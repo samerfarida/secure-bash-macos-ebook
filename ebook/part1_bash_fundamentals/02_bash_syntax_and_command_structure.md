@@ -1,6 +1,6 @@
 # Chapter 2: Bash Syntax and Command Structure
 
-### Learning Objectives
+## Learning Objectives
 
 By the end of this chapter, you will be able to:
 
@@ -12,13 +12,13 @@ By the end of this chapter, you will be able to:
 
 ---
 
-### Introduction: The Building Blocks of Bash
+## Introduction: The Building Blocks of Bash
 
 Before you can write powerful scripts, you need to understand how Bash interprets your input. This chapter will give you a clear, practical foundation in Bash syntax and structure—knowledge that applies equally whether you're writing a 3-line script or a full automation tool.
 
 ---
 
-### 2.1 Commands and Arguments
+## 2.1 Commands and Arguments
 
 Bash commands follow a simple structure:
 
@@ -44,7 +44,7 @@ mkdir newfolder && cd newfolder
 
 ---
 
-### 2.2 Variables
+## 2.2 Variables
 
 Bash variables are declared without a `let` or `var` keyword:
 
@@ -66,7 +66,7 @@ echo "$HOME"
 
 ---
 
-### 2.3 Quoting: Single, Double, and Escaping
+## 2.3 Quoting: Single, Double, and Escaping
 
 - `'single quotes'` prevent expansion.
 - `"double quotes"` allow variable and command substitution.
@@ -81,7 +81,7 @@ echo "My name is $USER"      # Expands $USER
 
 ---
 
-### 2.4 Conditionals: `if`, `elif`, `else`
+## 2.4 Conditionals: `if`, `elif`, `else`
 
 Basic structure:
 
@@ -109,9 +109,9 @@ Use `[[ ... ]]` for advanced conditions (e.g., regex).
 
 ---
 
-### 2.5 Loops: `for`, `while`, and `until`
+## 2.5 Loops: `for`, `while`, and `until`
 
-#### `for` loop:
+### `for` loop:
 
 ```bash
 for file in *.txt; do
@@ -119,7 +119,7 @@ for file in *.txt; do
 done
 ```
 
-#### `while` loop:
+### `while` loop:
 
 ```bash
 count=1
@@ -129,7 +129,7 @@ while [ $count -le 5 ]; do
 done
 ```
 
-#### `until` loop:
+### `until` loop:
 
 ```bash
 until [ "$ready" = "yes" ]; do
@@ -141,7 +141,7 @@ done
 
 ---
 
-### 2.6 Functions and Return Values
+## 2.6 Functions and Return Values
 
 Functions allow code reuse and structure:
 
@@ -167,7 +167,7 @@ fi
 
 ---
 
-### 2.7 Script Exit Codes
+## 2.7 Script Exit Codes
 
 Every Bash command returns an exit code (`$?`):
 - `0` = success
@@ -182,7 +182,7 @@ exit 1   # general error
 
 ---
 
-### 2.8 Reading User Input
+## 2.8 Reading User Input
 
 ```bash
 echo -n "Enter your name: "
@@ -208,7 +208,7 @@ fi
 
 ---
 
-### Chapter 2 Exercise
+## Chapter 2 Exercise
 
 Write a script called `backup.sh` that:
 
@@ -233,7 +233,7 @@ fi
 
 ---
 
-### macOS Scripting Tips
+## macOS Scripting Tips
 
 - Use `open .` or `open "$folder"` to open Finder to a directory.
 - You can pipe input to GUI dialogs with `osascript`.

@@ -42,7 +42,7 @@ command < input.txt
 
 ---
 
-### 4.2 Pipes and Command Chaining
+## 4.2 Pipes and Command Chaining
 
 Pipes allow the output of one command to feed into the next:
 ```bash
@@ -57,7 +57,7 @@ mkdir logs && cd logs || echo "Failed to create directory"
 
 ---
 
-### 4.3 Using `grep` to Search Text
+## 4.3 Using `grep` to Search Text
 
 ```bash
 grep 'pattern' file.txt
@@ -77,26 +77,26 @@ grep -i 'error' /var/log/system.log
 
 ---
 
-### 4.4 Using `cut`, `awk`, and `tr`
+## 4.4 Using `cut`, `awk`, and `tr`
 
-#### `cut`: extract columns
+### `cut`: extract columns
 ```bash
 cut -d ':' -f1 /etc/passwd
 ```
 
-#### `awk`: pattern scanning and reporting
+### `awk`: pattern scanning and reporting
 ```bash
 awk -F ':' '{ print $1 " -> " $3 }' /etc/passwd
 ```
 
-#### `tr`: character translation
+### `tr`: character translation
 ```bash
 echo "hello" | tr 'a-z' 'A-Z'
 ```
 
 ---
 
-### 4.5 Using `sed` to Edit Streams
+## 4.5 Using `sed` to Edit Streams
 
 Sed performs find and replace on streams:
 ```bash
@@ -115,7 +115,7 @@ sed -i '' 's/localhost/127.0.0.1/' hosts.txt   # macOS version
 
 ---
 
-### 4.6 Reading and Writing CSV Files
+## 4.6 Reading and Writing CSV Files
 
 While Bash doesn't have built-in CSV support, you can:
 ```bash
@@ -127,7 +127,7 @@ Beware of quoted fields and commas in text. For more complex CSVs, use `csvkit` 
 
 ---
 
-### 4.7 Working with JSON and `jq`
+## 4.7 Working with JSON and `jq`
 
 Use `jq` for parsing JSON:
 ```bash
@@ -146,7 +146,7 @@ brew install jq
 
 ---
 
-### 4.8 Working with Property Lists (plist)
+## 4.8 Working with Property Lists (plist)
 
 macOS stores many settings in `.plist` files.
 Use `plutil` to inspect or convert:
@@ -162,7 +162,7 @@ defaults read com.apple.finder
 
 ---
 
-### Chapter 4 Exercise
+## Chapter 4 Exercise
 
 Write a script `logfilter.sh` that:
 
@@ -181,7 +181,7 @@ echo "Filtered log written to $output"
 
 ---
 
-### macOS Scripting Tips
+## macOS Scripting Tips
 
 - Use `pbpaste | grep` to search clipboard content
 - Use `syslog` or `log show` to parse macOS logs

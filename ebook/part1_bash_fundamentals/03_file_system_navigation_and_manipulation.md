@@ -1,6 +1,6 @@
 # Chapter 3: File System Navigation and Manipulation
 
-### Learning Objectives
+## Learning Objectives
 
 By the end of this chapter, you will be able to:
 
@@ -13,13 +13,13 @@ By the end of this chapter, you will be able to:
 
 ---
 
-### Introduction: The Shell as Your Filesystem Interface
+## Introduction: The Shell as Your Filesystem Interface
 
 The command line isn't just a place to run commands — it's a powerful interface to the file system. In this chapter, we'll explore how to traverse, inspect, and modify files and directories using Bash, with a focus on macOS's quirks and features.
 
 ---
 
-### 3.1 Paths: Absolute vs Relative
+## 3.1 Paths: Absolute vs Relative
 
 - **Absolute path**: starts from root `/`
   - Example: `/Users/sammy/Documents/report.txt`
@@ -43,7 +43,7 @@ cd -
 
 ---
 
-### 3.2 Listing and Inspecting Files
+## 3.2 Listing and Inspecting Files
 
 List directory contents:
 ```bash
@@ -65,7 +65,7 @@ xattr file.txt     # Show extended attributes
 
 ---
 
-### 3.3 Creating and Removing Files and Directories
+## 3.3 Creating and Removing Files and Directories
 
 Create a file or folder:
 ```bash
@@ -83,7 +83,7 @@ Be cautious with `rm -rf`. It will remove without confirmation.
 
 ---
 
-### 3.4 Moving, Copying, and Renaming
+## 3.4 Moving, Copying, and Renaming
 
 Move or rename:
 ```bash
@@ -101,7 +101,7 @@ Use `-i` to confirm before overwriting.
 
 ---
 
-### 3.5 Wildcards and Globbing
+## 3.5 Wildcards and Globbing
 
 Use wildcards to match file patterns:
 - `*` matches any characters
@@ -119,7 +119,7 @@ Combine with commands like `rm`, `cp`, `echo`, etc.
 
 ---
 
-### 3.6 Permissions and Ownership
+## 3.6 Permissions and Ownership
 
 Check permissions:
 ```bash
@@ -144,7 +144,7 @@ umask
 
 ---
 
-### 3.7 macOS-Specific File Tips
+## 3.7 macOS-Specific File Tips
 
 - Use `open .` to launch Finder
 - `open file.pdf` opens with default app
@@ -157,7 +157,7 @@ sudo mdutil -i off /path/to/dir
 
 ---
 
-### Chapter 3 Exercise
+## Chapter 3 Exercise
 
 Write a script named `organize_downloads.sh` that:
 - Scans your `~/Downloads` directory
@@ -180,7 +180,7 @@ echo "Downloads organized."
 
 ---
 
-### macOS Scripting Tips
+## macOS Scripting Tips
 
 - `open -R filename` reveals a file in Finder
 - Use `tmutil` to interact with Time Machine in scripts

@@ -7,6 +7,5 @@
 ._*
 
 # Ignore editor directories and files
-output/*
 *.pdf
 *.log

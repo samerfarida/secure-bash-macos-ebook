@@ -21,19 +21,19 @@ When you run a Bash script, launch an app, or execute a command, you're starting
 
 ## 5.1 Viewing Running Processes
 
-### View system-wide processes
+## View system-wide processes
 
 ```bash
 ps aux
 ```
 
-#### View your own processes
+### View your own processes
 
 ```bash
 ps -u "$USER"
 ```
 
-#### Real-time monitoring
+### Real-time monitoring
 
 ```bash
 top
@@ -48,7 +48,7 @@ htop
 
 ---
 
-### 5.2 Process IDs and Signals
+## 5.2 Process IDs and Signals
 
 Each running process has a **PID**. Use it to send signals:
 ```bash
@@ -68,36 +68,36 @@ kill -SIGUSR1 12345
 
 ---
 
-### 5.3 Managing Foreground and Background Jobs
+## 5.3 Managing Foreground and Background Jobs
 
-#### Run in background
+### Run in background
 ```bash
 long_script.sh &
 ```
 
-#### View background jobs:
+### View background jobs:
 ```bash
 jobs
 ```
 
-#### Bring job to foreground:
+### Bring job to foreground:
 ```bash
 fg %1
 ```
 
-#### Stop a job:
+### Stop a job:
 ```bash
 Ctrl + Z
 ```
 
-#### Kill a background job:
+### Kill a background job:
 ```bash
 kill %1
 ```
 
 ---
 
-### 5.4 Prioritizing with `nice` and `renice`
+## 5.4 Prioritizing with `nice` and `renice`
 
 Run a process with lower priority:
 ```bash
@@ -113,7 +113,7 @@ Lower values = higher priority (0 is default).
 
 ---
 
-### 5.5 Automating Long-Running Tasks
+## 5.5 Automating Long-Running Tasks
 
 Use `nohup` to detach from terminal:
 ```bash
@@ -134,7 +134,7 @@ Use `launchd` for macOS-native task scheduling (discussed in later chapters).
 
 ---
 
-### 5.6 Monitoring System Usage
+## 5.6 Monitoring System Usage
 
 Check CPU usage:
 ```bash
@@ -163,7 +163,7 @@ pmset -g batt
 
 ---
 
-### 5.7 macOS-Specific Process Tools
+## 5.7 macOS-Specific Process Tools
 
 - `Activity Monitor`: GUI process viewer
 - `launchctl`: manage background daemons
@@ -177,7 +177,7 @@ launchctl list | grep com.apple
 
 ---
 
-### Chapter 5 Exercise
+## Chapter 5 Exercise
 
 Write a script `watch_process.sh` that:
 
@@ -197,7 +197,7 @@ fi
 
 ---
 
-### macOS Scripting Tips
+## macOS Scripting Tips
 
 - Use `pgrep` and `pkill` for process name filtering
 - Use `nohup` and `disown` to prevent processes from dying with the terminal
