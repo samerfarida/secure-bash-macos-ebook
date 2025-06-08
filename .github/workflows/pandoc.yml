@@ -28,19 +28,19 @@ jobs:
     - name: 🛠 Generate PDF
       run: |
         mkdir -p output
-        pandoc $(find book -name '*.md' | sort) \
+        pandoc $(find ebook -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
           -o output/Secure-Bash-for-macOS.pdf
 
     - name: 🛠 Generate EPUB
       run: |
-        pandoc $(find book -name '*.md' | sort) \
+        pandoc $(find ebook -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
           -o output/Secure-Bash-for-macOS.epub
 
     - name: 🛠 Generate HTML
       run: |
-        pandoc $(find book -name '*.md' | sort) \
+        pandoc $(find ebook -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
           -s -o output/Secure-Bash-for-macOS.html
 
