@@ -1,0 +1,12 @@
+# Ignore macOS hidden files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Ignore editor directories and files
+output/
+*.pdf
+*.log

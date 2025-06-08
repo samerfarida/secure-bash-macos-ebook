@@ -1,0 +1,22 @@
+
+
+title: "Secure Bash for macOS"
+subtitle: " hands-on scripting guide for administrators and security engineers"
+author: "Sammy Farida"
+date: "2025"
+lang: "en-US"
+rights: "© 2025 Sammy Farida. Licensed under CC BY 4.0"
+
+fontsize: 11pt
+geometry: margin=1in
+
+mainfont: "Latin Modern Roman"
+monofont: "Fira Code"
+linkcolor: blue
+
+toc: true
+toc-depth: 2
+
+documentclass: article
+pdf-engine: xelatex
+highlight-style: tango
