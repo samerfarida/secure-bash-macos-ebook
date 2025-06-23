@@ -1,4 +1,4 @@
-name: Build and Release eBook
+name: Build and Auto-Release eBook
 
 on:
   push:
@@ -15,11 +15,13 @@ jobs:
     steps:
     - name: 📥 Checkout repository
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Required to fetch Git tags
 
     - name: 🧰 Set up Pandoc
       uses: r-lib/actions/setup-pandoc@v2
 
-    - name: 📦 Install LaTeX (for PDF generation)
+    - name: 📦 Install LaTeX
       run: |
         sudo apt-get update
         sudo apt-get install -y texlive-xetex \
@@ -28,42 +30,56 @@ jobs:
                                 texlive-latex-extra \
                                 fonts-dejavu
 
-    - name: 📄 Read version
-      id: get_version
+    - name: 🔢 Auto-version minor if new .md added, else patch
+      id: compute_tag
       run: |
-        VERSION=$(cat VERSION)
-        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        # Get latest tag or default
+        LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
+        VERSION=${LATEST_TAG#v}
+        IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
 
-    - name: 🛠 Generate PDF
+        # Look at .md file changes since latest tag
+        CHANGED=$(git diff --name-status "$LATEST_TAG"..HEAD | grep '\.md$' || true)
+        ADDED=$(echo "$CHANGED" | grep '^A' || true)
+
+        if [[ -n "$ADDED" ]]; then
+          # New chapters added → minor bump
+          NEW_MINOR=$((MINOR + 1))
+          NEW_PATCH=0
+          BUMP_TYPE="minor"
+        else
+          # Only edits → patch bump
+          NEW_MINOR=$MINOR
+          NEW_PATCH=$((PATCH + 1))
+          BUMP_TYPE="patch"
+        fi
+
+        NEW_TAG="v$MAJOR.$NEW_MINOR.$NEW_PATCH"
+        echo "📌 Bumping $BUMP_TYPE version → $NEW_TAG"
+        echo "tag=$NEW_TAG" >> $GITHUB_OUTPUT
+        echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
+
+    - name: 📚 Build eBook formats
       run: |
         mkdir -p output
         pandoc $(find ebook -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
           -o output/Secure-Bash-for-macOS.pdf
 
-    - name: 🛠 Generate EPUB
-      run: |
         pandoc $(find ebook -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
           -o output/Secure-Bash-for-macOS.epub
 
-    - name: 🛠 Generate HTML
-      run: |
         pandoc $(find ebook -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
           -s -o output/Secure-Bash-for-macOS.html
 
-    - name: 📤 Upload artifacts to workflow
-      uses: actions/upload-artifact@v4
-      with:
-        name: secure-bash-for-macos
-        path: output/
-
-    - name: 📦 Create GitHub Release
+    - name: 📦 Create GitHub Pre-Release
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: v${{ steps.get_version.outputs.VERSION }}
-        name: "Release v${{ steps.get_version.outputs.VERSION }}"
+        tag_name: ${{ steps.compute_tag.outputs.tag }}
+        name: "Release ${{ steps.compute_tag.outputs.tag }} (${{ steps.compute_tag.outputs.bump_type }})"
+        prerelease: true
         generate_release_notes: true
         files: |
           output/Secure-Bash-for-macOS.pdf
