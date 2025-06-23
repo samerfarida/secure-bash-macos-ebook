@@ -1,0 +1,73 @@
+name: Build and Release eBook
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v3
+
+    - name: 🧰 Set up Pandoc
+      uses: r-lib/actions/setup-pandoc@v2
+
+    - name: 📦 Install LaTeX (for PDF generation)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y texlive-xetex \
+                                texlive-fonts-recommended \
+                                texlive-plain-generic \
+                                texlive-latex-extra \
+                                fonts-dejavu
+
+    - name: 📄 Read version
+      id: get_version
+      run: |
+        VERSION=$(cat VERSION)
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: 🛠 Generate PDF
+      run: |
+        mkdir -p output
+        pandoc $(find ebook -name '*.md' | sort) \
+          --metadata-file=metadata.yaml \
+          -o output/Secure-Bash-for-macOS.pdf
+
+    - name: 🛠 Generate EPUB
+      run: |
+        pandoc $(find ebook -name '*.md' | sort) \
+          --metadata-file=metadata.yaml \
+          -o output/Secure-Bash-for-macOS.epub
+
+    - name: 🛠 Generate HTML
+      run: |
+        pandoc $(find ebook -name '*.md' | sort) \
+          --metadata-file=metadata.yaml \
+          -s -o output/Secure-Bash-for-macOS.html
+
+    - name: 📤 Upload artifacts to workflow
+      uses: actions/upload-artifact@v4
+      with:
+        name: secure-bash-for-macos
+        path: output/
+
+    - name: 📦 Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v${{ steps.get_version.outputs.VERSION }}
+        name: "Release v${{ steps.get_version.outputs.VERSION }}"
+        generate_release_notes: true
+        files: |
+          output/Secure-Bash-for-macOS.pdf
+          output/Secure-Bash-for-macOS.epub
+          output/Secure-Bash-for-macOS.html
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
