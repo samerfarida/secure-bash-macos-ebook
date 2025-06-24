@@ -181,15 +181,3 @@ main
 2. Create a function called `backup_home` that accepts a username and uses `rsync` to back up their home directory to `/Users/Backups/`.
 3. Modify the `Lock Screen Reminder` example to send a message only once every 10 minutes.
 
----
-
-## Summary
-
-In this chapter, you learned to:
-
-- Use `if`, `elif`, `else`, and `case` to handle logic branching
-- Control flow with `for`, `while`, and `until` loops
-- Define and use functions in your scripts
-- Implement logic securely and modularly for macOS
-
-Coming up next: we'll explore how to **manage files, logs, and permissions securely** in Chapter 7.
