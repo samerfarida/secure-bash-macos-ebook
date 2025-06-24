@@ -1,16 +1,16 @@
 # About the Author
 
-Sammy Farida is a U.S. Army veteran, security architect, and lifelong technologist. Born and raised in Iraq, Sammy worked as a translator for the U.S. military during the Iraq War before immigrating to the United States in 2007. He later enlisted in the U.S. Army and deployed back to Iraq—this time as an American soldier.
+Sammy Farida is a security architect and lifelong technologist with over a decade of experience in enterprise cybersecurity. He currently serves as a Global Solution Security Architect at PwC, where he focuses on endpoint security, automation, and secure architecture at scale.
 
-After his military service, Sammy transitioned into the field of cybersecurity and currently works as a Global Solution Security Architect at PwC, where he focuses on endpoint security, automation, and secure architecture at scale.
+Sammy is passionate about Bash scripting, macOS internals, and open-source tooling. He is known for making complex topics approachable and actionable, whether building internal tools, designing enterprise security strategies, or automating tasks across thousands of devices.
 
-Sammy is passionate about scripting, open-source tools, and making complex technical topics accessible. This ebook was born out of countless hours writing, reviewing, and deploying secure Bash scripts in macOS environments—from personal automation to enterprise-scale fleet management.
+This ebook is the result of years spent writing, testing, and refining secure Bash scripts in real-world macOS environments—from personal workflows to global-scale infrastructure.
 
 ---
 
 ## Dedication
 
-To my wife Lisa, and our children Dimitri, Lincoln, and Celine—  
+To my wife Lisa, and our children Dimitri, Lincoln, and Celine,   
 thank you for your love, patience, and support.  
 This ebook would not exist without you.
 
