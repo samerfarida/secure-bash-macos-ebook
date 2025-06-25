@@ -73,6 +73,7 @@ jobs:
         pandoc $(find ebook -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
           --template=templates/custom.latex \
+          --pdf-engine=xelatex \
           -o output/Secure-Bash-for-macOS.pdf
 
         # Build EPUB
