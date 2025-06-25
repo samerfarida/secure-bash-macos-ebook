@@ -33,22 +33,20 @@ jobs:
     - name: 🔢 Auto-version minor if new .md added, else patch
       id: compute_tag
       run: |
-        # Get latest tag or default
+        # Get latest tag or default to v1.0.0
         LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
         VERSION=${LATEST_TAG#v}
         IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
 
-        # Look at .md file changes since latest tag
+        # Check for added .md files since last tag
         CHANGED=$(git diff --name-status "$LATEST_TAG"..HEAD | grep '\.md$' || true)
         ADDED=$(echo "$CHANGED" | grep '^A' || true)
 
         if [[ -n "$ADDED" ]]; then
-          # New chapters added → minor bump
           NEW_MINOR=$((MINOR + 1))
           NEW_PATCH=0
           BUMP_TYPE="minor"
         else
-          # Only edits → patch bump
           NEW_MINOR=$MINOR
           NEW_PATCH=$((PATCH + 1))
           BUMP_TYPE="patch"
@@ -58,6 +56,16 @@ jobs:
         echo "📌 Bumping $BUMP_TYPE version → $NEW_TAG"
         echo "tag=$NEW_TAG" >> $GITHUB_OUTPUT
         echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
+
+    - name: 🏷 Set version and date environment variables
+      run: |
+        echo "VERSION=${{ steps.compute_tag.outputs.tag }}" >> $GITHUB_ENV
+        echo "DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
+
+    - name: 🛠 Inject version and date into metadata.yaml
+      run: |
+        sed -i.bak "s/__VERSION__/${{ env.VERSION }}/g" metadata.yaml
+        sed -i.bak "s/__DATE__/${{ env.DATE }}/g" metadata.yaml
 
     - name: 📚 Build eBook formats
       run: |
@@ -74,6 +82,9 @@ jobs:
           --metadata-file=metadata.yaml \
           -s -o output/Secure-Bash-for-macOS.html
 
+    - name: 🧹 Clean up backup file
+      run: rm metadata.yaml.bak
+
     - name: 📦 Create GitHub Pre-Release
       uses: softprops/action-gh-release@v2
       with:
@@ -87,3 +98,4 @@ jobs:
           output/Secure-Bash-for-macOS.html
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        

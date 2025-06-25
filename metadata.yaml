@@ -1,7 +1,8 @@
 title: "Secure Bash for macOS"
 subtitle: "A Hands-On Scripting Guide for Administrators and Security Engineers"
 author: "Sammy Farida"
-date: "2025"
+version: "__VERSION__"
+date: "__DATE_"
 lang: "en-US"
 rights: >
   © 2025 Sammy Farida. Content licensed under Creative Commons Attribution 4.0 International (CC BY 4.0).
