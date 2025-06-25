@@ -33,12 +33,10 @@ jobs:
     - name: 🔢 Auto-version minor if new .md added, else patch
       id: compute_tag
       run: |
-        # Get latest tag or default to v1.0.0
         LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
         VERSION=${LATEST_TAG#v}
         IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
 
-        # Check for added .md files since last tag
         CHANGED=$(git diff --name-status "$LATEST_TAG"..HEAD | grep '\.md$' || true)
         ADDED=$(echo "$CHANGED" | grep '^A' || true)
 
@@ -62,7 +60,7 @@ jobs:
         echo "VERSION=${{ steps.compute_tag.outputs.tag }}" >> $GITHUB_ENV
         echo "DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
 
-    - name: 🛠 Inject version and date into metadata.yaml
+    - name: 🛠 Inject version and date into metadata.yaml and about.md
       run: |
         sed -i.bak "s/__VERSION__/${{ env.VERSION }}/g" metadata.yaml
         sed -i.bak "s/__DATE__/${{ env.DATE }}/g" metadata.yaml
@@ -70,20 +68,28 @@ jobs:
     - name: 📚 Build eBook formats
       run: |
         mkdir -p output
+
+        # Build PDF with custom template
         pandoc $(find ebook -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
+          --template=templates/custom.latex \
           -o output/Secure-Bash-for-macOS.pdf
 
+        # Build EPUB
         pandoc $(find ebook -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
+          --template=templates/custom.latex \
           -o output/Secure-Bash-for-macOS.epub
 
+        # Build HTML
         pandoc $(find ebook -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
+          --template=templates/custom.latex \
           -s -o output/Secure-Bash-for-macOS.html
 
     - name: 🧹 Clean up backup file
-      run: rm metadata.yaml.bak
+      run: |
+        rm metadata.yaml.bak
 
     - name: 📦 Create GitHub Pre-Release
       uses: softprops/action-gh-release@v2
@@ -98,4 +104,3 @@ jobs:
           output/Secure-Bash-for-macOS.html
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
