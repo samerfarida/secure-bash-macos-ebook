@@ -79,13 +79,11 @@ jobs:
         # Build EPUB
         pandoc $(find ebook -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
-          --template=templates/custom.latex \
           -o output/Secure-Bash-for-macOS.epub
 
         # Build HTML
         pandoc $(find ebook -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
-          --template=templates/custom.latex \
           -s -o output/Secure-Bash-for-macOS.html
 
     - name: 🧹 Clean up backup file
