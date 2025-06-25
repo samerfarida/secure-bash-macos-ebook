@@ -58,9 +58,9 @@ jobs:
     - name: 🏷 Set version and date environment variables
       run: |
         echo "VERSION=${{ steps.compute_tag.outputs.tag }}" >> $GITHUB_ENV
-        echo "DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
+        echo "DATE=$(date +%m-%d-%Y)" >> $GITHUB_ENV
 
-    - name: 🛠 Inject version and date into metadata.yaml and about.md
+    - name: 🛠 Inject version and date into metadata.yaml
       run: |
         sed -i.bak "s/__VERSION__/${{ env.VERSION }}/g" metadata.yaml
         sed -i.bak "s/__DATE__/${{ env.DATE }}/g" metadata.yaml
@@ -72,8 +72,6 @@ jobs:
         # Build PDF with custom template
         pandoc $(find ebook -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
-          --template=templates/custom.latex \
-          --pdf-engine=xelatex \
           -o output/Secure-Bash-for-macOS.pdf
 
         # Build EPUB
