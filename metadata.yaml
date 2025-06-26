@@ -20,4 +20,4 @@ toc-depth: 2
 
 documentclass: article
 pdf-engine: xelatex
-highlight-style: tango
+highlight-style: breezeDark
