@@ -79,7 +79,6 @@ jobs:
           $(find ebook/part3_real_world_projects -name '*.md' | sort) \
           $(find ebook/appendices -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
-          --template=templates/custom.latex \
           -o output/${FILEBASE}.pdf
 
         # Build EPUB
@@ -90,7 +89,6 @@ jobs:
           $(find ebook/part3_real_world_projects -name '*.md' | sort) \
           $(find ebook/appendices -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
-          --template=templates/custom.latex \
           -o output/${FILEBASE}.epub
 
         # Build HTML
@@ -106,7 +104,7 @@ jobs:
     - name: 🧹 Clean up backup file
       run: rm metadata.yaml.bak
 
-    - name: 📦 Create GitHub Pre-Release
+    - name: 📦 Create GitHub Release
       uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ steps.compute_tag.outputs.tag }}
