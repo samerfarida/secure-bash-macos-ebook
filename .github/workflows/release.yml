@@ -33,7 +33,7 @@ jobs:
     - name: 🔢 Auto-version minor if new .md added, else patch
       id: compute_tag
       run: |
-        LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
+        LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.1.0")
         VERSION=${LATEST_TAG#v}
         IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
 
@@ -69,24 +69,42 @@ jobs:
       run: |
         mkdir -p output
 
-        # Build PDF with custom template
-        pandoc $(find ebook -name '*.md' | sort) \
+        FILEBASE="Secure-Bash-for-macOS-${{ env.VERSION }}"
+
+        # Build PDF
+        pandoc \
+          $(find ebook/about.md) \
+          $(find ebook/part1_bash_fundamentals -name '*.md' | sort) \
+          $(find ebook/part2_advanced_security -name '*.md' | sort) \
+          $(find ebook/part3_real_world_projects -name '*.md' | sort) \
+          $(find ebook/appendices -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
-          -o output/Secure-Bash-for-macOS.pdf
+          --template=templates/custom.latex \
+          -o output/${FILEBASE}.pdf
 
         # Build EPUB
-        pandoc $(find ebook -name '*.md' | sort) \
+        pandoc \
+          $(find ebook/about.md) \
+          $(find ebook/part1_bash_fundamentals -name '*.md' | sort) \
+          $(find ebook/part2_advanced_security -name '*.md' | sort) \
+          $(find ebook/part3_real_world_projects -name '*.md' | sort) \
+          $(find ebook/appendices -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
-          -o output/Secure-Bash-for-macOS.epub
+          --template=templates/custom.latex \
+          -o output/${FILEBASE}.epub
 
         # Build HTML
-        pandoc $(find ebook -name '*.md' | sort) \
+        pandoc \
+          $(find ebook/about.md) \
+          $(find ebook/part1_bash_fundamentals -name '*.md' | sort) \
+          $(find ebook/part2_advanced_security -name '*.md' | sort) \
+          $(find ebook/part3_real_world_projects -name '*.md' | sort) \
+          $(find ebook/appendices -name '*.md' | sort) \
           --metadata-file=metadata.yaml \
-          -s -o output/Secure-Bash-for-macOS.html
+          -s -o output/${FILEBASE}.html
 
     - name: 🧹 Clean up backup file
-      run: |
-        rm metadata.yaml.bak
+      run: rm metadata.yaml.bak
 
     - name: 📦 Create GitHub Pre-Release
       uses: softprops/action-gh-release@v2
@@ -96,8 +114,8 @@ jobs:
         prerelease: true
         generate_release_notes: true
         files: |
-          output/Secure-Bash-for-macOS.pdf
-          output/Secure-Bash-for-macOS.epub
-          output/Secure-Bash-for-macOS.html
+          output/Secure-Bash-for-macOS-${{ env.VERSION }}.pdf
+          output/Secure-Bash-for-macOS-${{ env.VERSION }}.epub
+          output/Secure-Bash-for-macOS-${{ env.VERSION }}.html
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
