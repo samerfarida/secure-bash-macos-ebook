@@ -21,15 +21,10 @@ jobs:
     - name: 🧰 Set up Pandoc
       uses: r-lib/actions/setup-pandoc@v2
 
-    - name: 📦 Install LaTeX
+    - name: 📦  Install Full TeX Live (includes SourceSansPro)
       run: |
         sudo apt-get update
-        sudo apt-get install -y texlive-xetex \
-                                texlive-fonts-recommended \
-                                texlive-plain-generic \
-                                texlive-latex-extra \
-                                fonts-dejavu \
-                                fonts-sourcesanspro 
+        sudo apt-get install -y texlive-full 
                                 
     - name: 🔢 Auto-version minor if new .md added, else patch
       id: compute_tag
