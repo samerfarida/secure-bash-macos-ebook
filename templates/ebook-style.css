@@ -13,17 +13,31 @@ h1, h2, h3, h4 {
   line-height: 1.2;
 }
 
-code, pre {
+/* Fenced code blocks */
+pre > code {
   background-color: #2e3440;
   color: #d8dee9;
-  padding: 0.5em;
-  border-radius: 4px;
-  font-family: "Fira Code", monospace;
-  overflow-x: auto;
   display: block;
-  white-space: pre-wrap;
+  padding: 0.75em;
+  border-radius: 5px;
+  font-family: "Fira Code", monospace;
+  white-space: pre;         /* prevent line breaks */
+  overflow-x: auto;         /* enable scrolling */
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
+/* Inline code */
+code {
+  background-color: #f0f0f0;
+  color: #000;
+  padding: 0.15em 0.3em;
+  border-radius: 3px;
+  font-family: "Fira Code", monospace;
+  white-space: nowrap;
+}
+
+/* Hyperlinks */
 a {
   color: #0066cc;
   text-decoration: none;
