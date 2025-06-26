@@ -16,7 +16,7 @@ jobs:
     - name: 📥 Checkout repository
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0  # Required to fetch Git tags
+        fetch-depth: 0
 
     - name: 🧰 Set up Pandoc
       uses: r-lib/actions/setup-pandoc@v2
@@ -58,7 +58,7 @@ jobs:
     - name: 🏷 Set version and date environment variables
       run: |
         echo "VERSION=${{ steps.compute_tag.outputs.tag }}" >> $GITHUB_ENV
-        echo "DATE=$(date +%m-%d-%Y)" >> $GITHUB_ENV
+        echo "DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
 
     - name: 🛠 Inject version and date into metadata.yaml
       run: |
@@ -71,35 +71,35 @@ jobs:
 
         FILEBASE="Secure-Bash-for-macOS-${{ env.VERSION }}"
 
-        # Build PDF
-        pandoc \
-          $(find ebook/about.md) \
-          $(find ebook/part1_bash_fundamentals -name '*.md' | sort) \
-          $(find ebook/part2_advanced_security -name '*.md' | sort) \
-          $(find ebook/part3_real_world_projects -name '*.md' | sort) \
-          $(find ebook/appendices -name '*.md' | sort) \
+        # Common chapter ordering
+        CHAPTERS="$(find ebook/about.md) \
+                   $(find ebook/part1_bash_fundamentals -name '*.md' | sort) \
+                   $(find ebook/part2_advanced_security -name '*.md' | sort) \
+                   $(find ebook/part3_real_world_projects -name '*.md' | sort) \
+                   $(find ebook/appendices -name '*.md' | sort)"
+
+        # PDF
+        pandoc $CHAPTERS \
           --metadata-file=metadata.yaml \
+          --template=templates/eisvogel.latex \
           -o output/${FILEBASE}.pdf
 
-        # Build EPUB
-        pandoc \
-          $(find ebook/about.md) \
-          $(find ebook/part1_bash_fundamentals -name '*.md' | sort) \
-          $(find ebook/part2_advanced_security -name '*.md' | sort) \
-          $(find ebook/part3_real_world_projects -name '*.md' | sort) \
-          $(find ebook/appendices -name '*.md' | sort) \
+        # EPUB
+        pandoc $CHAPTERS \
           --metadata-file=metadata.yaml \
+          --css=templates/ebook-style.css \
+          --toc --toc-depth=2 \
+          --highlight-style=breezeDark \
           -o output/${FILEBASE}.epub
 
-        # Build HTML
-        pandoc \
-          $(find ebook/about.md) \
-          $(find ebook/part1_bash_fundamentals -name '*.md' | sort) \
-          $(find ebook/part2_advanced_security -name '*.md' | sort) \
-          $(find ebook/part3_real_world_projects -name '*.md' | sort) \
-          $(find ebook/appendices -name '*.md' | sort) \
+        # HTML
+        pandoc $CHAPTERS \
           --metadata-file=metadata.yaml \
-          -s -o output/${FILEBASE}.html
+          --css=templates/ebook-style.css \
+          --toc --toc-depth=2 \
+          --standalone \
+          --highlight-style=breezeDark \
+          -o output/${FILEBASE}.html
 
     - name: 🧹 Clean up backup file
       run: rm metadata.yaml.bak

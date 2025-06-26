@@ -1,0 +1,34 @@
+body {
+  font-family: "Latin Modern Roman", serif;
+  margin: 2rem auto;
+  max-width: 42em;
+  line-height: 1.6;
+  padding: 0 1rem;
+  background: #ffffff;
+  color: #111;
+}
+
+h1, h2, h3, h4 {
+  margin-top: 2rem;
+  line-height: 1.2;
+}
+
+code, pre {
+  background-color: #2e3440;
+  color: #d8dee9;
+  padding: 0.5em;
+  border-radius: 4px;
+  font-family: "Fira Code", monospace;
+  overflow-x: auto;
+  display: block;
+  white-space: pre-wrap;
+}
+
+a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
