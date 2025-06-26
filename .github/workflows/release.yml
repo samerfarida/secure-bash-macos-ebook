@@ -28,8 +28,9 @@ jobs:
                                 texlive-fonts-recommended \
                                 texlive-plain-generic \
                                 texlive-latex-extra \
-                                fonts-dejavu
-
+                                fonts-dejavu \
+                                fonts-sourcesanspro 
+                                
     - name: 🔢 Auto-version minor if new .md added, else patch
       id: compute_tag
       run: |
