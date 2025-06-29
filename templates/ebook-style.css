@@ -15,22 +15,30 @@ h1, h2, h3, h4 {
 
 /* Fenced code blocks */
 pre > code {
-  background-color: #2e3440;
-  color: #d8dee9;
+  background-color: #f5f5f5;
+  color: #111;
   display: block;
   padding: 0.75em;
   border-radius: 5px;
   font-family: "Fira Code", monospace;
-  white-space: pre;         /* prevent line breaks */
-  overflow-x: auto;         /* enable scrolling */
+  white-space: pre;
+  overflow-x: auto;
   max-width: 100%;
   box-sizing: border-box;
+  word-break: break-word;
+}
+
+pre {
+  background-color: #f5f5f5;
+  padding: 0.75em;
+  border-radius: 5px;
+  overflow-x: auto;
 }
 
 /* Inline code */
 code {
-  background-color: #f0f0f0;
-  color: #000;
+  background-color: #f5f5f5;
+  color: #111;
   padding: 0.15em 0.3em;
   border-radius: 3px;
   font-family: "Fira Code", monospace;
