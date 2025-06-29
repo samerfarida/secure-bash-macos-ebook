@@ -73,6 +73,9 @@ jobs:
                    $(find ebook/part2_advanced_security -name '*.md' | sort) \
                    $(find ebook/part3_real_world_projects -name '*.md' | sort) \
                    $(find ebook/appendices -name '*.md' | sort)"
+        
+        # Ensure all chapters are in the correct order
+        echo "$CHAPTERS" | tr ' ' '\n'
 
         # PDF
         pandoc $CHAPTERS \
