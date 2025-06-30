@@ -4,6 +4,18 @@ Secure Bash for macOS is a practical, hands-on scripting guide for administrator
 
 This book teaches you how to write secure, efficient scripts, from basic shell syntax to advanced security automation, with real-world examples and macOS-specific tips throughout.
 
+## Preface
+
+Over the past decade, I’ve had the privilege of securing some of the largest macOS fleets in the enterprise world. As a security engineer, I started as the macOS SME on a global security engineering team, building practical tools and processes to keep endpoints secure and users productive. I wrote countless Bash scripts to automate tasks, enforce security controls, and collect the data we needed to stay ahead of threats.
+
+Through this work, I became a security architect, designing and delivering secure-by-default solutions at scale, but my Bash scripts were always there, saving time, reducing risk, and bridging the gap between complex security tools and the real world of end users.
+
+With over 11 years in IT and more than 7 years focused on cybersecurity, I bring deep experience securing cloud platforms, identity systems, and large-scale infrastructure. At PwC, I’ve led efforts to deploy and architect security controls across Azure, AWS, and macOS environments. I’ve implemented tools like DLP, EDR, DSPM, and PAM; enforced identity and access policies; and worked closely with engineering teams to secure both cloud and on-prem environments. I’ve also supported hardening of firewalls, hypervisors, and vendor-supplied systems during global rollouts.
+
+This book is my way of sharing what I’ve learned with administrators, security engineers, and power users like you. My hope is that you’ll use these lessons and examples not just to automate tasks, but to build a security mindset into every script you write.
+
+Let’s secure Bash together, one script at a time.
+
 ## About the Author
 
 Sammy Farida is a security architect and lifelong technologist with over a decade of experience in enterprise cybersecurity. He currently serves as a Global Solution Security Architect at PwC, where he focuses on endpoint security, automation, and secure architecture at scale.
