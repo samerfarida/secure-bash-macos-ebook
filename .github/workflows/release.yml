@@ -80,6 +80,7 @@ jobs:
         # PDF
         pandoc $CHAPTERS \
           --metadata-file=metadata.yaml \
+          --highlight-style=templates/tango.theme \
           --template=templates/eisvogel.latex \
           -o output/${FILEBASE}.pdf
 
