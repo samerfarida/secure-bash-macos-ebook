@@ -166,7 +166,7 @@ You can view these with `log show` or the Console app.
 
 ## Chapter 8 Exercise
 
-**Add robust error handling and debugging to an existing script**
+### Add robust error handling and debugging to an existing script
 
 1. Take a script you wrote in a previous chapter.
 2. Add:
@@ -200,4 +200,3 @@ set +x
 - Always test your `trap` handlers to avoid infinite loops.
 - Clean up sensitive files or secrets when an error occurs.
 - For persistent issues, break the script into small parts and test each with `bash -x`.
-
