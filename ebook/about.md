@@ -4,6 +4,14 @@ Secure Bash for macOS is a practical, hands-on scripting guide for administrator
 
 This book teaches you how to write secure, efficient scripts, from basic shell syntax to advanced security automation, with real-world examples and macOS-specific tips throughout.
 
+## About the Author
+
+Sammy Farida is a security architect and lifelong technologist with over a decade of experience in enterprise cybersecurity. He currently serves as a Global Solution Security Architect at PwC, where he focuses on endpoint security, automation, and secure architecture at scale.
+
+Sammy is passionate about Bash scripting, macOS internals, and open-source tooling. He is known for making complex topics approachable and actionable, whether building internal tools, designing enterprise security strategies, or automating tasks across thousands of devices.
+
+This ebook is the result of years spent writing, testing, and refining secure Bash scripts in real-world macOS environments, from personal workflows to global-scale infrastructure.
+
 ## Preface
 
 Over the past decade, I’ve had the privilege of securing some of the largest macOS fleets in the enterprise world. As a security engineer, I started as the macOS SME on a global security engineering team, building practical tools and processes to keep endpoints secure and users productive. I wrote countless Bash scripts to automate tasks, enforce security controls, and collect the data we needed to stay ahead of threats.
@@ -15,14 +23,6 @@ With over 11 years in IT and more than 7 years focused on cybersecurity, I bring
 This book is my way of sharing what I’ve learned with administrators, security engineers, and power users like you. My hope is that you’ll use these lessons and examples not just to automate tasks, but to build a security mindset into every script you write.
 
 Let’s secure Bash together, one script at a time.
-
-## About the Author
-
-Sammy Farida is a security architect and lifelong technologist with over a decade of experience in enterprise cybersecurity. He currently serves as a Global Solution Security Architect at PwC, where he focuses on endpoint security, automation, and secure architecture at scale.
-
-Sammy is passionate about Bash scripting, macOS internals, and open-source tooling. He is known for making complex topics approachable and actionable, whether building internal tools, designing enterprise security strategies, or automating tasks across thousands of devices.
-
-This ebook is the result of years spent writing, testing, and refining secure Bash scripts in real-world macOS environments, from personal workflows to global-scale infrastructure.
 
 ## Dedication
 
@@ -63,8 +63,14 @@ This ebook is released under the [Creative Commons Attribution 4.0 International
 
 This project uses a dual-license model:
 
-- **Book content** (Markdown files under `book/`) is licensed under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](LICENSES/CC-BY-4.0.txt).
-- **Scripts and code** (files in `scripts/`, `Makefile`, GitHub Actions) are licensed under the [MIT License](LICENSES/MIT.txt).
+- **Book content** (Markdown files under `book/`) is licensed under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://github.com/samerfarida/secure-bash-macos-ebook/blob/main/LICENSES/CC-BY-4.0.txt).
+- **Scripts and code** (files in `scripts/`, `Makefile`, GitHub Actions) are licensed under the [MIT License](https://github.com/samerfarida/secure-bash-macos-ebook/blob/main/LICENSES/MIT.txt).
+
+## Disclaimer
+
+The opinions, examples, and recommendations in this book are my own and do not reflect the views of my current employer or any past employers.
+Likewise, any feedback, peer review, or contributions provided by individuals named in the Acknowledgments or Contributions sections represent their personal views and do not reflect the official positions of their respective employers.
+This content is provided for educational purposes only and comes with no warranty or guarantee of fitness for any specific use case.
 
 ## Acknowledgments
 
@@ -75,7 +81,7 @@ Special thanks to all the reviewers who took the time to test scripts, proofread
 ## Contributions
 
 This project is open source and thrives on community involvement.  
-If you find this book helpful, please consider starring the GitHub repository and sharing it with others.  
+If you find this book helpful, please consider starring the [GitHub repository](https://github.com/samerfarida/secure-bash-macos-ebook) and sharing it with others.  
 
 I welcome contributions of all kinds such as fixes, examples, or new ideas.
 
