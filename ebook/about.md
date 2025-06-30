@@ -1,4 +1,10 @@
-# About the Author
+# About This Book
+
+Secure Bash for macOS is a practical, hands-on scripting guide for administrators, security engineers, and power users who want to master Bash in a modern macOS environment.  
+
+This book teaches you how to write secure, efficient scripts, from basic shell syntax to advanced security automation, with real-world examples and macOS-specific tips throughout.
+
+## About the Author
 
 Sammy Farida is a security architect and lifelong technologist with over a decade of experience in enterprise cybersecurity. He currently serves as a Global Solution Security Architect at PwC, where he focuses on endpoint security, automation, and secure architecture at scale.
 
