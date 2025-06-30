@@ -21,18 +21,21 @@ pre > code {
   padding: 0.75em;
   border-radius: 5px;
   font-family: "Fira Code", monospace;
-  white-space: pre;
-  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
   max-width: 100%;
   box-sizing: border-box;
-  word-break: break-word;
 }
 
 pre {
   background-color: #f5f5f5;
+  color: #111;
   padding: 0.75em;
   border-radius: 5px;
-  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 
 /* Inline code */
