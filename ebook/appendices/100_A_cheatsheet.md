@@ -133,8 +133,7 @@ echo "Today is $today"
 #!/bin/bash
 
 set -euo pipefail
-IFS=$'
-	'
+IFS=$''
 
 echo "Script started"
 
