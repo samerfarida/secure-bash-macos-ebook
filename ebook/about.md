@@ -24,23 +24,17 @@ Sammy is passionate about Bash scripting, macOS internals, and open-source tooli
 
 This ebook is the result of years spent writing, testing, and refining secure Bash scripts in real-world macOS environments, from personal workflows to global-scale infrastructure.
 
----
-
 ## Dedication
 
 To my wife Lisa, and our children Dimitri, Lincoln, and Celine,
 thank you for your love, patience, and support.  
 This ebook would not exist without you.
 
----
-
 ## How to Use This Book
 
 This book is designed as a practical, hands-on guide. You can read it cover to cover if you are new to Bash scripting on macOS, or jump to specific chapters when you need to solve a problem or expand your skills.  
 Examples, exercises, and real-world use cases are included throughout to reinforce your learning.  
 Keep your Terminal open as you read, experimenting with the scripts is the best way to learn.
-
----
 
 ## Conventions Used in This Book
 
@@ -50,8 +44,6 @@ To make commands, code, and examples clear and consistent, this book uses the fo
 - **Inline code**: `like_this` to highlight commands, filenames, or paths.
 - **Variables**: UPPERCASE to indicate placeholders you should replace, such as `$FILENAME`.
 - **Notes and Warnings**: Important security tips, cautions, or best practices appear in callouts.
-
----
 
 ## System Requirements
 
@@ -73,3 +65,20 @@ This project uses a dual-license model:
 
 - **Book content** (Markdown files under `book/`) is licensed under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](LICENSES/CC-BY-4.0.txt).
 - **Scripts and code** (files in `scripts/`, `Makefile`, GitHub Actions) are licensed under the [MIT License](LICENSES/MIT.txt).
+
+## Acknowledgments
+
+I would like to extend my heartfelt thanks to everyone who provided valuable feedback, peer review, and encouragement during the creation of this ebook. Your insights and constructive criticism made this project stronger.  
+
+Special thanks to all the reviewers who took the time to test scripts, proofread chapters, and share practical suggestions. Your names will be proudly listed in each release to recognize your contributions.
+
+## Contributions
+
+This project is open source and thrives on community involvement.  
+If you find this book helpful, please consider starring the GitHub repository and sharing it with others.  
+
+I welcome contributions of all kinds such as fixes, examples, or new ideas.
+
+To contribute, fork the repository, make your changes, and submit a pull request (PR).
+
+I plan to automate contributor acknowledgments in the release process, so your name will be recognized in future versions.
