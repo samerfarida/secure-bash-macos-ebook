@@ -88,7 +88,7 @@ jobs:
           --metadata-file=metadata.yaml \
           --css=templates/ebook-style.css \
           --toc --toc-depth=2 \
-          --highlight-style=breezeDark \
+          --highlight-style=tango \
           -o output/${FILEBASE}.epub
 
         # HTML
@@ -97,7 +97,7 @@ jobs:
           --css=templates/ebook-style.css \
           --toc --toc-depth=2 \
           --standalone \
-          --highlight-style=breezeDark \
+          --highlight-style=tango \
           -o output/${FILEBASE}.html
 
     - name: 🧹 Clean up backup file
