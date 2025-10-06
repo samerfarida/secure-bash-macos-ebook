@@ -1,3 +1,0 @@
-# Chapter 15: Custom Installer Wrapper with GUI Prompts
-
-...
