@@ -58,11 +58,11 @@ Directory layout example:
 
 ```bash
 payload/
-└── Applications/
-    └── MyApp.app
-        ├── Contents/MacOS/MyApp
-        ├── Contents/Frameworks/SomeFramework.framework/Versions/A/SomeFramework
-        └── Contents/PlugIns/MyAppExtension.appex
+-- Applications/
+    -- MyApp.app
+        |-- Contents/MacOS/MyApp
+        |-- Contents/Frameworks/SomeFramework.framework/Versions/A/SomeFramework
+        -- Contents/PlugIns/MyAppExtension.appex
 ```
 
 Sign in dependency order (deep signing can hide problems; prefer explicit signing of each nested binary/framework first):
@@ -103,8 +103,8 @@ Installer scripts let you validate or adjust the system before and after files a
 
 ```bash
 scripts/
-├── preinstall
-└── postinstall
+|-- preinstall
+-- postinstall
 ```
 
 Example `preinstall` (root, non-interactive, fail-fast):
@@ -193,9 +193,9 @@ This creates a project with three key directories:
 
 ```bash
 SecurityWrapper/
-├── build-info.plist        # identifier, version, name, etc.
-├── payload/                # files that will be installed
-└── scripts/                # optional preinstall/postinstall (run as root)
+|-- build-info.plist        # identifier, version, name, etc.
+|-- payload/                # files that will be installed
+-- scripts/                # optional preinstall/postinstall (run as root)
 ```
 
 > Note: Packages created by `munkipkg` are **normal .pkg files** that work anywhere Apple installer packages work; Munki is not required to install them. citeturn0search2turn0search4
@@ -286,8 +286,8 @@ Example project layout:
 
 ```bash
 payload/
-└── Applications/
-    └── Sentinel.app               # vendor-signed, unmodified
+-- Applications/
+    -- Sentinel.app               # vendor-signed, unmodified
 payload/Library/Application Support/ExampleInc/Sentinel/config.json
 scripts/postinstall                 # writes org config, kicks service
 ```
