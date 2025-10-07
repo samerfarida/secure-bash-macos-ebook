@@ -30,8 +30,8 @@ We will focus on **Developer ID** distribution for direct downloads (outside the
 You need:
 
 * An Apple Developer account with access to **Certificates, Identifiers & Profiles**.
-* **Developer ID Application** certificate — used to sign apps and binaries inside your payload (e.g., `.app`, helper tools).  
-* **Developer ID Installer** certificate — used to sign `.pkg` installers.  
+* **Developer ID Application** certificate - used to sign apps and binaries inside your payload (e.g., `.app`, helper tools).  
+* **Developer ID Installer** certificate - used to sign `.pkg` installers.  
 * Xcode command line tools installed (provides `xcrun`, `codesign`, `notarytool`, `stapler`).
 
 Verify tools:
@@ -50,7 +50,7 @@ security find-identity -p codesigning -v
 
 Tip: Keep your Developer ID private keys in a **locked keychain** and use a CI-safe keychain if automating.
 
-## Step 1 — Prepare and Sign the App Payload
+## Step 1 - Prepare and Sign the App Payload
 
 Before packaging, ensure the app and all nested content are properly signed with **Developer ID Application** and hardened runtime if appropriate.
 
@@ -62,7 +62,7 @@ payload/
     -- MyApp.app
         |-- Contents/MacOS/MyApp
         |-- Contents/Frameworks/SomeFramework.framework/Versions/A/SomeFramework
-        -- Contents/PlugIns/MyAppExtension.appex
+        |-- Contents/PlugIns/MyAppExtension.appex
 ```
 
 Sign in dependency order (deep signing can hide problems; prefer explicit signing of each nested binary/framework first):
@@ -97,14 +97,14 @@ Verify signatures and requirements:
 
 If you package command-line tools (e.g., `/usr/local/bin/mytool`), sign them as well with the Application identity before packaging.
 
-## Step 2 — Create Preinstall/Postinstall Scripts (Optional)
+## Step 2 - Create Preinstall/Postinstall Scripts (Optional)
 
 Installer scripts let you validate or adjust the system before and after files are placed. Create a `scripts/` directory with executable scripts:
 
 ```bash
 scripts/
 |-- preinstall
--- postinstall
+|-- postinstall
 ```
 
 Example `preinstall` (root, non-interactive, fail-fast):
@@ -169,9 +169,9 @@ Guidelines:
 * Always log to stdout/stderr; output is captured in `/var/log/install.log`.  
 * Exit non-zero to abort installation gracefully.
 
-## Step 2.5 — Real‑World Packaging with **munkipkg** (wrap scripts & security tools)
+## Step 2.5 - Real‑World Packaging with **munkipkg** (wrap scripts & security tools)
 
-For many enterprise deployments you aren’t shipping a developer app — you’re wrapping a **script** (e.g., `xyz.sh`) or a **security tool** plus configuration files so it can be deployed by Munki/Jamf/MDM and managed like any other package. The fastest, reproducible way to do this is with **munkipkg** (project name: “munki‑pkg”; command: `munkipkg`). munkipkg builds standard Apple installer packages using a simple, Git‑friendly project layout.
+For many enterprise deployments you aren’t shipping a developer app - you’re wrapping a **script** (e.g., `xyz.sh`) or a **security tool** plus configuration files so it can be deployed by Munki/Jamf/MDM and managed like any other package. The fastest, reproducible way to do this is with **munkipkg** (project name: “munki‑pkg”; command: `munkipkg`). munkipkg builds standard Apple installer packages using a simple, Git‑friendly project layout.
 
 ### Install munkipkg
 
@@ -200,7 +200,7 @@ SecurityWrapper/
 
 > Note: Packages created by `munkipkg` are **normal .pkg files** that work anywhere Apple installer packages work; Munki is not required to install them.
 
-### Example A — Wrap a shell tool `xyz.sh` with a LaunchDaemon
+### Example A - Wrap a shell tool `xyz.sh` with a LaunchDaemon
 
 We’ll install the tool to `/usr/local/bin/xyz.sh`, a config to `/Library/Application Support/ExampleInc/xyz/config.json`, and a LaunchDaemon to keep it running.
 
@@ -258,7 +258,10 @@ else
 fi
 
 exit 0
+
 SCRIPT
+
+# Make executable
 chmod 755 scripts/postinstall
 ```
 
@@ -278,7 +281,7 @@ munkipkg .
 # output: build/XYZ Tool-1.0.0.pkg
 ```
 
-### Example B — Wrap a third‑party **security app** with extra configs
+### Example B - Wrap a third‑party **security app** with extra configs
 
 If a vendor ships a signed `.app` or CLI tool, place it under `payload/Applications/VendorApp.app` (or under `/Library/Application Support/Vendor/App/…` if CLI‑only) **without modifying its signature**, and add your org’s configuration files beside it. Use `postinstall` to apply permissions, write out defaults, seed license keys, or register launch assets. `munkipkg` will set `scripts/*` executable on build, simplifying project setup.
 
@@ -373,7 +376,7 @@ Verify component package:
 pkgutil --check-signature "build/MyApp-1.2.3-component.pkg"
 ```
 
-## Step 4 — Create a Distribution Package with `productbuild`
+## Step 4 - Create a Distribution Package with `productbuild`
 
 For multi-component installers or GUI customizations, create a distribution package using an XML distribution file. Minimal example (`distribution.xml`):
 
@@ -418,7 +421,7 @@ pkgutil --packages | grep com.example.myapp || true
 
 If you only have a single component package and no need for a distribution GUI, you can distribute the signed component `.pkg` directly.
 
-## Step 5 — Notarize with `xcrun notarytool` and Staple
+## Step 5 - Notarize with `xcrun notarytool` and Staple
 
 Apple’s notarization service scans the installer for malware and verifies signatures. Use an **App Store Connect API key** or a **keychain profile**.
 
@@ -472,7 +475,7 @@ spctl -a -vvv -t install "dist/MyApp-1.2.3-Installer.pkg"
 pkgutil --check-signature "dist/MyApp-1.2.3-Installer.pkg"
 ```
 
-## Step 6 — A User-Friendly Wrapper with swiftDialog
+## Step 6 - A User-Friendly Wrapper with swiftDialog
 
 Installer scripts must be non-interactive, so surface UX with a **wrapper** that runs before the `installer` command. The wrapper checks prerequisites, captures consent, then proceeds.
 
