@@ -171,7 +171,7 @@ Guidelines:
 
 ## Step 2.5 — Real‑World Packaging with **munkipkg** (wrap scripts & security tools)
 
-For many enterprise deployments you aren’t shipping a developer app — you’re wrapping a **script** (e.g., `xyz.sh`) or a **security tool** plus configuration files so it can be deployed by Munki/Jamf/MDM and managed like any other package. The fastest, reproducible way to do this is with **munkipkg** (project name: “munki‑pkg”; command: `munkipkg`). munkipkg builds standard Apple installer packages using a simple, Git‑friendly project layout. citeturn0search2turn0search0
+For many enterprise deployments you aren’t shipping a developer app — you’re wrapping a **script** (e.g., `xyz.sh`) or a **security tool** plus configuration files so it can be deployed by Munki/Jamf/MDM and managed like any other package. The fastest, reproducible way to do this is with **munkipkg** (project name: “munki‑pkg”; command: `munkipkg`). munkipkg builds standard Apple installer packages using a simple, Git‑friendly project layout.
 
 ### Install munkipkg
 
@@ -198,7 +198,7 @@ SecurityWrapper/
 -- scripts/                # optional preinstall/postinstall (run as root)
 ```
 
-> Note: Packages created by `munkipkg` are **normal .pkg files** that work anywhere Apple installer packages work; Munki is not required to install them. citeturn0search2turn0search4
+> Note: Packages created by `munkipkg` are **normal .pkg files** that work anywhere Apple installer packages work; Munki is not required to install them.
 
 ### Example A — Wrap a shell tool `xyz.sh` with a LaunchDaemon
 
@@ -335,7 +335,7 @@ xcrun stapler staple "dist/XYZ-1.0.0-signed.pkg"
 Deployment notes:
 
 * These packages are ideal for Munki/Jamf/MDM. They install a receipt and can be versioned by bumping `build-info.plist` → `version`.
-* For **script‑only** jobs, consider a **payload‑free** package built with `pkgbuild --nopayload` and scripts only; Munki sees/versions these by their receipt just like other pkgs. citeturn0search8
+* For **script‑only** jobs, consider a **payload‑free** package built with `pkgbuild --nopayload` and scripts only; Munki sees/versions these by their receipt just like other pkgs.
 * Keep configs out of the app bundle when possible so you can update configs without touching the vendor signature.
 
 Troubleshooting:
@@ -661,7 +661,7 @@ Security recommendations:
 ## macOS Scripting Tips
 
 * Prefer **API key** authentication with `notarytool` for automation.  
-* For “wrap and ship” deployments, prefer a **munkipkg** project: clean Git history, reproducible outputs, and standard receipts recognized by Munki/Jamf. citeturn0search2
+* For “wrap and ship” deployments, prefer a **munkipkg** project: clean Git history, reproducible outputs, and standard receipts recognized by Munki/Jamf.
 * Sign nested content explicitly before signing the app bundle.  
 * Keep **identifiers stable** across versions; version numbers should be semver-like.  
 * For CLI-only tools, consider installing into `/usr/local/bin` or `/opt/<vendor>/bin` and update PATH via a profile.  
