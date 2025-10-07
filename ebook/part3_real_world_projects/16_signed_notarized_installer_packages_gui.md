@@ -646,12 +646,12 @@ Security recommendations:
 **Goal:** Build a signed, notarized installer with a preflight GUI wrapper.
 
 1. Create a simple payload: an app in `payload/Applications/DemoApp.app` containing a signed shell tool in `Contents/MacOS/demo`.  
-2. Write `preinstall` and `postinstall` scripts to validate macOS version ≥ 13 and write a completion flag.  
+2. Write `preinstall` and `postinstall` scripts to validate macOS version >= 13 and write a completion flag.  
 3. Build a signed component `.pkg` with `pkgbuild`.  
 4. Create a distribution `.pkg` with `productbuild`, sign it, and notarize it with `notarytool --wait`.  
 5. Staple the package, verify with `spctl` and `pkgutil`.  
 6. Write a swiftDialog wrapper that:
-   * Checks for ≥ 1 GB free space and macOS ≥ 13
+   * Checks for >= 1 GB free space and macOS >= 13
    * Asks for user consent
    * Runs `installer` and shows progress
 7. Bonus: Integrate the flow into your CI and publish the artifact.
