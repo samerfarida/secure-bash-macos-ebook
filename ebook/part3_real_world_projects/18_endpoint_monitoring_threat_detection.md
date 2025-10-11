@@ -33,6 +33,10 @@ sudo launchctl load /Library/LaunchDaemons/io.osquery.agent.plist
 osqueryi
 ```
 
+### Ensure config/log directories exist with correct ownership/permissions
+
+sudo install -d -m 0755 -o root -g wheel /var/osquery /var/log/osquery
+
 ### LaunchDaemon plist example
 
 Save as `/Library/LaunchDaemons/io.osquery.agent.plist` with root:wheel ownership and mode `0644`.
@@ -74,6 +78,8 @@ Save as `/Library/LaunchDaemons/io.osquery.agent.plist` with root:wheel ownershi
 - Symlinks: `/usr/local/bin/osqueryi` (shell), `/usr/local/bin/osqueryctl`
 - Config examples: `/private/var/osquery/*.conf`
 - Logs: `/private/var/log/osquery/`
+
+Note: On macOS, `/var` is a symlink to `/private/var`. Osquery may document paths with either prefix; both refer to the same location.
 
 > Apple silicon & Intel: the official macOS package is a **universal** binary; no Rosetta is required.
 >
@@ -128,7 +134,7 @@ The following **TCC/PPPC** profile grants Full Disk Access (SystemPolicyAllFiles
 codesign -dr - /opt/osquery/lib/osquery.app
 ```
 
-Save as osquery-fda.mobileconfig and deploy via your MDM.
+Save as `osquery-fda.mobileconfig` and deploy via your MDM.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -196,7 +202,7 @@ Save as osquery-fda.mobileconfig and deploy via your MDM.
 </plist>
 ```
 
->Tip: Many MDMs (Jamf, Kandji, Mosyle, Intune) render PPPC in their UI. Use the profile above only when you need a raw .mobileconfig.
+> Tip: Many MDMs (Jamf, Kandji, Mosyle, Intune) render PPPC in their UI. Use the profile above only when you need a raw .mobileconfig.
 >
 > After granting FDA via PPPC, **restart `osqueryd`** (or use `launchctl kickstart -k system/io.osquery.agent`) or Endpoint Security tables will remain empty until the daemon restarts.
 
@@ -231,6 +237,8 @@ Osquery’s behavior is mostly controlled via a **flagfile** and a **JSON config
 --verbose=false
 ```
 
+> Version note: `es_process_file_events` requires a recent 5.x build. If that table is empty while `es_process_events` is populated (and FDA is granted), confirm your osquery version with `osqueryd --version` and upgrade if needed.
+>
 > On macOS, you can collect FIM two ways: `file_events` (FSEvents) and `es_process_file_events` (Endpoint Security with process context). Both respect the `file_paths`/`exclude_paths` configuration. Enable one or both depending on your needs and storage budget.
 
 #### File Integrity Monitoring (FIM) pattern tips
@@ -442,6 +450,8 @@ There are two common patterns:
      sourcetype = osquery:results
      ```
 
+     >If your fleet writes to `osqueryd.INFO/.WARNING` files instead, monitor those as well.
+
    - **Logstash** (Elastic):
 
      ```bash
@@ -477,9 +487,14 @@ Operational tips:
 5. Start the daemon and verify events arrive:
 
    ```bash
-   sudo launchctl load /Library/LaunchDaemons/io.osquery.agent.plist
-   # (Modern alternative shown later: bootstrap/enable/kickstart)
-   sudo tail -f /var/log/osquery/osqueryd.results.log
+    # Start the daemon (modern macOS 11+)
+    sudo launchctl bootstrap system /Library/LaunchDaemons/io.osquery.agent.plist
+    sudo launchctl enable system/io.osquery.agent
+    sudo launchctl kickstart -k system/io.osquery.agent
+
+    # Verify
+    launchctl print system/io.osquery.agent
+    sudo tail -f /var/log/osquery/osqueryd.results.log
    ```
 
 6. Point your forwarder (Splunk/Logstash/etc.) at `/var/log/osquery/` and confirm ingestion.
@@ -495,6 +510,15 @@ Operational tips:
 - `file_events` will remain empty unless `--enable_file_events=true` is set in your flags **and** matching `file_paths` are configured.
 - To confirm event publishers/subscribers are alive, run: `SELECT name, publisher, subscriptions, events, active FROM osquery_events;` and `SELECT name, value FROM osquery_flags WHERE name IN ('disable_events','disable_endpointsecurity','disable_endpointsecurity_fim','enable_file_events');`.
 - Prefer Endpoint Security on macOS for process events; avoid `audit_*` flags on macOS unless you intentionally deploy OpenBSM for legacy reasons.
+
+### Quick validation checklist
+
+- `osqueryd --version` returns a recent 5.x.
+- `/var/osquery/osquery.flags` includes `--disable_events=false`, `--disable_endpointsecurity=false`, and at least one FIM option (`--enable_file_events=true` or `--disable_endpointsecurity_fim=false`).
+- `launchctl print system/io.osquery.agent` shows the service loaded and running.
+- FDA PPPC is applied to the bundle ID `io.osquery.agent` or the binary path; daemon was restarted.
+- `osqueryi --line "SELECT * FROM es_process_events LIMIT 1;"` returns rows after a test process launch.
+- `osqueryi --line "SELECT * FROM file_events LIMIT 1;"` returns rows after touching a monitored path.
 
 ## Global Deployment Checklist (A to Z)
 
