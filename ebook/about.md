@@ -52,10 +52,11 @@ To follow along and run the examples in this book, you will need:
 - A Mac running a recent version of macOS (tested on macOS Sequoia v15.4)
 - Access to the Terminal app and basic command line familiarity
 - A text editor (such as `nano`, `vim`, or Visual Studio Code)
-- Administrative privileges for certain system-level scripts
-- An internet connection (optional, for downloading tools and updates)
+- Administrative privileges for certain system-level scripts (optional, many examples work as standard users)
+- An MDM system like Jamf Pro, Intune, Mosyle, or Addigy (optional, for Part III enterprise automation chapters)
+- Internet connection for downloading tools, packages, and updates
 
-Before starting, make sure your macOS is up to date and you have a safe test environment for experimenting with scripts.
+Before starting, make sure your macOS is up to date and you have a safe test environment for experimenting with scripts. For enterprise automation chapters (14-22), an MDM test environment is recommended to follow along with examples.
 
 ## License
 
