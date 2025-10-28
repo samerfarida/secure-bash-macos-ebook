@@ -16,7 +16,7 @@ Fleet administrators depend on accurate and up-to-date inventory data to make de
 
 macOS offers rich sources of truth: `system_profiler`, `ioreg`, `pkgutil`, Spotlight (`mdfind`, `mdls`), and system receipts. By wrapping these tools in modular functions, you can build consistent reports with minimal overhead.
 
-## Section 1 – Collecting Hardware Inventory
+## 15.1 Collecting Hardware Inventory
 
 ### 1.1 Efficient Hardware Collection
 
@@ -58,7 +58,7 @@ networksetup -listallhardwareports
 system_profiler SPStorageDataType -json | jq '.[0].SPStorageDataType[] | {name: ._name, capacity: .size}'
 ```
 
-## Section 2 – Collecting Software Inventory
+## 15.2 Collecting Software Inventory
 
 ### 2.1 Application Inventory via Spotlight
 
@@ -97,7 +97,7 @@ Quickly check for login items and LaunchAgents:
 ls /Library/LaunchAgents /Library/LaunchDaemons ~/Library/LaunchAgents 2>/dev/null
 ```
 
-## Section 3 – Exporting and Normalizing Inventory Data
+## 15.3 Exporting and Normalizing Inventory Data
 
 ### 3.1 Multiple Output Formats
 
@@ -141,7 +141,7 @@ sqlite3 /usr/local/share/inventory.db "SELECT * FROM systems ORDER BY last_seen 
 
 You now have multiple formats for structured inventory storage, ready for analysis or automation pipelines.
 
-## Section 4 – Integrating Inventory into App Rollouts
+## 15.4 Integrating Inventory into App Rollouts
 
 Use inventory metrics to make rollout decisions dynamically.
 
@@ -162,7 +162,7 @@ fi
 
 Integrate this logic into MDM scripts or CI/CD pipelines. Combine with application version checks to ensure prerequisites are met before pushing updates.
 
-## Section 5 – Automating Inventory Collection with launchd
+## 15.5 Automating Inventory Collection with launchd
 
 LaunchDaemons run with root privileges and must be placed in `/Library/LaunchDaemons` for system-wide jobs. User-level tasks should instead use `~/Library/LaunchAgents`.
 
@@ -194,7 +194,7 @@ sudo launchctl load -w /Library/LaunchDaemons/com.example.inventory.plist
 
 With launchd automation, your inventory collection becomes hands-free and consistent across devices.
 
-## Section 6 – Uploading Results Securely
+## 15.6 Uploading Results Securely
 
 Push results to a remote server for central analysis:
 

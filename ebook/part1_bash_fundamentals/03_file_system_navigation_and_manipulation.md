@@ -11,13 +11,11 @@ By the end of this chapter, you will be able to:
 - Apply file permissions and understand `chmod`, `chown`, and `umask`
 - Use macOS-specific tools like `open`, `xattr`, and `mdls`
 
----
 
 ## Introduction: The Shell as Your Filesystem Interface
 
 The command line isn't just a place to run commands — it's a powerful interface to the file system. In this chapter, we'll explore how to traverse, inspect, and modify files and directories using Bash, with a focus on macOS's quirks and features.
 
----
 
 ## 3.1 Paths: Absolute vs Relative
 
@@ -41,7 +39,6 @@ Return to previous directory:
 cd -
 ```
 
----
 
 ## 3.2 Listing and Inspecting Files
 
@@ -63,7 +60,6 @@ mdls file.txt      # Show Spotlight metadata
 xattr file.txt     # Show extended attributes
 ```
 
----
 
 ## 3.3 Creating and Removing Files and Directories
 
@@ -81,7 +77,6 @@ rm -r projects     # Recursively delete folder
 
 Be cautious with `rm -rf`. It will remove without confirmation.
 
----
 
 ## 3.4 Moving, Copying, and Renaming
 
@@ -99,7 +94,6 @@ cp -r myfolder/ archive/
 
 Use `-i` to confirm before overwriting.
 
----
 
 ## 3.5 Wildcards and Globbing
 
@@ -117,7 +111,6 @@ ls data[1-3].csv # data1.csv, data2.csv, data3.csv
 
 Combine with commands like `rm`, `cp`, `echo`, etc.
 
----
 
 ## 3.6 Permissions and Ownership
 
@@ -142,7 +135,6 @@ Default permission mask:
 umask
 ```
 
----
 
 ## 3.7 macOS-Specific File Tips
 
@@ -155,7 +147,6 @@ umask
 sudo mdutil -i off /path/to/dir
 ```
 
----
 
 ## Chapter 3 Exercise
 
@@ -178,7 +169,6 @@ done
 echo "Downloads organized."
 ```
 
----
 
 ## macOS Scripting Tips
 
@@ -187,4 +177,3 @@ echo "Downloads organized."
 - Use `diskutil list` to inspect drives and volumes
 - Use `find` or `mdfind` for search with greater flexibility
 
----

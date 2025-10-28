@@ -25,7 +25,7 @@ On macOS, a professional delivery pipeline for software typically culminates in 
 
 We will focus on **Developer ID** distribution for direct downloads (outside the Mac App Store).
 
-## Prerequisites and Certificates
+## 16.1 Prerequisites and Certificates
 
 You need:
 
@@ -50,7 +50,7 @@ security find-identity -p codesigning -v
 
 Tip: Keep your Developer ID private keys in a **locked keychain** and use a CI-safe keychain if automating.
 
-## Step 1 - Prepare and Sign the App Payload
+## 16.2 Prepare and Sign the App Payload
 
 Before packaging, ensure the app and all nested content are properly signed with **Developer ID Application** and hardened runtime if appropriate.
 
@@ -97,7 +97,7 @@ Verify signatures and requirements:
 
 If you package command-line tools (e.g., `/usr/local/bin/mytool`), sign them as well with the Application identity before packaging.
 
-## Step 2 - Create Preinstall/Postinstall Scripts (Optional)
+## 16.3 Create Preinstall/Postinstall Scripts (Optional)
 
 Installer scripts let you validate or adjust the system before and after files are placed. Create a `scripts/` directory with executable scripts:
 
@@ -169,7 +169,7 @@ Guidelines:
 * Always log to stdout/stderr; output is captured in `/var/log/install.log`.  
 * Exit non-zero to abort installation gracefully.
 
-## Step 2.5 - Real‑World Packaging with **munkipkg** (wrap scripts & security tools)
+## 16.4 Real-World Packaging with munkipkg
 
 For many enterprise deployments you aren’t shipping a developer app - you’re wrapping a **script** (e.g., `xyz.sh`) or a **security tool** plus configuration files so it can be deployed by Munki/Jamf/MDM and managed like any other package. The fastest, reproducible way to do this is with **munkipkg** (project name: “munki‑pkg”; command: `munkipkg`). munkipkg builds standard Apple installer packages using a simple, Git‑friendly project layout.
 
@@ -376,7 +376,7 @@ Verify component package:
 pkgutil --check-signature "build/MyApp-1.2.3-component.pkg"
 ```
 
-## Step 4 - Create a Distribution Package with `productbuild`
+## 16.5 Create a Distribution Package with productbuild
 
 For multi-component installers or GUI customizations, create a distribution package using an XML distribution file. Minimal example (`distribution.xml`):
 
@@ -421,7 +421,7 @@ pkgutil --packages | grep com.example.myapp || true
 
 If you only have a single component package and no need for a distribution GUI, you can distribute the signed component `.pkg` directly.
 
-## Step 5 - Notarize with `xcrun notarytool` and Staple
+## 16.6 Notarize with xcrun notarytool and Staple
 
 Apple’s notarization service scans the installer for malware and verifies signatures. Use an **App Store Connect API key** or a **keychain profile**.
 
@@ -475,7 +475,7 @@ spctl -a -vvv -t install "dist/MyApp-1.2.3-Installer.pkg"
 pkgutil --check-signature "dist/MyApp-1.2.3-Installer.pkg"
 ```
 
-## Step 6 - A User-Friendly Wrapper with swiftDialog
+## 16.7 A User-Friendly Wrapper with swiftDialog
 
 Installer scripts must be non-interactive, so surface UX with a **wrapper** that runs before the `installer` command. The wrapper checks prerequisites, captures consent, then proceeds.
 
@@ -560,7 +560,7 @@ Notes:
 * Gatekeeper and Authorization UI are still enforced by macOS as needed (admin prompts, etc.).  
 * Run the wrapper from a management tool (MDM policy, Jamf Script, Munki preflight, Self Service, etc.).
 
-## Verification and Troubleshooting
+## 16.8 Verification and Troubleshooting
 
 Common checks:
 
@@ -590,7 +590,7 @@ If notarization fails:
 * Avoid `--deep` as a crutch; explicitly sign nested items.  
 * Rebuild, re-sign, and re-submit.
 
-## CI: Automating Build → Sign → Notarize → Staple
+## 16.9 CI: Automating Build → Sign → Notarize → Staple
 
 A minimal CI flow (pseudo-Bash) suitable for GitHub Actions (macOS runner):
 

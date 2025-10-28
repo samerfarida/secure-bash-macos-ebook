@@ -17,7 +17,7 @@ Osquery exposes macOS as a relational database you can query with SQL. For endpo
 
 This chapter walks through **installation**, **hardening**, **configuration**, **high‑signal queries**, and **log forwarding** patterns that map directly to real-world threat detection and DFIR workflows.
 
-## Installing osquery on macOS
+## 18.1 Installing osquery on macOS
 
 Use the official macOS installer package for fleet deployments, which lays down the app bundle, symlinks, example config, and a sample LaunchDaemon.
 
@@ -114,7 +114,7 @@ osqueryi --line "SELECT time,pid,parent,path FROM es_process_events ORDER BY tim
 osqueryi --line "SELECT * FROM file_events ORDER BY time DESC LIMIT 3;"
 ```
 
-## Hardening & prerequisites (macOS)
+## 18.2 Hardening and Prerequisites (macOS)
 
 ### Full Disk Access (FDA)
 
@@ -210,7 +210,7 @@ Save as `osquery-fda.mobileconfig` and deploy via your MDM.
 
 Official builds of osquery are code‑signed/notarized and include the **Endpoint Security client entitlement** needed to subscribe to ES events. Use official packages for production; custom‑built binaries must be signed, notarized, and provisioned with the proper entitlement to receive ES events.
 
-## Configuration: flags, schedules, and packs
+## 18.3 Configuration: Flags, Schedules, and Packs
 
 Osquery’s behavior is mostly controlled via a **flagfile** and a **JSON configuration**. On macOS, place the flagfile at `/var/osquery/osquery.flags` and the primary JSON at `/var/osquery/osquery.conf`.
 
@@ -314,7 +314,7 @@ If you run a central osquery manager (e.g., Fleet, your own TLS endpoint), enabl
 >
 > `file_events` requires that paths be listed under `file_paths`; osquery buffers and emits the events when the scheduled query runs. On macOS, file change notifications come from FSEvents/ES depending on configuration.
 
-## Practical detection queries (macOS)
+## 18.4 Practical Detection Queries (macOS)
 
 Below are high‑signal examples designed for production schedules and ad‑hoc investigations. Test on a pilot group before broad rollout.
 
@@ -419,7 +419,7 @@ ORDER BY time DESC
 LIMIT 200;
 ```
 
-## macOS logging for correlation (Unified Logging)
+## 18.5 macOS Logging for Correlation (Unified Logging)
 
 The macOS **unified logging** system (Console app, `log show`, `log stream`) complements osquery during investigations. Example workflows:
 
@@ -437,7 +437,7 @@ Tips:
 - Capture both osquery **status logs** and **results logs** in your SIEM; status logs are invaluable when debugging event pipelines.
 - For near–real‑time triage, tail `/var/log/osquery/osqueryd.results.log` while streaming `log stream` in another terminal.
 
-## Forwarding osquery results to your SIEM
+## 18.6 Forwarding Osquery Results to Your SIEM
 
 There are two common patterns:
 
@@ -469,14 +469,14 @@ Operational tips:
 - Results vs. status logs: results are written to `/var/log/osquery/osqueryd.results.log`; status/debug to `/var/log/osquery/osqueryd.INFO/.WARNING` or `osqueryd.status.log` depending on version and flags.
 - If storing logs locally, keep rotation enabled via `--logger_rotate*` flags, and size/test in a pilot to avoid filling disks.
 
-## Performance and safety
+## 18.7 Performance and Safety
 
 - Event publishers can generate high volumes. Start with a pilot, then scale intervals and `events_max` with data.
 - Use `removed: false` on high‑volume event queries to reduce noise.
 - Consider label‑based targeting (by OS version, model, corporate unit) via your manager to scope expensive queries.
 - Avoid monitoring every path in `file_paths`; focus on persistence/control points first and iterate.
 
-## Hands‑On Exercise: Build a production‑ready ES pipeline
+## 18.8 Hands-On Exercise: Build a Production-Ready ES Pipeline
 
 **Goal:** Enable Endpoint Security–backed process events, capture FIM on key directories, and forward to your SIEM.
 
@@ -520,7 +520,7 @@ Operational tips:
 - `osqueryi --line "SELECT * FROM es_process_events LIMIT 1;"` returns rows after a test process launch.
 - `osqueryi --line "SELECT * FROM file_events LIMIT 1;"` returns rows after touching a monitored path.
 
-## Global Deployment Checklist (A to Z)
+## 18.9 Global Deployment Checklist (A to Z)
 
 1. **Install** the official pkg across the fleet (MDM/munki/Jamf) and verify `/usr/local/bin/osqueryctl` exists.
 2. **LaunchDaemon** installed and loaded (`io.osquery.agent.plist`) using modern `launchctl` commands; verify with `launchctl print system/io.osquery.agent`.
@@ -533,7 +533,7 @@ Operational tips:
 9. **Performance**: tune `interval`, `removed`, `events_max`, and path scopes; monitor CPU/RAM and RocksDB size at `/var/osquery/osquery.db`.
 10. **Security**: pin TLS server certs (`--tls_server_certs`), keep official, signed/notarized builds; audit your PPPC payloads regularly.
 
-## Drop-in detections pack (packs/detections.conf)
+## 18.10 Drop-in Detections Pack (packs/detections.conf)
 
 Save this file to `/var/osquery/packs/detections.conf` and enable it from your main config under `"packs"`.
 

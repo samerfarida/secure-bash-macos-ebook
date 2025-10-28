@@ -11,13 +11,15 @@ By the end of this chapter, you will be able to:
 - Work with structured data (CSV, JSON, plist) in Bash
 - Leverage macOS tools like `plutil` and `jq`
 
----
+
 
 ## Introduction: Bash as a Data Processing Tool
 
 While many think of Bash as a command runner, its real power lies in data manipulation—especially text. Logs, configuration files, CSVs, and JSON responses can all be processed with Bash's built-in capabilities and powerful command-line utilities.
 
----
+As a macOS administrator or security engineer, you'll frequently need to parse system logs, extract data from configuration files, transform CSV exports from inventory tools, and process JSON responses from APIs. This chapter teaches you the essential text processing tools—grep, awk, sed, cut, and tr—along with macOS-specific utilities like plutil, jq, and pbcopy/pbpaste that make data manipulation faster and more reliable.
+
+
 
 ## 4.1 Standard Input, Output, and Error
 
@@ -40,7 +42,7 @@ Read from a file as input:
 command < input.txt
 ```
 
----
+
 
 ## 4.2 Pipes and Command Chaining
 
@@ -55,7 +57,7 @@ Chain commands:
 mkdir logs && cd logs || echo "Failed to create directory"
 ```
 
----
+
 
 ## 4.3 Using `grep` to Search Text
 
@@ -75,7 +77,7 @@ Example:
 grep -i 'error' /var/log/system.log
 ```
 
----
+
 
 ## 4.4 Using `cut`, `awk`, and `tr`
 
@@ -94,7 +96,7 @@ awk -F ':' '{ print $1 " -> " $3 }' /etc/passwd
 echo "hello" | tr 'a-z' 'A-Z'
 ```
 
----
+
 
 ## 4.5 Using `sed` to Edit Streams
 
@@ -113,7 +115,7 @@ In-place editing:
 sed -i '' 's/localhost/127.0.0.1/' hosts.txt   # macOS version
 ```
 
----
+
 
 ## 4.6 Reading and Writing CSV Files
 
@@ -125,7 +127,7 @@ awk -F ',' '{ print $2 }' users.csv
 
 Beware of quoted fields and commas in text. For more complex CSVs, use `csvkit` or `python -c` one-liners.
 
----
+
 
 ## 4.7 Working with JSON and `jq`
 
@@ -144,7 +146,7 @@ Install with:
 brew install jq
 ```
 
----
+
 
 ## 4.8 Working with Property Lists (plist)
 
@@ -160,7 +162,7 @@ Use `defaults` to read/write user preferences:
 defaults read com.apple.finder
 ```
 
----
+
 
 ## Chapter 4 Exercise
 
@@ -179,7 +181,7 @@ grep 'ERROR' "$input" > "$output"
 echo "Filtered log written to $output"
 ```
 
----
+
 
 ## macOS Scripting Tips
 
@@ -188,4 +190,4 @@ echo "Filtered log written to $output"
 - Combine `osascript` with `grep` for smart notifications
 - Use `mdfind` to search file metadata
 
----
+

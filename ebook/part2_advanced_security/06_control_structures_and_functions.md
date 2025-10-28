@@ -1,4 +1,4 @@
-# Chapter 06: Control Structures and Functions
+# Chapter 6: Control Structures and Functions
 
 ## Learning Objectives
 
@@ -10,15 +10,15 @@ By the end of this chapter, you will be able to:
 - Apply control structures and functions to build readable, modular scripts
 - Recognize macOS-specific quirks when using these constructs
 
----
+
 
 ## Introduction
 
 Control structures and functions are the backbone of any scripting language, enabling dynamic behavior and code reuse. Bash on macOS supports the same powerful constructs as other Unix-based systems, but scripting with security and clarity in mind is key when administering macOS at scale.
 
----
 
-## Conditional Statements
+
+## 6.1 Conditional Statements
 
 ### `if` Statements
 
@@ -53,9 +53,9 @@ else
 fi
 ```
 
----
 
-## `case` Statements
+
+## 6.2 `case` Statements
 
 Great for handling multiple possibilities, especially for command-line arguments or user input.
 
@@ -77,9 +77,9 @@ case "$1" in
 esac
 ```
 
----
 
-## Loops
+
+## 6.3 Loops
 
 ### `for` Loops
 
@@ -110,9 +110,9 @@ until [ -f /tmp/signal.done ]; do
 done
 ```
 
----
 
-## Bash Functions
+
+## 6.4 Bash Functions
 
 Functions allow code reuse and better structure.
 
@@ -137,9 +137,9 @@ result=$(add_numbers 3 4)
 echo "The sum is: $result"
 ```
 
----
 
-## Real-World Example: Lock Screen Reminder
+
+## 6.5 Real-World Example: Lock Screen Reminder
 
 This script displays a lock screen reminder if a user forgets to lock their Mac:
 
@@ -165,17 +165,17 @@ main() {
 main
 ```
 
----
 
-## macOS-Specific Notes
+
+## 6.6 macOS-Specific Notes
 
 - `osascript` allows integration of AppleScript within Bash for user notifications.
 - GUI prompts or notifications via scripts require `System Events` permissions under **System Preferences > Privacy & Security > Automation**.
 - File paths and user account handling differ from Linux—use `dscl` or `id` carefully.
 
----
 
-## Exercises
+
+## Chapter 6 Exercise
 
 1. Write a script that loops through all `.log` files in `/var/log` and prints the filename and number of lines.
 2. Create a function called `backup_home` that accepts a username and uses `rsync` to back up their home directory to `/Users/Backups/`.

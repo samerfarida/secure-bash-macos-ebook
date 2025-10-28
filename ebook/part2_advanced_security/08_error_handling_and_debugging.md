@@ -10,15 +10,15 @@ By the end of this chapter, you will be able to:
 4. Implement logging and output redirection for troubleshooting.
 5. Apply best practices for debugging on macOS.
 
----
+
 
 ## Introduction: Why Error Handling and Debugging Matter
 
 Even the best Bash scripts fail at some point. On macOS, where scripts often automate system configurations, backups, or security checks, robust error handling is crucial. Poor error handling can lead to partial changes, corrupted files, or security misconfigurations. This chapter shows you how to detect and handle problems gracefully, log what happened, and troubleshoot effectively.
 
----
 
-## Understanding Exit Codes
+
+## 8.1 Understanding Exit Codes
 
 Every command in Bash returns an exit code. By convention:
 
@@ -56,7 +56,7 @@ else
 fi
 ```
 
-## Using `trap` to Handle Errors and Signals
+## 8.2 Using `trap` to Handle Errors and Signals
 
 `trap` allows you to run cleanup code when a script exits, or when it receives a signal like SIGINT (Ctrl+C).
 
@@ -84,9 +84,9 @@ When the script exits — normally or via Ctrl+C — `trap` ensures the temp fil
 - Stop services you started.
 - Unlock files or resources.
 
----
 
-## Debugging with `set -x` and `bash -x`
+
+## 8.3 Debugging with `set -x` and `bash -x`
 
 Bash’s `-x` option shows each command and its arguments as they run.
 
@@ -119,9 +119,9 @@ bash -x myscript.sh
 
 On macOS, this is helpful when working with `launchd` jobs — you can test scripts interactively before deploying them.
 
----
 
-## Logging and Output Redirection
+
+## 8.4 Logging and Output Redirection
 
 Capturing output and errors helps you diagnose issues after the fact.
 
@@ -148,9 +148,9 @@ echo "Script done" >> "$LOGFILE"
 - Rotate logs on macOS if you run scripts regularly (use `newsyslog` or log rotation tools).
 - Include timestamps for each log entry with `date`.
 
----
 
-## macOS-Specific Tips
+
+## 8.5 macOS-Specific Tips
 
 - When testing scripts that will run as `launchd` jobs, log output to `/var/log/` or `~/Library/Logs/`.
 - For privileged scripts, remember `sudo` can suppress environment variables; test exit codes carefully.
@@ -162,7 +162,7 @@ logger "My script started"
 
 You can view these with `log show` or the Console app.
 
----
+
 
 ## Chapter 8 Exercise
 
@@ -192,9 +192,9 @@ echo "Exit code: $?"
 set +x
 ```
 
----
 
-## Tips
+
+## macOS Scripting Tips
 
 - Use clear, descriptive log messages.
 - Always test your `trap` handlers to avoid infinite loops.

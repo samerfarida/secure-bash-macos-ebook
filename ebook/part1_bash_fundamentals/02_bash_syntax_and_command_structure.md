@@ -10,13 +10,11 @@ By the end of this chapter, you will be able to:
 - Use comments, functions, and exit codes properly
 - Begin writing scripts that interact with user input
 
----
 
 ## Introduction: The Building Blocks of Bash
 
 Before you can write powerful scripts, you need to understand how Bash interprets your input. This chapter will give you a clear, practical foundation in Bash syntax and structure—knowledge that applies equally whether you're writing a 3-line script or a full automation tool.
 
----
 
 ## 2.1 Commands and Arguments
 
@@ -42,7 +40,6 @@ You can chain commands using `&&`, `||`, and `;`:
 mkdir newfolder && cd newfolder
 ```
 
----
 
 ## 2.2 Variables
 
@@ -64,7 +61,6 @@ You can also use environment variables:
 echo "$HOME"
 ```
 
----
 
 ## 2.3 Quoting: Single, Double, and Escaping
 
@@ -79,7 +75,6 @@ echo 'My name is $USER'      # Prints literally
 echo "My name is $USER"      # Expands $USER
 ```
 
----
 
 ## 2.4 Conditionals: `if`, `elif`, `else`
 
@@ -107,7 +102,6 @@ fi
 
 Use `[[ ... ]]` for advanced conditions (e.g., regex).
 
----
 
 ## 2.5 Loops: `for`, `while`, and `until`
 
@@ -139,7 +133,6 @@ until [ "$ready" = "yes" ]; do
 done
 ```
 
----
 
 ## 2.6 Functions and Return Values
 
@@ -165,7 +158,6 @@ if check_dir "/tmp"; then
 fi
 ```
 
----
 
 ## 2.7 Script Exit Codes
 
@@ -180,7 +172,6 @@ exit 0   # success
 exit 1   # general error
 ```
 
----
 
 ## 2.8 Reading User Input
 
@@ -206,7 +197,6 @@ else
 fi
 ```
 
----
 
 ## Chapter 2 Exercise
 
@@ -231,7 +221,6 @@ else
 fi
 ```
 
----
 
 ## macOS Scripting Tips
 
@@ -240,4 +229,3 @@ fi
 - Use `read -s` to securely accept passwords from users.
 - Use `touch`, `say`, and `afplay` for playful script output on macOS.
 
----

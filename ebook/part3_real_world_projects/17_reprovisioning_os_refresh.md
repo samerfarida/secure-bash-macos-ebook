@@ -21,7 +21,7 @@ This chapter provides a practical, script‑first treatment of **in‑place upgr
 
 > **Danger zone:** The examples below can erase data. Only run on test devices first. Always back up and confirm scope, power, and user consent.
 
-## Choosing a Strategy: In‑Place vs Clean Refresh
+## 17.1 Choosing a Strategy: In-Place vs Clean Refresh
 
 **In‑place upgrade / reinstall** (keeps data & apps):
 
@@ -41,7 +41,7 @@ This chapter provides a practical, script‑first treatment of **in‑place upgr
 * You want **audit trails**, **rate limiting**, and **policy gating** at scale.
 * You rely on **Bootstrap Token** and platform entitlements only MDM can exercise.
 
-## Preflight Checks You Should Never Skip
+## 17.2 Preflight Checks You Should Never Skip
 
 Create a **single preflight function** you can call from any workflow. This avoids subtle differences across scripts and teams.
 
@@ -149,7 +149,7 @@ main "$@"
 
 **Why these checks?** Power loss or low disk space can brick upgrades. Apple silicon may require *user authorization* during certain flows unless MDM pathways are used. **Bootstrap Token** state tells you how “hands‑off” the flow can be on managed Macs.
 
-## Obtaining the Installer Safely
+## 17.3 Obtaining the Installer Safely
 
 Prefer **Apple‑signed installers** via `softwareupdate`. This ensures correct catalogs and signing.
 
@@ -175,7 +175,7 @@ codesign -dv --verbose=4 "/Applications/Install macOS*.app" 2>&1 | grep -E "Auth
 
 For bandwidth control across sites, consider **Content Caching** and staged distribution.
 
-## startosinstall: Core Patterns
+## 17.4 startosinstall: Core Patterns
 
 `startosinstall` lives at:
 
@@ -220,7 +220,7 @@ sudo "$installer/Contents/Resources/startosinstall"   --eraseinstall   --newvolu
 
 > **Tip:** Some flows on Apple silicon still require an *admin user’s authorization* to proceed. If you need a truly unattended experience at scale, use **MDM workflows** and ensure **Bootstrap Token** is escrowed.
 
-## Apple Silicon vs Intel: Critical Differences
+## 17.5 Apple Silicon vs Intel: Critical Differences
 
 | Topic | Intel (T2 and non‑T2) | Apple silicon (M1/M2/M3) |
 |---|---|---|
@@ -244,7 +244,7 @@ profiles status -type bootstraptoken
 
 If **Bootstrap Token** is not escrowed on managed devices, unattended upgrades may stall on Apple silicon. Work with your MDM to escrow tokens and consider using **ScheduleOSUpdate**/**EraseDevice** instead of local scripts.
 
-## Using erase-install for Operator Safety
+## 17.6 Using erase-install for Operator Safety
 
 The community **erase-install** tool wraps `startosinstall` to provide consistent CLI options, preflight checks, and logging. Typical flows:
 
@@ -270,7 +270,7 @@ Example patterns (confirm version on the device you’re targeting):
 
 **Operational guardrails to keep:** require `--confirm`, maintain verbose logs, and gate execution behind your preflight function.
 
-## User Experience: Preconditions and Consent (swiftDialog)
+## 17.7 User Experience: Preconditions and Consent (swiftDialog)
 
 Use a lightweight dialog to show preconditions and gather explicit consent in user‑present flows.
 
@@ -291,7 +291,7 @@ esac
 
 Combine with your **preflight_refresh.sh** to fail fast when power/network/FileVault conditions are not met.
 
-## Logging, Proof, and Rollback
+## 17.8 Logging, Proof, and Rollback
 
 Your help desk will thank you for **structured logs** and clear “what happened” artifacts.
 
@@ -308,7 +308,7 @@ sw_vers
 
 Keep a manifest of **inputs** (installer path, flags, user decision), **outputs** (return codes), and **timeline** for audit. If a flow aborts, display a dialog with next steps and open a help ticket URL for the user.
 
-## MDM/DDM Workflows to Prefer at Scale
+## 17.9 MDM/DDM Workflows to Prefer at Scale
 
 * **EraseDevice** – authoritative wipe for Apple silicon and T2; user‑absent, auditable. On macOS 12+, EraseDevice leverages **Erase All Content and Settings (EACS)**, which performs faster and preserves OS integrity.
 * **ScheduleOSUpdate / Declarative Device Management** – platform‑level upgrades with better success rates than local scripts.
@@ -317,7 +317,7 @@ Keep a manifest of **inputs** (installer path, flags, user decision), **outputs*
 
 **Rule of thumb:** If it must be unattended on Apple silicon, and you manage the device with MDM, prefer **MDM/DDM** over local `startosinstall`.
 
-## Putting It All Together: Orchestrated Scripts
+## 17.10 Putting It All Together: Orchestrated Scripts
 
 A simple orchestrator tying together preflight, consent, and `startosinstall`:
 

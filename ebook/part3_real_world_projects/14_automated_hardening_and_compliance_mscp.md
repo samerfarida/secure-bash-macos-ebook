@@ -269,7 +269,7 @@ dialog --title "Compliance Window"   --message "Your Mac will run a security com
 - **Compliance script shell:** If you see syntax errors in Bash, run with `zsh` as required.
 - **DDM not applying:** Ensure your MDM supports DDM on the target OS and you delivered the correct activations, assets, and configurations.
 
-## macOS Tips
+## macOS Scripting Tips
 
 - **Bash 3.2 vs 5:** If you author your own verifiers, stick to Bash 3.2‑compatible syntax (ships with macOS) unless you deploy a Bash 5 runtime.
 - **Apple silicon paths:** If you reference Homebrew tools in checks, use `/opt/homebrew` on Apple silicon.
@@ -284,7 +284,7 @@ dialog --title "Compliance Window"   --message "Your Mac will run a security com
 1. Create a LaunchDaemon to run nightly and ship the audit plist/log summary to your SIEM.
 1. Add your mini‑audit JSON to the SIEM and build a simple dashboard showing pass/fail by control ID.
 
-## References
+## References and Further Reading
 
 - mSCP introduction and docs: https://pages.nist.gov/macos_security/welcome/introduction/
 - Getting Started (prerequisites and branches): https://pages.nist.gov/macos_security/welcome/getting-started/

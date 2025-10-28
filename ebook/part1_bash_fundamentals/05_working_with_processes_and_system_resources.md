@@ -11,17 +11,19 @@ By the end of this chapter, you will be able to:
 - Understand process IDs (PIDs) and signals
 - Use macOS-specific tools like `Activity Monitor`, `launchctl`, and `pmset`
 
----
+
 
 ## Introduction: Why Processes Matter
 
 When you run a Bash script, launch an app, or execute a command, you're starting a process. Understanding how to inspect, manage, and influence those processes is essential for automation, performance tuning, and security auditing on macOS.
 
----
+Process management is critical for security engineers who need to monitor suspicious activity, stop malware, or audit system usage. For administrators, process knowledge enables you to troubleshoot performance issues, manage system resources, and schedule automated tasks effectively. This chapter covers the fundamental tools for process management on macOS, setting you up for advanced topics like launchd (covered in Chapter 10) and system monitoring (discussed in Chapter 18).
+
+
 
 ## 5.1 Viewing Running Processes
 
-## View system-wide processes
+### View system-wide processes
 
 ```bash
 ps aux
@@ -46,7 +48,7 @@ brew install htop
 htop
 ```
 
----
+
 
 ## 5.2 Process IDs and Signals
 
@@ -66,7 +68,7 @@ Send a signal by name:
 kill -SIGUSR1 12345
 ```
 
----
+
 
 ## 5.3 Managing Foreground and Background Jobs
 
@@ -95,7 +97,7 @@ Ctrl + Z
 kill %1
 ```
 
----
+
 
 ## 5.4 Prioritizing with `nice` and `renice`
 
@@ -111,7 +113,7 @@ renice 15 -p 12345
 
 Lower values = higher priority (0 is default).
 
----
+
 
 ## 5.5 Automating Long-Running Tasks
 
@@ -132,7 +134,7 @@ Example:
 
 Use `launchd` for macOS-native task scheduling (discussed in later chapters).
 
----
+
 
 ## 5.6 Monitoring System Usage
 
@@ -161,7 +163,7 @@ Battery and power status:
 pmset -g batt
 ```
 
----
+
 
 ## 5.7 macOS-Specific Process Tools
 
@@ -175,7 +177,7 @@ Example: List user agents loaded by `launchd`:
 launchctl list | grep com.apple
 ```
 
----
+
 
 ## Chapter 5 Exercise
 
@@ -195,18 +197,15 @@ if ! pgrep -x "$process" > /dev/null; then
 fi
 ```
 
----
+
 
 ## macOS Scripting Tips
 
 - Use `pgrep` and `pkill` for process name filtering
 - Use `nohup` and `disown` to prevent processes from dying with the terminal
-- Use `launchctl bootout` and `launchctl bootout` to disable/enable services
-- Monitor app hangs with:
-- Monitor app hangs with:
+- Use `launchctl bootout` and `launchctl bootin` to disable/enable services
+- Monitor app hangs with `sample`: `sample [pid] -file output.txt`
+- Use `spindump` to identify resource-intensive processes
+- Check battery status before running intensive scripts with `pmset -g batt`
 
-```bash
-sample [pid] -file output.txt
-```
 
----

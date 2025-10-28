@@ -1,4 +1,4 @@
-# Chapter 07: File Management and Permissions
+# Chapter 7: File Management and Permissions
 
 ## Learning Objectives
 
@@ -10,7 +10,7 @@ By the end of this chapter, you will be able to:
 - Use `find`, `xargs`, and `stat` to audit file access and attributes
 - Apply macOS-specific practices for protecting sensitive files
 
----
+
 
 ## Introduction
 
@@ -18,9 +18,9 @@ File and directory permissions are a fundamental security layer in Unix-based sy
 
 In this chapter, we'll explore the key tools and techniques to manage file access securely from a Bash script on macOS.
 
----
 
-## Creating and Managing Files
+
+## 7.1 Creating and Managing Files
 
 ### Basic File Commands
 
@@ -38,9 +38,9 @@ Use `rm -i` or `rm -I` interactively to avoid accidental deletions:
 rm -i ~/Desktop/*.sh
 ```
 
----
 
-## Understanding File Permissions
+
+## 7.2 Understanding File Permissions
 
 Permissions define who can read, write, or execute a file.
 
@@ -61,9 +61,9 @@ chmod 755 script.sh   # rwxr-xr-x
 chmod 700 secrets.txt # rwx------
 ```
 
----
 
-## Changing Ownership and Permissions
+
+## 7.3 Changing Ownership and Permissions
 
 ### `chmod` – Change Permissions
 
@@ -89,9 +89,9 @@ sudo chflags nouchg important.doc
 
 Use `ls -lO` to view file flags.
 
----
 
-## File Attributes and Metadata
+
+## 7.4 File Attributes and Metadata
 
 macOS uses extended attributes and metadata (`com.apple.*` keys).
 
@@ -108,9 +108,9 @@ Remove all attributes:
 xattr -c file.txt
 ```
 
----
 
-## Finding and Auditing Files
+
+## 7.5 Finding and Auditing Files
 
 ### Using `find`
 
@@ -131,9 +131,9 @@ find ~/Downloads -atime +30 -delete
 find . -type f -name "*.log" | xargs grep "ERROR"
 ```
 
----
 
-## Real-World Example: Secure Log Archiving Script
+
+## 7.6 Real-World Example: Secure Log Archiving Script
 
 ```bash
 #!/bin/bash
@@ -151,18 +151,18 @@ chmod -R 700 "$dest_dir"
 chown -R admin:staff "$dest_dir"
 ```
 
----
 
-## macOS-Specific Notes
+
+## macOS Scripting Tips
 
 - System files are protected by **System Integrity Protection (SIP)** and may be immutable even for `sudo`.
 - Always use `sudo` cautiously in automation scripts—privilege escalation should be justified.
 - `/System` and `/usr/bin` are mostly read-only in recent macOS versions.
 - User-owned writable directories: `/Users`, `/usr/local`, `/opt`.
 
----
 
-## Exercises
+
+## Chapter 7 Exercise
 
 1. Write a script to find and back up all `.conf` files in `/etc` to a folder in your home directory.
 2. Create a script that checks permissions of all `.sh` files in a directory and warns if any are globally writable.

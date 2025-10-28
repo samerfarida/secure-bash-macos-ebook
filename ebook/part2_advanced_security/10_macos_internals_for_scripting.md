@@ -11,15 +11,15 @@ By the end of this chapter, you will be able to:
 - Use the macOS unified logging system for script debugging.
 - Understand sandboxing basics and how they affect script execution.
 
----
+
 
 ## Introduction: Scripting with macOS Internals in Mind
 
 macOS combines security features, system tools, and logging mechanisms you must know to write reliable Bash scripts. `launchd` controls background processes, SIP restricts certain operations, and PPPC governs access to user data. You’ll also learn how to use the unified log and how sandboxing can limit script actions.
 
----
 
-## Using launchctl and launchd
+
+## 10.1 Using launchctl and launchd
 
 `launchd` is the service manager for macOS. `launchctl` is how you interact with it.
 
@@ -100,9 +100,9 @@ sudo launchctl load /Library/LaunchDaemons/com.example.backup.plist
 
 This will run your backup script daily at 2 AM and also run it immediately when loaded.
 
----
 
-## Understanding System Integrity Protection (SIP)
+
+## 10.2 Understanding System Integrity Protection (SIP)
 
 SIP protects system files and processes from being modified—even by root.
 
@@ -123,9 +123,9 @@ Check SIP status:
 csrutil status
 ```
 
----
 
-## Privacy Preferences Policy Control (PPPC)
+
+## 10.3 Privacy Preferences Policy Control (PPPC)
 
 PPPC protects access to things like Mail, Messages, and Full Disk Access.
 
@@ -139,9 +139,9 @@ Scripts may fail to access protected folders without explicit permission.
 - Use MDM to deploy PPPC profiles for multiple machines.
 - Reset permissions for testing: `tccutil reset All`
 
----
 
-## Using the Unified Logging System
+
+## 10.4 Using the Unified Logging System
 
 macOS uses unified logging instead of simple text log files.
 
@@ -157,9 +157,9 @@ logger "Backup started at $(date)"
 log show --predicate 'eventMessage CONTAINS "Backup started"' --info
 ```
 
----
 
-## Understanding Sandboxing
+
+## 10.5 Understanding Sandboxing
 
 Some macOS apps run in a sandbox which limits what they can do.
 
@@ -167,16 +167,7 @@ Some macOS apps run in a sandbox which limits what they can do.
 - For packaged scripts, use hardened runtime and notarization.
 - Test scripts in Terminal and via `launchd` to verify behavior.
 
----
 
-## Extra Tips
-
-- Use `plutil` to check plist files.
-- Organize LaunchAgents and LaunchDaemons clearly.
-- Use `logger` and `log show` for structured logs.
-- Keep logs rotated.
-
----
 
 ## Chapter 10 Exercise
 
@@ -187,10 +178,12 @@ Some macOS apps run in a sandbox which limits what they can do.
 5. Check SIP status with `csrutil status`.
 6. Test reading a protected folder and grant Full Disk Access if needed.
 
----
+## macOS Scripting Tips
 
-## Tips
-
+- Use `plutil` to check plist files.
+- Organize LaunchAgents and LaunchDaemons clearly.
+- Use `logger` and `log show` for structured logs.
+- Keep logs rotated.
 - Keep privileges minimal.
 - Validate all `.plist` files.
 - Document permissions your scripts need.

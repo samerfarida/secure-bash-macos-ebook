@@ -4,7 +4,7 @@ This appendix provides a practical reference for commonly used macOS command-lin
 These commands are essential for Bash scripting, system administration, and security tasks
 on macOS systems.
 
----
+
 
 ## Learning Objectives
 
@@ -12,7 +12,7 @@ on macOS systems.
 - Understand syntax and practical examples.
 - Apply commands securely and efficiently in real-world scripts.
 
----
+
 
 ## System Information
 
@@ -23,7 +23,7 @@ on macOS systems.
 | `system_profiler` | Detailed hardware and software info | `system_profiler SPHardwareDataType` |
 | `sysctl` | Read kernel parameters | `sysctl -a \| grep machdep.cpu` |
 
----
+
 
 ## File and Directory Operations
 
@@ -40,7 +40,7 @@ on macOS systems.
 | `du` | Disk usage | `du -sh ~/Downloads` |
 | `df` | Filesystem disk space usage | `df -h` |
 
----
+
 
 ## Permissions and Ownership
 
@@ -50,7 +50,7 @@ on macOS systems.
 | `chown` | Change ownership | `sudo chown user:staff file.txt` |
 | `sudo` | Run as superuser | `sudo nano /etc/hosts` |
 
----
+
 
 ## Process and Resource Management
 
@@ -62,7 +62,7 @@ on macOS systems.
 | `kill` | Terminate process | `kill -9 <PID>` |
 | `pkill` | Kill processes by name | `pkill -f "processname"` |
 
----
+
 
 ## Networking
 
@@ -76,7 +76,7 @@ on macOS systems.
 | `lsof` | List open files and sockets | `sudo lsof -i -n -P` |
 | `nc` | Netcat: open TCP/UDP connections | `nc -vz host 80` |
 
----
+
 
 ## System Maintenance and Updates
 
@@ -88,7 +88,7 @@ on macOS systems.
 | `diskutil` | Disk management | `diskutil list` |
 | `csrutil` | SIP (System Integrity Protection) status/config | `csrutil status` (must run from Recovery OS) |
 
----
+
 
 ## Logging and Monitoring
 
@@ -100,7 +100,7 @@ on macOS systems.
 | `awk` | Text processing | `awk '{print $1}' file.txt` |
 | `sed` | Stream editor | `sed 's/old/new/g' file.txt` |
 
----
+
 
 ## System Controls and Services
 
@@ -111,7 +111,7 @@ on macOS systems.
 | `shutdown` | Shut down system | `sudo shutdown -h now` |
 | `reboot` | Reboot system | `sudo reboot` |
 
----
+
 
 ## Security and Privacy
 
@@ -121,7 +121,7 @@ on macOS systems.
 | `codesign` | Code signing operations | `codesign -dv --verbose=4 /Applications/Safari.app` |
 | `csrutil` | SIP configuration | `csrutil status` |
 
----
+
 
 ## Handy macOS-Specific Shortcuts
 
@@ -131,7 +131,7 @@ on macOS systems.
 | Flush DNS cache | `sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder` |
 | Take screenshot from terminal | `screencapture ~/Desktop/screen.jpg` |
 
----
+
 
 ## Final Tips
 

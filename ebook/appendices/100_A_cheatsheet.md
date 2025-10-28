@@ -2,7 +2,7 @@
 
 A quick-reference guide for writing and debugging Bash scripts on macOS.
 
----
+
 
 ## Variables
 
@@ -13,7 +13,7 @@ readonly PI=3.14       # constant
 unset name             # delete variable
 ```
 
----
+
 
 ## Conditionals
 
@@ -39,7 +39,7 @@ fi
 | `"$a" == "$b"` | Strings are equal     |
 | `"$a" != "$b"` | Strings not equal     |
 
----
+
 
 ## Loops
 
@@ -58,7 +58,7 @@ until [ "$n" -ge 5 ]; do
 done
 ```
 
----
+
 
 ## Functions
 
@@ -69,7 +69,7 @@ greet() {
 greet "macOS"
 ```
 
----
+
 
 ## Arrays
 
@@ -79,7 +79,7 @@ echo "${fruits[1]}"     # banana
 echo "${#fruits[@]}"    # count
 ```
 
----
+
 
 ## String Manipulation
 
@@ -91,7 +91,7 @@ echo "${str:1:3}"       # substring
 echo "${str/m/Mac}"     # replace
 ```
 
----
+
 
 ## File Descriptors and Redirection
 
@@ -102,7 +102,7 @@ command 2> err.txt       # stderr
 command &> all.txt       # both stdout + stderr
 ```
 
----
+
 
 ## Command Substitution
 
@@ -111,7 +111,7 @@ today=$(date)
 echo "Today is $today"
 ```
 
----
+
 
 ## Useful Shortcuts
 
@@ -125,7 +125,7 @@ echo "Today is $today"
 | `!!`         | Repeat last command              |
 | `!n`         | Run command `n` from history     |
 
----
+
 
 ## Script Template
 
@@ -142,7 +142,7 @@ echo "Script started"
 echo "Done"
 ```
 
----
+
 
 ## File Permission Basics
 
@@ -152,7 +152,7 @@ chmod 644 file.txt      # rw-r--r--
 chown user:staff file   # change owner
 ```
 
----
+
 
 ## macOS Specific Tips
 
@@ -163,7 +163,7 @@ defaults read com.apple.finder     # read plist settings
 system_profiler SPHardwareDataType # hardware info
 ```
 
----
+
 
 ## Debugging
 
@@ -173,7 +173,7 @@ set -x                  # enable tracing
 trap 'echo "Failed at $LINENO"' ERR
 ```
 
----
+
 
 ## Safe Scripting Practices
 
@@ -182,7 +182,7 @@ trap 'echo "Failed at $LINENO"' ERR
 * Validate inputs before use
 * Avoid parsing `ls`, use `find` or `stat`
 
----
+
 
 ## Resources
 
@@ -191,4 +191,4 @@ trap 'echo "Failed at $LINENO"' ERR
 * `man -k something` — Search man pages
 * `brew install bash` — Install latest Bash (via Homebrew)
 
----
+

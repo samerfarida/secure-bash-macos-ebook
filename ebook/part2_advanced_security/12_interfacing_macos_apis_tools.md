@@ -17,7 +17,7 @@ In real-world enterprise environments, tasks like deploying FileVault keys, conf
 
 > **Note:** The techniques in this chapter show how macOS native tools work under the hood. Use these scripts for testing, compliance checks, or troubleshooting — not as a replacement for managed deployment.
 
-## Using `osascript` for Secure User Prompts
+## 12.1 Using `osascript` for Secure User Prompts
 
 AppleScript remains helpful for simple GUI prompts when you need user interaction alongside scripts.
 
@@ -49,7 +49,7 @@ fi
 osascript -e 'display notification "Your device security settings were updated by IT." with title "Security Agent"'
 ```
 
-## Understanding Keychain Access for Testing
+## 12.2 Understanding Keychain Access for Testing
 
 Your MDM should deploy and rotate secrets in production. But understanding Keychain commands helps you test and verify local workflows.
 
@@ -68,7 +68,7 @@ echo "Password is: $password"
 
 > **Best Practice:** Never hard-code real credentials in scripts — use MDM payloads for production secrets.
 
-## Gatekeeper, TCC, and Privacy Controls
+## 12.3 Gatekeeper, TCC, and Privacy Controls
 
 You can audit and verify your system’s security posture using these commands.
 
@@ -97,7 +97,7 @@ tccutil reset All com.yourcompany.yourapp
 
 This is useful when testing new Privacy Preferences Policy Control (PPPC) profiles before pushing them via MDM.
 
-## Using `profiles` and `mdmclient`
+## 12.4 Using `profiles` and `mdmclient`
 
 The `profiles` and `mdmclient` commands help you verify your MDM status and what profiles are installed.
 
@@ -121,7 +121,7 @@ sudo profiles renew -type enrollment
 
 > **Tip:** Never remove MDM profiles manually — always manage them through your MDM console.
 
-## Forcing and Encouraging macOS Updates
+## 12.5 Forcing and Encouraging macOS Updates
 
 Keeping devices up to date is a core security control. Use your MDM’s built-in macOS update commands and deferral settings whenever possible.
 
@@ -148,7 +148,7 @@ Instead of building your own `osascript` loops, consider using these community t
 
 These tools integrate well with your MDM but can also be invoked by scripts or `launchd` jobs for local checks and user experience improvements.
 
-## Combining with `launchd` for Compliance Checks
+## 12.6 Combining with `launchd` for Compliance Checks
 
 Even with MDM, local scripts can verify compliance and notify IT of drifts.
 
@@ -185,7 +185,7 @@ Use a `LaunchAgent` or `LaunchDaemon` to run this script on a schedule.
 
 2. Combine this script with a `LaunchAgent` so it runs daily or when a user logs in.
 
-## macOS Scripting Tips for Enterprise
+## macOS Scripting Tips
 
 - Always use MDM for production updates, profiles, and secrets.
 - Use local scripts for compliance checks, small automations, and custom notifications.

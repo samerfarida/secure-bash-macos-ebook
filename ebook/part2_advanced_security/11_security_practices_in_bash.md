@@ -15,7 +15,7 @@ By the end of this chapter, you will be able to:
 
 Bash is powerful — but with great power comes great responsibility. Scripts often run with elevated privileges, handle sensitive data, or automate system-level tasks. A small oversight can lead to significant vulnerabilities. This chapter teaches practical strategies to write safer Bash scripts on macOS.
 
-## Safe Script Settings
+## 11.1 Safe Script Settings
 
 Start your secure scripts with `set -euo pipefail`:
 
@@ -25,7 +25,7 @@ Start your secure scripts with `set -euo pipefail`:
 
 This ensures your script stops on unexpected issues.
 
-## Safe Input Handling
+## 11.2 Safe Input Handling
 
 User input is one of the most common attack vectors. Malicious input can lead to command injection, file overwrite, or privilege escalation.
 
@@ -63,7 +63,7 @@ Note: You can adjust your validation regex to be stricter if needed — for exam
 
 - Avoid using `eval` whenever possible. It’s dangerous!
 
-## Avoiding Code Injection
+## 11.3 Avoiding Code Injection
 
 Command injection happens when untrusted data is executed as part of a command.
 
@@ -78,7 +78,7 @@ rm -- "$FILENAME"
 
 - Prefer built-in tools that can handle edge cases safely (e.g., `xargs -0` with `find -print0`).
 
-## Secure Storage: Avoid Plaintext Credentials
+## 11.4 Secure Storage: Avoid Plaintext Credentials
 
 Never store passwords or API keys directly in your scripts. Instead:
 
@@ -91,7 +91,7 @@ security find-generic-password -a "myaccount" -s "myservice" -w
 - Use environment variables and `.env` files with secure permissions (`chmod 600`).
 - For deployment, use secure vaults or configuration management tools.
 
-## Secure File Permissions and Ownership
+## 11.5 Secure File Permissions and Ownership
 
 Ensure your scripts are not world-writable or executable by unauthorized users.
 
@@ -103,7 +103,7 @@ chmod 700 myscript.sh
 chmod 600 secrets.env
 ```
 
-## Script Sandboxing and Least Privilege
+## 11.6 Script Sandboxing and Least Privilege
 
 Minimize the impact if your script is exploited:
 
@@ -111,7 +111,7 @@ Minimize the impact if your script is exploited:
 - Use `sudo` only for commands that absolutely require it — and never run an entire script with `sudo` by default.
 - Use macOS sandboxing where appropriate, like `sandbox-exec`.
 
-## Managing Temporary Files Securely
+## 11.7 Managing Temporary Files Securely
 
 Temporary files are often a target for attackers.
 
@@ -126,7 +126,7 @@ rm -f "$TEMP_FILE"
 
 - Store temp files in directories with restricted permissions.
 
-## Secure Logging Practices
+## 11.8 Secure Logging Practices
 
 Logging is essential — but don’t leak secrets:
 
@@ -148,7 +148,7 @@ exec > >(tee -a secure_script.log)
 chmod 600 secure_script.log
 ```
 
-## Handling Signals and Cleanup
+## 11.9 Handling Signals and Cleanup
 
 Use `trap` to clean up securely on exit or interruption:
 
@@ -164,7 +164,7 @@ trap cleanup EXIT INT TERM
 
 This ensures sensitive temp files don’t persist if your script is killed unexpectedly.
 
-## Example: A Secure Wrapper Script
+## 11.10 Example: A Secure Wrapper Script
 
 Below is a simple example that ties all these practices together.
 
@@ -234,7 +234,7 @@ log "Hello, $USERNAME! Your secure work is complete."
 log "Script completed successfully."
 ```
 
-## macOS-Specific Tips
+## 11.11 macOS-Specific Security Considerations
 
 - Leverage **Keychain**, **System Integrity Protection (SIP)**, and **Gatekeeper** when distributing scripts.
 - Consider using **launchd** to run privileged tasks securely.
@@ -252,7 +252,7 @@ Write a Bash script that:
 4. Retrieves an API key securely (simulate with an environment variable).
 5. Sets file permissions correctly on all outputs.
 
-## Tips
+## macOS Scripting Tips
 
 - Always review your scripts for injection risks.
 - Keep sensitive data out of your version control system.

@@ -18,7 +18,7 @@ all: pdf epub html
 
 pdf:
 	mkdir -p $(OUTPUT_DIR)
-	pandoc $(CHAPTERS) --metadata-file=$(METADATA) --cover-image=$(COVER) -o $(OUTPUT_DIR)/Secure-Bash-for-macOS.pdf
+	pandoc $(CHAPTERS) --metadata-file=$(METADATA) -V geometry:margin=1in -V cover-image=$(COVER) -o $(OUTPUT_DIR)/Secure-Bash-for-macOS.pdf
 
 epub:
 	mkdir -p $(OUTPUT_DIR)

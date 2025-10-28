@@ -8,15 +8,15 @@ By the end of this chapter, you will be able to:
 2. Configure and manage `.bash_profile` and `.bashrc`, including macOS-specific considerations.
 3. Use Launch Agents and Daemons to manage environment variables and scripts.
 
----
+
 
 ## Introduction: Why Environment Configuration Matters
 
 Environment variables influence how Bash scripts run and interact with macOS. They define system-wide paths, user preferences, and credentials. Misconfigurations can lead to unexpected behavior, security issues, or broken automation. This chapter shows you how to manage these settings correctly.
 
----
 
-## User vs System Environment
+
+## 9.1 User vs System Environment
 
 - **User Environment Variables**: Defined in your user’s shell config files like `.bash_profile` or `.bashrc`. They apply only when you run a shell as your user.
 - **System Environment Variables**: Defined in system files like `/etc/profile` or `/etc/paths`. They affect all users and sometimes system daemons.
@@ -39,9 +39,9 @@ echo $HOME
 - On macOS, modify `/etc/paths` to add system-wide directories.
 - For sensitive scripts, prefer user-level variables unless you need system scope.
 
----
 
-## .bash\_profile, .bashrc, and macOS Quirks
+
+## 9.2 .bash\_profile, .bashrc, and macOS Quirks
 
 Traditionally:
 
@@ -67,9 +67,9 @@ fi
 
 **Tip:** Always test changes with a new Terminal window.
 
----
 
-## Managing Config with Launch Agents and Daemons
+
+## 9.3 Managing Config with Launch Agents and Daemons
 
 macOS uses `launchd` to manage user and system processes. Sometimes you need to ensure environment variables are available to GUI apps or background tasks.
 
@@ -113,7 +113,7 @@ cat /tmp/my_var.txt
 
 **Tip:** For system-wide daemons, use `/Library/LaunchDaemons/` and ensure permissions are correct.
 
----
+
 
 ## Chapter 9 Exercise
 
@@ -132,9 +132,9 @@ mkdir -p "$BACKUP_DIR"
 echo "Backups will go to: $BACKUP_DIR"
 ```
 
----
 
-## Tips
+
+## macOS Scripting Tips
 
 - Always back up `.bash_profile` and `.bashrc` before changes.
 - Use descriptive variable names.
