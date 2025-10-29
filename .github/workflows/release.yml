@@ -78,11 +78,17 @@ jobs:
         echo "$CHAPTERS" | tr ' ' '\n'
 
         # PDF
+        # Copy cover image to root for LaTeX to find it more easily
+        cp ebook/assets/images/cover.png cover.png
         pandoc $CHAPTERS \
           --metadata-file=metadata.yaml \
           --highlight-style=templates/tango.theme \
           --template=templates/eisvogel.latex \
+          -V geometry:margin=1in \
+          -V titlepage=true \
+          -V titlepage-background=cover.png \
           -o output/${FILEBASE}.pdf
+        rm -f cover.png
 
         # EPUB
         pandoc $CHAPTERS \

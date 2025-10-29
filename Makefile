@@ -18,7 +18,10 @@ all: pdf epub html
 
 pdf:
 	mkdir -p $(OUTPUT_DIR)
-	pandoc $(CHAPTERS) --metadata-file=$(METADATA) -V geometry:margin=1in -V cover-image=$(COVER) -o $(OUTPUT_DIR)/Secure-Bash-for-macOS.pdf
+	# Copy cover image to root for LaTeX to find it more easily
+	cp $(COVER) cover.png
+	pandoc $(CHAPTERS) --metadata-file=$(METADATA) -V geometry:margin=1in -V titlepage=true -V titlepage-background=cover.png -o $(OUTPUT_DIR)/Secure-Bash-for-macOS.pdf
+	rm -f cover.png
 
 epub:
 	mkdir -p $(OUTPUT_DIR)
