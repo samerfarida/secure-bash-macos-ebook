@@ -1,7 +1,7 @@
 site_name: Secure Bash for macOS
 site_description: A Hands-On Scripting Guide for Administrators and Security Engineers
 site_author: Sammy Farida
-site_url: https://secure-bash-macos.pages.dev
+site_url: https://bash.itsecurity.network
 
 # SEO and social sharing
 extra:
