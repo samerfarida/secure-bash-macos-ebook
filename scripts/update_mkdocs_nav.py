@@ -44,7 +44,9 @@ def update_mkdocs_nav():
         f.write(new_content)
     
     print("✓ Updated nav section in mkdocs.yml")
-    print(f"  Generated {len(new_nav.split(chr(10)))} navigation items")
+    # Count navigation items (lines in the generated nav)
+    nav_lines = [line for line in new_nav.split('\n') if line.strip()]
+    print(f"  Generated {len(nav_lines)} navigation items")
 
 if __name__ == '__main__':
     # Change to repo root (parent of scripts directory)
