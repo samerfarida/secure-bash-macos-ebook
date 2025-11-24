@@ -9,3 +9,9 @@
 # Ignore editor directories and files
 *.pdf
 *.log
+
+# MkDocs build output
+site/
+
+# Python virtual environment
+venv/

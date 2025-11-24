@@ -12,7 +12,7 @@ CHAPTERS := \
     $(wildcard $(BOOK_DIR)/part3_real_world_projects/*.md) \
     $(wildcard $(BOOK_DIR)/appendices/*.md)
 
-.PHONY: all pdf epub html clean
+.PHONY: all pdf epub html website clean
 
 all: pdf epub html
 
@@ -31,6 +31,16 @@ epub:
 html:
 	mkdir -p $(OUTPUT_DIR)
 	pandoc $(CHAPTERS) --metadata-file=$(METADATA) -s -o $(OUTPUT_DIR)/Secure-Bash-for-macOS.html
+
+website:
+	mkdir -p $(OUTPUT_DIR)
+	mkdocs build -d $(OUTPUT_DIR)/website
+
+update-nav:
+	@echo "Updating navigation in mkdocs.yml from file structure..."
+	@python3 scripts/update_mkdocs_nav.py
+
+.PHONY: update-nav
 
 clean:
 	rm -rf $(OUTPUT_DIR)/*

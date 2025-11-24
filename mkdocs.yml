@@ -1,0 +1,151 @@
+site_name: Secure Bash for macOS
+site_description: A Hands-On Scripting Guide for Administrators and Security Engineers
+site_author: Sammy Farida
+site_url: https://secure-bash-macos.pages.dev
+
+# SEO and social sharing
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/samerfarida/secure-bash-macos-ebook
+      name: GitHub Repository
+    - icon: fontawesome/solid/book
+      link: https://github.com/samerfarida/secure-bash-macos-ebook/releases
+      name: Download Book
+  generator: false
+  # Analytics (optional - uncomment and add your tracking ID if desired)
+  # analytics:
+  #   provider: google
+  #   property: G-XXXXXXXXXX
+
+repo_name: samerfarida/secure-bash-macos-ebook
+repo_url: https://github.com/samerfarida/secure-bash-macos-ebook
+edit_uri: edit/main/
+
+# Use ebook/ directory as the documentation source
+docs_dir: ebook
+
+# Build output directory (will be ignored in git)
+site_dir: site
+
+theme:
+  name: material
+  logo: assets/images/logo_v1.png
+  favicon: assets/images/logo_v1.png
+  palette:
+    - scheme: default
+      primary: black
+      accent: black
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: black
+      accent: black
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.indexes
+    - navigation.tracking
+    - navigation.path
+    - navigation.footer
+    - navigation.instant
+    - navigation.instant.preview
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.action.print
+    - content.code.copy
+    - content.code.annotate
+    - content.code.select
+    - content.tabs.link
+    - content.tooltips
+    - content.action.edit
+    - content.action.view
+    - content.estimate
+    - toc.follow
+    - toc.integrate
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+      baselevel: 1
+      toc_depth: 3
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - Home: index.md
+  - About: about.md
+  - "Part I – Bash Fundamentals":
+    - Part I – Bash Fundamentals: part1_bash_fundamentals/00_part1_bash_fundamentals.md
+    - "Chapter 1: Getting Started with Bash on macOS": part1_bash_fundamentals/01_getting_started.md
+    - "Chapter 2: Bash Syntax and Command Structure": part1_bash_fundamentals/02_bash_syntax_and_command_structure.md
+    - "Chapter 3: File System Navigation and Manipulation": part1_bash_fundamentals/03_file_system_navigation_and_manipulation.md
+    - "Chapter 4: Text Processing and Data Manipulation": part1_bash_fundamentals/04_text_processing_and_data_manipulation.md
+    - "Chapter 5: Working with Processes and System Resources": part1_bash_fundamentals/05_working_with_processes_and_system_resources.md
+  - "Part II – Advanced Security Scripting":
+    - Part II – Advanced Bash and macOS Security Scripting: part2_advanced_security/00_part2_advanced_security_scripting.md
+    - "Chapter 6: Control Structures and Functions": part2_advanced_security/06_control_structures_and_functions.md
+    - "Chapter 7: File Management and Permissions": part2_advanced_security/07_file_management_and_permissions.md
+    - "Chapter 8: Error Handling and Debugging": part2_advanced_security/08_error_handling_and_debugging.md
+    - "Chapter 9: Environment Variables and Configuration Management": part2_advanced_security/09_environment_variables_config.md
+    - "Chapter 10: macOS Internals for Scripting": part2_advanced_security/10_macos_internals_for_scripting.md
+    - "Chapter 11: Security Practices in Bash": part2_advanced_security/11_security_practices_in_bash.md
+    - "Chapter 12: Interfacing with macOS APIs and Tools": part2_advanced_security/12_interfacing_macos_apis_tools.md
+    - "Chapter 13: Writing Interactive and GUI-Driven Scripts": part2_advanced_security/13_writing_interactive_gui_driven_scripts.md
+  - "Part III – Real-World Projects":
+    - Part III – Real-World Projects and Automation: part3_real_world_projects/00_part3_real_world_projects.md
+    - "Chapter 14: Automated Hardening & Compliance (mSCP)": part3_real_world_projects/14_automated_hardening_and_compliance_mscp.md
+    - "Chapter 15: Inventory & Asset Management": part3_real_world_projects/15_inventory_asset_management.md
+    - "Chapter 16: Signed & Notarized Installer Packages with GUI Elements": part3_real_world_projects/16_signed_notarized_installer_packages_gui.md
+    - "Chapter 17: Reprovisioning & OS Refresh (startosinstall / erase-install)": part3_real_world_projects/17_reprovisioning_os_refresh.md
+    - "Chapter 18: Endpoint Monitoring & Threat Detection": part3_real_world_projects/18_endpoint_monitoring_threat_detection.md
+    - "Chapter 19: macOS Patch Automation & Notifications (DDM-first)": part3_real_world_projects/19_macos_patch_automation_notifications.md
+    - "Chapter 20: Application Deployment & Update Automation (Installomator + Patchomator)": part3_real_world_projects/20_application_deployment_update_automation.md
+    - "Chapter 21: Application Control with Santa": part3_real_world_projects/21_application_control_with_santa.md
+    - "Chapter 22: Privilege Elevation with SAP Privileges": part3_real_world_projects/22_privilege_elevation_with_sap_privileges.md
+  - Appendices:
+    - "Appendix A: Bash Scripting Cheat Sheet": appendices/100_A_cheatsheet.md
+    - "Appendix B: Common macOS Command Reference": appendices/101_B_common_macOS_command_reference.md
+    - "Appendix C: Tools and Resources": appendices/102_C_tools_and_resources.md
+    - "Appendix D: Further Reading and Communities": appendices/103_D_further_reading_and_communities.md
+
+plugins:
+  - search:
+      lang: en
+  - git-revision-date-localized:
+      enable_creation_date: true
+      enable_git_follow: false
+      type: date
+      timezone: UTC
+      fallback_to_build_date: false
+  - minify:
+      minify_html: true
+      minify_js: true
+      minify_css: true
+
+copyright: Copyright &copy; 2025 Sammy Farida. Content licensed under <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC BY 4.0)</a>. Code and scripts licensed under the <a href="https://opensource.org/licenses/MIT">MIT License</a>.
+
