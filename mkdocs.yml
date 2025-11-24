@@ -6,6 +6,12 @@ site_url: https://bash.itsecurity.network
 # SEO and social sharing
 extra:
   social:
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/sammyfarida/
+      name: LinkedIn
+    - icon: fontawesome/solid/globe
+      link: https://me.itsecurity.network/
+      name: Portfolio
     - icon: fontawesome/brands/github
       link: https://github.com/samerfarida/secure-bash-macos-ebook
       name: GitHub Repository
