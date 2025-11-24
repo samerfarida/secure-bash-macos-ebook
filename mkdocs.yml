@@ -20,7 +20,7 @@ extra:
 
 repo_name: samerfarida/secure-bash-macos-ebook
 repo_url: https://github.com/samerfarida/secure-bash-macos-ebook
-edit_uri: edit/main/
+edit_uri: edit/main/ebook/
 
 # Use ebook/ directory as the documentation source
 docs_dir: ebook
