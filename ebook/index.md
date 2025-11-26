@@ -1,23 +1,25 @@
 # Secure Bash for macOS
 
 <div align="center">
-  <img src="assets/images/logo_v1.png" alt="Secure Bash for macOS" width="50%" style="max-width: 600px;">
+  <img src="assets/images/logo_v1.png" alt="Secure Bash for macOS" width="35%" style="max-width: 400px;">
 </div>
 
 > **A practical, hands-on scripting guide for administrators and security engineers who want to master Bash on macOS**
 
-**Master Bash scripting on macOS—from fundamentals to enterprise automation.**
+**Master Bash scripting on macOS, from fundamentals to enterprise automation.**
 
 This comprehensive ebook teaches you how to write secure, efficient Bash scripts specifically tailored for macOS. Whether you're an IT administrator managing thousands of devices, a security engineer hardening endpoints, or a power user automating your workflow, this book provides practical, real-world examples you can use immediately.
 
 ## What You'll Learn
 
 ### Part I – Bash Fundamentals
+
 - **Chapters 1-5:** Master the basics of Bash on macOS
 - Navigate the Terminal, understand Bash syntax, manipulate files, process data, and manage system resources
 - Build a solid foundation with practical examples tailored for macOS
 
 ### Part II – Advanced Security Scripting
+
 - **Chapters 6-13:** Level up your scripting skills
 - Write resilient scripts with proper error handling
 - Integrate with macOS internals (launchd, SIP, PPPC)
@@ -25,6 +27,7 @@ This comprehensive ebook teaches you how to write secure, efficient Bash scripts
 - Build interactive GUI-driven tools with osascript, swiftDialog, and Platypus
 
 ### Part III – Real-World Projects
+
 - **Chapters 14-22:** Enterprise-grade automation you can deploy today
 - Automated hardening & compliance with mSCP
 - Application deployment with Installomator & Patchomator
@@ -36,7 +39,7 @@ This comprehensive ebook teaches you how to write secure, efficient Bash scripts
 
 ## Why This Book?
 
-- **Written by a Security Architect** with over 11 years in IT and 7+ years in cybersecurity
+- **Written by a Security Architect** with over a decade of experience in IT and extensive focus on cybersecurity
 - **Enterprise-Tested** examples proven in production at scale
 - **Security-First** mindset built into every lesson
 - **macOS-Specific** tips, tricks, and gotchas throughout
@@ -67,4 +70,3 @@ This ebook is released under a **dual-license** model:
 ---
 
 **Ready to master Bash on macOS?** [Get Started →](about.md)
-

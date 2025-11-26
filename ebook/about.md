@@ -6,7 +6,7 @@ This book teaches you how to write secure, efficient scripts, from basic shell s
 
 ## About the Author
 
-Sammy Farida is a security architect and lifelong technologist with over a decade of experience in enterprise cybersecurity. He currently serves as a Global Solution Security Architect at PwC, where he focuses on endpoint security, automation, and secure architecture at scale.
+Sammy Farida is a security architect and lifelong technologist with over a decade of experience in enterprise cybersecurity. He currently serves as a Global Solution Security Architect at PwC, where he focuses on endpoint security, automation, and secure architecture at scale. [Learn more about Sammy](https://me.itsecurity.network/about/).
 
 Sammy is passionate about Bash scripting, macOS internals, and open-source tooling. He is known for making complex topics approachable and actionable, whether building internal tools, designing enterprise security strategies, or automating tasks across thousands of devices.
 
@@ -18,7 +18,7 @@ Over the past decade, I’ve had the privilege of securing some of the largest m
 
 Through this work, I became a security architect, designing and delivering secure-by-default solutions at scale, but my Bash scripts were always there, saving time, reducing risk, and bridging the gap between complex security tools and the real world of end users.
 
-With over 11 years in IT and more than 7 years focused on cybersecurity, I bring deep experience securing cloud platforms, identity systems, and large-scale infrastructure. At PwC, I’ve led efforts to deploy and architect security controls across Azure, AWS, and macOS environments. I’ve implemented tools like DLP, EDR, DSPM, and PAM; enforced identity and access policies; and worked closely with engineering teams to secure both cloud and on-prem environments. I’ve also supported hardening of firewalls, hypervisors, and vendor-supplied systems during global rollouts.
+With over a decade of experience in IT and extensive focus on cybersecurity, I bring deep experience securing cloud platforms, identity systems, and large-scale infrastructure. At PwC, I've led efforts to deploy and architect security controls across Azure, AWS, and macOS environments. I've implemented tools like DLP, EDR, DSPM, and PAM; enforced identity and access policies; and worked closely with engineering teams to secure both cloud and on-prem environments. I've also supported hardening of firewalls, hypervisors, and vendor-supplied systems during global rollouts.
 
 This book is my way of sharing what I’ve learned with administrators, security engineers, and power users like you. My hope is that you’ll use these lessons and examples not just to automate tasks, but to build a security mindset into every script you write.
 
@@ -26,9 +26,7 @@ Let’s secure Bash together, one script at a time.
 
 ## Dedication
 
-To my wife Lisa, and our children Dimitri, Lincoln, and Celine,
-thank you for your love, patience, and support.  
-This ebook would not exist without you.
+To my wife Lisa, our children Dimitri, Lincoln, and Celine, and my godson Theodor, thank you for your love, patience, and support. This ebook would not exist without you.
 
 ## How to Use This Book
 
