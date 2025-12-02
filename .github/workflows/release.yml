@@ -51,8 +51,7 @@ jobs:
             texlive-fonts-recommended \
             texlive-fonts-extra \
             lmodern \
-            fonts-linuxlibertine \
-            fonts-source-code-pro
+            fonts-linuxlibertine
 
       - name: 🔢 Auto-version minor if new .md added, else patch
         id: compute_tag
