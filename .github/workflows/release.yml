@@ -40,10 +40,15 @@ jobs:
       - name: 🧰 Set up Pandoc
         uses: r-lib/actions/setup-pandoc@v2
 
-      - name: 📦  Install Full TeX Live (includes SourceSansPro)
+      - name: 📦  Install Minimal TeX Live (optimized for speed)
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-full
+          sudo apt-get install -y --no-install-recommends \
+            texlive-xetex \
+            texlive-fonts-recommended \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            fonts-linuxlibertine
 
       - name: 🔢 Auto-version minor if new .md added, else patch
         id: compute_tag
@@ -100,7 +105,6 @@ jobs:
           # Copy cover image to root for LaTeX to find it more easily
           cp ebook/assets/images/cover.png cover.png
           # Set titlepage-background and suppress text overlay (cover image contains all info)
-          # Add Unicode support for box-drawing characters using fontspec
           pandoc $CHAPTERS \
             --metadata-file=metadata.yaml \
             --highlight-style=templates/tango.theme \
@@ -112,7 +116,6 @@ jobs:
             -V subtitle="" \
             -V author="" \
             -V date="" \
-            -V header-includes='\usepackage{fontspec}\setmonofont{Fira Code}[Scale=MatchLowercase]' \
             -o output/${FILEBASE}.pdf
           rm -f cover.png
 

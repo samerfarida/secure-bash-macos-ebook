@@ -74,47 +74,41 @@ Understanding when and why to perform OS refreshes in enterprise environments he
 
 Use this decision tree to select the appropriate refresh approach for your scenario:
 
-```
-Start: Need to refresh/upgrade macOS device?
+**Decision Flow:**
 
-├─ Is device being offboarded or repurposed?
-│  ├─ YES → Clean Refresh (erase & install)
-│  │        └─ Use MDM EraseDevice if available, else startosinstall --eraseinstall
-│  │
-│  └─ NO → Continue
-│
-├─ Is device part of a compliance event or security incident?
-│  ├─ YES → Clean Refresh (erase & install)
-│  │        └─ Use MDM EraseDevice for audit trail, else startosinstall --eraseinstall
-│  │
-│  └─ NO → Continue
-│
-├─ Is device experiencing persistent software issues?
-│  ├─ YES → Try in-place reinstall first
-│  │        └─ If issues persist after reinstall → Clean Refresh
-│  │
-│  └─ NO → Continue
-│
-├─ Is this a routine OS upgrade (n to n+1)?
-│  ├─ YES → In-place upgrade (preserve data)
-│  │        └─ Use MDM ScheduleOSUpdate if available, else startosinstall
-│  │
-│  └─ NO → Continue
-│
-├─ Is device Apple silicon (M1/M2/M3)?
-│  ├─ YES → Prefer MDM workflows (EraseDevice, ScheduleOSUpdate)
-│  │        └─ Local scripts may require user authentication
-│  │
-│  └─ NO → Continue (Intel devices)
-│
-├─ Fleet size and automation requirements?
-│  ├─ Large fleet (100+ devices) → MDM/DDM preferred
-│  ├─ Medium fleet (10-100 devices) → MDM or local scripts with automation
-│  └─ Small fleet (<10 devices) → Local scripts acceptable
-│
-└─ Default: In-place upgrade/reinstall (preserve data)
-   └─ Use startosinstall with appropriate flags
-```
+1. **Is device being offboarded or repurposed?**
+   - YES → Clean Refresh (erase & install)
+     - Use MDM EraseDevice if available, else `startosinstall --eraseinstall`
+   - NO → Continue to next question
+
+2. **Is device part of a compliance event or security incident?**
+   - YES → Clean Refresh (erase & install)
+     - Use MDM EraseDevice for audit trail, else `startosinstall --eraseinstall`
+   - NO → Continue to next question
+
+3. **Is device experiencing persistent software issues?**
+   - YES → Try in-place reinstall first
+     - If issues persist after reinstall → Clean Refresh
+   - NO → Continue to next question
+
+4. **Is this a routine OS upgrade (n to n+1)?**
+   - YES → In-place upgrade (preserve data)
+     - Use MDM ScheduleOSUpdate if available, else `startosinstall`
+   - NO → Continue to next question
+
+5. **Is device Apple silicon (M1/M2/M3)?**
+   - YES → Prefer MDM workflows (EraseDevice, ScheduleOSUpdate)
+     - Local scripts may require user authentication
+   - NO → Continue (Intel devices)
+
+6. **Fleet size and automation requirements?**
+   - Large fleet (100+ devices) → MDM/DDM preferred
+   - Medium fleet (10-100 devices) → MDM or local scripts with automation
+   - Small fleet (<10 devices) → Local scripts acceptable
+
+**Default:** In-place upgrade/reinstall (preserve data)
+
+- Use `startosinstall` with appropriate flags
 
 **Key Decision Factors:**
 
