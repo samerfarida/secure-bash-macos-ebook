@@ -12,7 +12,7 @@
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Master Bash scripting on macOS—from fundamentals to enterprise automation.**
+**Master Bash scripting on macOS, from fundamentals to enterprise automation.**
 
 This comprehensive ebook teaches you how to write secure, efficient Bash scripts specifically tailored for macOS. Whether you're an IT administrator managing thousands of devices, a security engineer hardening endpoints, or a power user automating your workflow, this book provides practical, real-world examples you can use immediately.
 
@@ -42,7 +42,7 @@ This comprehensive ebook teaches you how to write secure, efficient Bash scripts
 
 ## Why This Book?
 
-- **Written by a Security Architect** with over 11 years in IT and 7+ years in cybersecurity
+- **Written by a Security Architect** with over a decade of experience in IT and extensive focus on cybersecurity
 - **Enterprise-Tested** examples proven in production at scale
 - **Security-First** mindset built into every lesson
 - **macOS-Specific** tips, tricks, and gotchas throughout

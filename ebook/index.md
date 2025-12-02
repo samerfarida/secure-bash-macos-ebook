@@ -12,13 +12,13 @@ This comprehensive ebook teaches you how to write secure, efficient Bash scripts
 
 ## What You'll Learn
 
-### Part I – Bash Fundamentals
+### [Part I – Bash Fundamentals →](part1_bash_fundamentals/00_part1_bash_fundamentals.md)
 
 - **Chapters 1-5:** Master the basics of Bash on macOS
 - Navigate the Terminal, understand Bash syntax, manipulate files, process data, and manage system resources
 - Build a solid foundation with practical examples tailored for macOS
 
-### Part II – Advanced Security Scripting
+### [Part II – Advanced Security Scripting →](part2_advanced_security/00_part2_advanced_security_scripting.md)
 
 - **Chapters 6-13:** Level up your scripting skills
 - Write resilient scripts with proper error handling
@@ -26,7 +26,7 @@ This comprehensive ebook teaches you how to write secure, efficient Bash scripts
 - Create secure, auditable automation
 - Build interactive GUI-driven tools with osascript, swiftDialog, and Platypus
 
-### Part III – Real-World Projects
+### [Part III – Real-World Projects →](part3_real_world_projects/00_part3_real_world_projects.md)
 
 - **Chapters 14-22:** Enterprise-grade automation you can deploy today
 - Automated hardening & compliance with mSCP

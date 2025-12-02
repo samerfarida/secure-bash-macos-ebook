@@ -62,7 +62,7 @@ This ebook is released under the [Creative Commons Attribution 4.0 International
 
 This project uses a dual-license model:
 
-- **Book content** (Markdown files under `book/`) is licensed under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://github.com/samerfarida/secure-bash-macos-ebook/blob/main/LICENSES/CC-BY-4.0.txt).
+- **Book content** (Markdown files under `ebook/`) is licensed under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://github.com/samerfarida/secure-bash-macos-ebook/blob/main/LICENSES/CC-BY-4.0.txt).
 - **Scripts and code** (files in `scripts/`, `Makefile`, GitHub Actions) are licensed under the [MIT License](https://github.com/samerfarida/secure-bash-macos-ebook/blob/main/LICENSES/MIT.txt).
 
 ## Disclaimer
