@@ -144,8 +144,9 @@ plugins:
       lang: en
   - git-revision-date-localized:
       enable_creation_date: true
-      enable_git_follow: false
+      enable_git_follow: true
       type: date
+      locale: en
       timezone: UTC
       fallback_to_build_date: false
   - minify:
