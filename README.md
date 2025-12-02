@@ -6,6 +6,7 @@
 
 > **A practical, hands-on scripting guide for administrators and security engineers who want to master Bash on macOS**
 
+[![Read Online](https://img.shields.io/badge/Read-Online-blue.svg)](https://bash.itsecurity.network/)
 [![PDF Download](https://img.shields.io/badge/Download-PDF-red.svg)](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.pdf)
 [![EPUB Download](https://img.shields.io/badge/Download-EPUB-orange.svg)](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.epub)
 [![HTML Download](https://img.shields.io/badge/Download-HTML-green.svg)](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.html)
@@ -13,6 +14,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Master Bash scripting on macOS, from fundamentals to enterprise automation.**
+
+> 📖 **Also available online:** Read the full book at [https://bash.itsecurity.network/](https://bash.itsecurity.network/) with search, navigation, and always up-to-date content.
 
 This comprehensive ebook teaches you how to write secure, efficient Bash scripts specifically tailored for macOS. Whether you're an IT administrator managing thousands of devices, a security engineer hardening endpoints, or a power user automating your workflow, this book provides practical, real-world examples you can use immediately.
 
@@ -50,6 +53,14 @@ This comprehensive ebook teaches you how to write secure, efficient Bash scripts
 - **Up-to-Date** with the latest macOS features and best practices
 
 ## Quick Start
+
+### Read Online
+
+The complete book is available online at **[https://bash.itsecurity.network/](https://bash.itsecurity.network/)** with:
+- Full search functionality
+- Interactive navigation
+- Always up-to-date content
+- Mobile-friendly reading experience
 
 ### Download the Latest Release
 
@@ -194,6 +205,7 @@ If you find this book helpful:
 
 **Ready to master Bash on macOS?**
 
+- [Read Online](https://bash.itsecurity.network/) - Full book with search and navigation
 - [Download PDF](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.pdf)
 - [Download EPUB](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.epub)
 - [Download HTML](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.html)
