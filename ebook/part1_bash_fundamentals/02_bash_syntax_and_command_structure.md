@@ -30,6 +30,8 @@ For example:
 ls -la /Users/sammy/Desktop
 ```
 
+> **Note:** The path `/Users/sammy/Desktop` is an example. In real scripts, use `$HOME` or `~` for user-specific paths.
+
 - `ls` is the command
 - `-la` are the options (flags)
 - `/Users/sammy/Desktop` is the argument
@@ -51,6 +53,7 @@ echo "Hello, $name!"
 ```
 
 Remember:
+
 - No spaces around `=`
 - Use `"$var"` to preserve whitespace
 - Enclose in braces for safety: `${name}`
@@ -76,7 +79,7 @@ echo "My name is $USER"      # Expands $USER
 ```
 
 
-## 2.4 Conditionals: `if`, `elif`, `else`
+## 2.4 Conditionals: if, elif, else
 
 Basic structure:
 
@@ -103,9 +106,9 @@ fi
 Use `[[ ... ]]` for advanced conditions (e.g., regex).
 
 
-## 2.5 Loops: `for`, `while`, and `until`
+## 2.5 Loops: for, while, and until
 
-### `for` loop:
+### for loop
 
 ```bash
 for file in *.txt; do
@@ -113,17 +116,17 @@ for file in *.txt; do
 done
 ```
 
-### `while` loop:
+### while loop
 
 ```bash
 count=1
-while [ $count -le 5 ]; do
+while [ "$count" -le 5 ]; do
   echo "Count: $count"
   ((count++))
 done
 ```
 
-### `until` loop:
+### until loop
 
 ```bash
 until [ "$ready" = "yes" ]; do
@@ -162,6 +165,7 @@ fi
 ## 2.7 Script Exit Codes
 
 Every Bash command returns an exit code (`$?`):
+
 - `0` = success
 - `1+` = failure or different exit state
 
@@ -182,6 +186,7 @@ echo "Hi, $username."
 ```
 
 Flags:
+
 - `-p` prints prompt
 - `-s` hides input (e.g., passwords)
 - `-n 1` reads a single character
@@ -213,7 +218,7 @@ Hint:
 #!/bin/bash
 read -p "Folder to back up: " folder
 if [ -d "$folder" ]; then
-  tar -czf "backup_$(basename $folder)_$(date +%F).tar.gz" "$folder"
+  tar -czf "backup_$(basename "$folder")_$(date +%F).tar.gz" "$folder"
   echo "Backup complete."
 else
   echo "Folder not found."
@@ -228,4 +233,3 @@ fi
 - You can pipe input to GUI dialogs with `osascript`.
 - Use `read -s` to securely accept passwords from users.
 - Use `touch`, `say`, and `afplay` for playful script output on macOS.
-

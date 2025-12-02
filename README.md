@@ -22,11 +22,13 @@ This comprehensive ebook teaches you how to write secure, efficient Bash scripts
 ## What You'll Learn
 
 ### Part I – Bash Fundamentals
+
 - **Chapters 1-5:** Master the basics of Bash on macOS
 - Navigate the Terminal, understand Bash syntax, manipulate files, process data, and manage system resources
 - Build a solid foundation with practical examples tailored for macOS
 
 ### Part II – Advanced Security Scripting
+
 - **Chapters 6-13:** Level up your scripting skills
 - Write resilient scripts with proper error handling
 - Integrate with macOS internals (launchd, SIP, PPPC)
@@ -34,6 +36,7 @@ This comprehensive ebook teaches you how to write secure, efficient Bash scripts
 - Build interactive GUI-driven tools with osascript, swiftDialog, and Platypus
 
 ### Part III – Real-World Projects
+
 - **Chapters 14-22:** Enterprise-grade automation you can deploy today
 - Automated hardening & compliance with mSCP
 - Application deployment with Installomator & Patchomator
@@ -57,6 +60,7 @@ This comprehensive ebook teaches you how to write secure, efficient Bash scripts
 ### Read Online
 
 The complete book is available online at **[https://bash.itsecurity.network/](https://bash.itsecurity.network/)** with:
+
 - Full search functionality
 - Interactive navigation
 - Always up-to-date content
@@ -100,6 +104,7 @@ make html
 ## Table of Contents
 
 **Part I – Bash Fundamentals**
+
 1. Getting Started with Bash on macOS
 2. Bash Syntax and Command Structure
 3. File System Navigation and Manipulation
@@ -138,35 +143,31 @@ This book is perfect for:
 - **Anyone** who writes Bash scripts and wants to do it securely
 
 **Prerequisites:**
+
 - Basic familiarity with the Terminal
 - Access to a Mac running macOS
 - Willingness to learn and experiment
 
 ## Contribute
 
-This project thrives on community involvement! Here's how you can help:
+This project thrives on community involvement! We welcome contributions of all kinds.
 
-### Star the Repository
-Show your support by starring this repo—it helps others discover the book.
+**📖 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed contribution guidelines**, including:
 
-### Report Issues
-Found a typo, bug, or have a suggestion? Open an issue!
+- How to report issues and suggest improvements
+- Development setup and installation
+- Linting requirements and how to run checks locally
+- Pre-commit checklist
+- Review process
 
-### Suggest Improvements
-Have ideas for new examples, chapters, or features? We'd love to hear them.
-
-### Contribute Content
-Want to add examples, fix errors, or improve chapters?
+Quick start:
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-improvement`)
-3. Make your changes
-4. Submit a pull request with a clear description
+2. Create a feature branch
+3. Make your changes (ensure linting passes!)
+4. Submit a pull request
 
 All contributors will be recognized in future releases!
-
-### Review Process
-Your pull request will be reviewed, and once merged, we'll automatically acknowledge your contribution in the next release.
 
 ## License
 

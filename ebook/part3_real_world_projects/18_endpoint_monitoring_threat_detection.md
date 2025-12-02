@@ -17,6 +17,91 @@ Osquery exposes macOS as a relational database you can query with SQL. For endpo
 
 This chapter walks through **installation**, **hardening**, **configuration**, **high‑signal queries**, and **log forwarding** patterns that map directly to real-world threat detection and DFIR workflows.
 
+### Enterprise Security Monitoring Context
+
+Endpoint monitoring and threat detection are foundational to enterprise security programs. In regulated industries, organizations must demonstrate continuous monitoring capabilities, and security teams need visibility into endpoint activity to detect and respond to threats quickly. Osquery provides this visibility by exposing macOS system state as queryable data, enabling security analysts to detect suspicious activity, investigate incidents, and maintain compliance.
+
+**Key Use Cases:**
+
+- **Threat Detection**: Identify malicious processes, file changes, and network activity
+- **Incident Response**: Quickly investigate security events and understand attack scope
+- **Compliance Monitoring**: Track security configuration and generate compliance reports
+- **Forensics**: Capture historical system state for post-incident analysis
+
+## Building Your Detection Strategy
+
+Before deploying osquery, define your detection strategy to ensure you're collecting the right data and can effectively respond to security events.
+
+### Defining Detection Requirements
+
+**Threat Models:**
+
+- What threats are most relevant to your organization? (malware, insider threats, data exfiltration, etc.)
+- What attack vectors should you prioritize? (fileless attacks, living-off-the-land, persistence mechanisms)
+- What compliance requirements drive monitoring needs? (data protection, access control, audit logging)
+
+**Detection Priorities:**
+
+1. **High-Priority Detections**: Immediate security risks requiring rapid response
+   - Unauthorized privilege escalation
+   - Malicious process execution
+   - Persistence mechanism installation
+   - Data exfiltration attempts
+
+2. **Medium-Priority Detections**: Suspicious activity requiring investigation
+   - Unusual parent-child process relationships
+   - Execution from untrusted locations
+   - Network connections to suspicious destinations
+   - Configuration changes to security settings
+
+3. **Low-Priority Detections**: Informational monitoring for trend analysis
+   - Software installation events
+   - User authentication events
+   - System configuration changes
+
+### Query Development Workflow
+
+**Phases of Detection Content:**
+
+1. **Prototype**: Develop queries interactively using `osqueryi`
+2. **Test**: Validate queries on test devices with known scenarios
+3. **Tune**: Optimize queries for performance and reduce false positives
+4. **Deploy**: Add to production schedules or packs
+5. **Monitor**: Track detection effectiveness and tune based on results
+
+**Best Practices:**
+
+- Start with broad queries, then narrow based on observed behavior
+- Test queries against known-good and known-bad scenarios
+- Document query purpose and expected results
+- Version control detection queries for change management
+
+### Performance Considerations (Early Planning)
+
+**Before Deployment, Consider:**
+
+1. **Event Volume**: How many events will your queries generate?
+   - Process events: High volume (thousands per hour per device)
+   - File events: Very high volume (can be millions per hour)
+   - Network events: Medium volume (depends on monitoring scope)
+
+2. **Query Frequency**: How often should queries run?
+   - Real-time event queries: Continuous (with event buffering)
+   - Snapshot queries: 5-15 minutes for high-value data
+   - Historical queries: Hourly or daily for trend analysis
+
+3. **Resource Impact**: What's acceptable system impact?
+   - CPU usage: Target <5% average, <15% peak
+   - Memory usage: Target <500 MB for osqueryd
+   - Disk I/O: Minimize file monitoring scope to essential paths
+   - Network bandwidth: Batch and compress log uploads
+
+**Planning for Scale:**
+
+- Small fleets (<100 devices): Aggressive monitoring possible
+- Medium fleets (100-1000 devices): Balanced monitoring with performance tuning
+- Large fleets (1000+ devices): Focused monitoring on high-value detections only
+
 ## 18.1 Installing osquery on macOS
 
 Use the official macOS installer package for fleet deployments, which lays down the app bundle, symlinks, example config, and a sample LaunchDaemon.
@@ -35,7 +120,9 @@ osqueryi
 
 ### Ensure config/log directories exist with correct ownership/permissions
 
+```bash
 sudo install -d -m 0755 -o root -g wheel /var/osquery /var/log/osquery
+```
 
 ### LaunchDaemon plist example
 
@@ -85,7 +172,7 @@ Note: On macOS, `/var` is a symlink to `/private/var`. Osquery may document path
 >
 > Note: The installer does **not** auto‑load the daemon; use `osqueryctl start` or install the LaunchDaemon as shown.
 
-### Launching the daemon (modern `launchctl` on macOS 11+)
+### Launching the daemon (modern launchctl on macOS 11+)
 
 While `launchctl load` still works, Apple recommends the newer subcommands:
 

@@ -11,11 +11,9 @@ By the end of this chapter, you will be able to:
 5. Apply best practices for debugging on macOS.
 
 
-
 ## Introduction: Why Error Handling and Debugging Matter
 
 Even the best Bash scripts fail at some point. On macOS, where scripts often automate system configurations, backups, or security checks, robust error handling is crucial. Poor error handling can lead to partial changes, corrupted files, or security misconfigurations. This chapter shows you how to detect and handle problems gracefully, log what happened, and troubleshoot effectively.
-
 
 
 ## 8.1 Understanding Exit Codes
@@ -56,7 +54,7 @@ else
 fi
 ```
 
-## 8.2 Using `trap` to Handle Errors and Signals
+## 8.2 Using trap to Handle Errors and Signals
 
 `trap` allows you to run cleanup code when a script exits, or when it receives a signal like SIGINT (Ctrl+C).
 
@@ -67,10 +65,10 @@ fi
 
 TEMP_FILE="/tmp/my_tempfile.txt"
 
-trap "echo 'Cleaning up'; rm -f $TEMP_FILE; exit" EXIT
+trap "echo 'Cleaning up'; rm -f \"$TEMP_FILE\"; exit" EXIT
 
 echo "Doing work..."
-touch $TEMP_FILE
+touch "$TEMP_FILE"
 
 sleep 5
 echo "Done."
@@ -78,15 +76,14 @@ echo "Done."
 
 When the script exits — normally or via Ctrl+C — `trap` ensures the temp file is removed.
 
-### Common `trap` Use Cases
+### Common trap Use Cases
 
 - Remove sensitive temporary files.
 - Stop services you started.
 - Unlock files or resources.
 
 
-
-## 8.3 Debugging with `set -x` and `bash -x`
+## 8.3 Debugging with set -x and bash -x
 
 Bash’s `-x` option shows each command and its arguments as they run.
 
@@ -120,7 +117,6 @@ bash -x myscript.sh
 On macOS, this is helpful when working with `launchd` jobs — you can test scripts interactively before deploying them.
 
 
-
 ## 8.4 Logging and Output Redirection
 
 Capturing output and errors helps you diagnose issues after the fact.
@@ -149,7 +145,6 @@ echo "Script done" >> "$LOGFILE"
 - Include timestamps for each log entry with `date`.
 
 
-
 ## 8.5 macOS-Specific Tips
 
 - When testing scripts that will run as `launchd` jobs, log output to `/var/log/` or `~/Library/Logs/`.
@@ -161,7 +156,6 @@ logger "My script started"
 ```
 
 You can view these with `log show` or the Console app.
-
 
 
 ## Chapter 8 Exercise
@@ -191,7 +185,6 @@ echo "Exit code: $?"
 
 set +x
 ```
-
 
 
 ## macOS Scripting Tips

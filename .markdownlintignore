@@ -1,0 +1,32 @@
+# Generated files
+site/
+output/
+node_modules/
+venv/
+__pycache__/
+
+# Build artifacts
+*.pdf
+*.epub
+*.html
+
+# Git
+.git/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.bak
+*.tmp
+*.swp
+*.swo
+
+# Package files
+package-lock.json
+yarn.lock

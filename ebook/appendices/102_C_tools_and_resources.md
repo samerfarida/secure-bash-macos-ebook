@@ -30,12 +30,15 @@
 | **Little Snitch** | Outbound firewall for macOS | [https://www.obdev.at/products/littlesnitch/index.html](https://www.obdev.at/products/littlesnitch/index.html) |
 | **LuLu** | Free, open-source firewall | [https://objective-see.org/products/lulu.html](https://objective-see.org/products/lulu.html) |
 | **macOS Security Compliance Project (mSCP)** | Community-driven framework for creating security baselines and compliance mappings for macOS | [https://github.com/usnistgov/macos_security](https://github.com/usnistgov/macos_security) |
-| **Santa** | Binary authorization and application control system for macOS | [https://github.com/google/santa](https://github.com/google/santa) |
+| **Santa** | Binary authorization and application control system for macOS (maintained by North Pole Security) | [https://github.com/northpolesec/santa](https://github.com/northpolesec/santa) |
+| **Workshop** | Commercial sync server for enterprise Santa rule management | [https://northpole.dev](https://northpole.dev) |
 | **SAP Privileges** | Time-limited admin elevation tool for macOS | [https://github.com/SAP/macOS-enterprise-privileges](https://github.com/SAP/macOS-enterprise-privileges) |
 | **Installomator** | Label-driven installer and updater for macOS applications | [https://github.com/Installomator/Installomator](https://github.com/Installomator/Installomator) |
 | **Patchomator** | Automated patch management for discovered macOS applications | [https://github.com/Mac-Nerd/patchomator](https://github.com/Mac-Nerd/patchomator) |
 | **Nudge** | User deferral framework for mandatory macOS updates | [https://github.com/macadmins/nudge](https://github.com/macadmins/nudge) |
+| **erase-install** | Community tool for safe macOS reinstallation and OS refresh workflows | [https://github.com/grahampugh/erase-install](https://github.com/grahampugh/erase-install) |
 | **swiftDialog** | Professional dialog presentation tool for macOS | [https://github.com/bartreardon/swiftDialog](https://github.com/bartreardon/swiftDialog) |
+| **munkipkg** | Tool for building macOS installer packages | [https://github.com/munki/munki-pkg](https://github.com/munki/munki-pkg) |
 | **Platypus** | Create macOS applications from command-line scripts | [https://sveinbjorn.org/platypus](https://sveinbjorn.org/platypus) |
 
 ## Recommended Shells and Extensions
@@ -55,7 +58,6 @@
 | **ShellCheck** | Static analysis tool for shell scripts | [https://www.shellcheck.net/](https://www.shellcheck.net/) |
 | **Regex101** | Regex tester and debugger | [https://regex101.com/](https://regex101.com/) |
 | **CyberChef** | Swiss Army knife for data format transformations | [https://gchq.github.io/CyberChef/](https://gchq.github.io/CyberChef/) |
-
 
 
 ## Author's Note

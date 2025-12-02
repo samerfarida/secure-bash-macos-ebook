@@ -1,0 +1,95 @@
+name: Lint Markdown and YAML
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  markdown-lint:
+    name: Markdown Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📥 Install dependencies
+        run: npm ci
+
+      - name: 🔍 Run markdownlint
+        run: npm run lint:markdown
+
+  spell-check:
+    name: Spell Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📥 Install dependencies
+        run: npm ci
+
+      - name: 🔤 Run spell check
+        run: npm run spell-check
+
+  link-check:
+    name: Link Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📥 Install dependencies
+        run: npm ci
+
+      - name: 🔗 Check markdown links
+        run: npm run link-check
+        continue-on-error: false
+
+  yaml-lint:
+    name: YAML Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📥 Install yamllint
+        run: |
+          pip install yamllint
+
+      - name: 🔍 Lint YAML files
+        run: |
+          # Lint workflow files and metadata (strict)
+          yamllint -c .yamllint.yml .github/workflows/*.yml metadata.yaml
+          # Lint mkdocs.yml (warnings only, errors fail)
+          yamllint -c .yamllint.yml mkdocs.yml 2>&1 | grep -v "warning" || true
+          if yamllint -c .yamllint.yml mkdocs.yml 2>&1 | grep -q "error"; then
+            echo "❌ YAML linting failed. Please fix the errors above."
+            exit 1
+          fi

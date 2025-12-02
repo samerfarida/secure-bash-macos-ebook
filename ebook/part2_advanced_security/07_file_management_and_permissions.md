@@ -11,13 +11,11 @@ By the end of this chapter, you will be able to:
 - Apply macOS-specific practices for protecting sensitive files
 
 
-
 ## Introduction
 
 File and directory permissions are a fundamental security layer in Unix-based systems, including macOS. Whether you’re writing scripts to automate backups, rotate logs, or deploy files, managing access rights properly is critical to system security and user privacy.
 
 In this chapter, we'll explore the key tools and techniques to manage file access securely from a Bash script on macOS.
-
 
 
 ## 7.1 Creating and Managing Files
@@ -37,7 +35,6 @@ Use `rm -i` or `rm -I` interactively to avoid accidental deletions:
 ```bash
 rm -i ~/Desktop/*.sh
 ```
-
 
 
 ## 7.2 Understanding File Permissions
@@ -62,23 +59,22 @@ chmod 700 secrets.txt # rwx------
 ```
 
 
-
 ## 7.3 Changing Ownership and Permissions
 
-### `chmod` – Change Permissions
+### chmod – Change Permissions
 
 ```bash
 chmod u+x backup.sh      # Add execute to user
 chmod go-w config.conf   # Remove write from group and others
 ```
 
-### `chown` – Change Owner
+### chown – Change Owner
 
 ```bash
 sudo chown root:wheel /usr/local/bin/tool
 ```
 
-### `chflags` – macOS Flagging System
+### chflags – macOS Flagging System
 
 macOS supports file flags like `uchg` (user immutable):
 
@@ -88,7 +84,6 @@ sudo chflags nouchg important.doc
 ```
 
 Use `ls -lO` to view file flags.
-
 
 
 ## 7.4 File Attributes and Metadata
@@ -109,10 +104,9 @@ xattr -c file.txt
 ```
 
 
-
 ## 7.5 Finding and Auditing Files
 
-### Using `find`
+### Using find
 
 ```bash
 # Find all .sh files in the home directory
@@ -125,12 +119,11 @@ find /var/log -type f -mtime -7
 find ~/Downloads -atime +30 -delete
 ```
 
-### Combine with `xargs`
+### Combine with xargs
 
 ```bash
 find . -type f -name "*.log" | xargs grep "ERROR"
 ```
-
 
 
 ## 7.6 Real-World Example: Secure Log Archiving Script
@@ -140,6 +133,7 @@ find . -type f -name "*.log" | xargs grep "ERROR"
 
 # Define variables
 src_dir="/var/log"
+# Note: Replace 'admin' with actual admin username or use $HOME for current user
 dest_dir="/Users/admin/LogArchive/$(date +%F)"
 mkdir -p "$dest_dir"
 
@@ -152,14 +146,12 @@ chown -R admin:staff "$dest_dir"
 ```
 
 
-
 ## macOS Scripting Tips
 
 - System files are protected by **System Integrity Protection (SIP)** and may be immutable even for `sudo`.
 - Always use `sudo` cautiously in automation scripts—privilege escalation should be justified.
 - `/System` and `/usr/bin` are mostly read-only in recent macOS versions.
 - User-owned writable directories: `/Users`, `/usr/local`, `/opt`.
-
 
 
 ## Chapter 7 Exercise

@@ -38,4 +38,3 @@ mkdocs build
 echo "   ✓ Build complete!"
 
 echo "✨ All done! Site ready for deployment."
-

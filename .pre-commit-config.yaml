@@ -1,0 +1,42 @@
+# Pre-commit hooks configuration
+# See https://pre-commit.com for more information
+
+repos:
+  # General file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '\.(md|txt)$'
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: ['--unsafe']  # Allow custom YAML tags
+      - id: check-json
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: check-case-conflict
+
+  # Run npm lint scripts
+  - repo: local
+    hooks:
+      - id: markdown-lint
+        name: Markdown Linting
+        entry: npm run lint:markdown
+        language: system
+        types: [markdown]
+        pass_filenames: false
+
+      - id: spell-check
+        name: Spell Check
+        entry: npm run spell-check
+        language: system
+        types: [markdown]
+        pass_filenames: false
+
+      - id: yaml-lint
+        name: YAML Linting
+        entry: npm run lint:yaml
+        language: system
+        types: [yaml]
+        pass_filenames: false

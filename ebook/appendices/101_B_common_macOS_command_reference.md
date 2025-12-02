@@ -5,13 +5,11 @@ These commands are essential for Bash scripting, system administration, and secu
 on macOS systems.
 
 
-
 ## Learning Objectives
 
 - Quickly look up essential macOS commands for daily scripting and admin tasks.
 - Understand syntax and practical examples.
 - Apply commands securely and efficiently in real-world scripts.
-
 
 
 ## System Information
@@ -22,7 +20,6 @@ on macOS systems.
 | `sw_vers` | Display macOS version | `sw_vers` |
 | `system_profiler` | Detailed hardware and software info | `system_profiler SPHardwareDataType` |
 | `sysctl` | Read kernel parameters | `sysctl -a \| grep machdep.cpu` |
-
 
 
 ## File and Directory Operations
@@ -41,7 +38,6 @@ on macOS systems.
 | `df` | Filesystem disk space usage | `df -h` |
 
 
-
 ## Permissions and Ownership
 
 | Command | Description | Example |
@@ -49,7 +45,6 @@ on macOS systems.
 | `chmod` | Change permissions | `chmod 755 script.sh` |
 | `chown` | Change ownership | `sudo chown user:staff file.txt` |
 | `sudo` | Run as superuser | `sudo nano /etc/hosts` |
-
 
 
 ## Process and Resource Management
@@ -61,7 +56,6 @@ on macOS systems.
 | `htop` | Enhanced top (install via Homebrew) | `htop` |
 | `kill` | Terminate process | `kill -9 <PID>` |
 | `pkill` | Kill processes by name | `pkill -f "processname"` |
-
 
 
 ## Networking
@@ -77,7 +71,6 @@ on macOS systems.
 | `nc` | Netcat: open TCP/UDP connections | `nc -vz host 80` |
 
 
-
 ## System Maintenance and Updates
 
 | Command | Description | Example |
@@ -87,7 +80,6 @@ on macOS systems.
 | `tmutil` | Time Machine utility | `tmutil listbackups` |
 | `diskutil` | Disk management | `diskutil list` |
 | `csrutil` | SIP (System Integrity Protection) status/config | `csrutil status` (must run from Recovery OS) |
-
 
 
 ## Logging and Monitoring
@@ -101,7 +93,6 @@ on macOS systems.
 | `sed` | Stream editor | `sed 's/old/new/g' file.txt` |
 
 
-
 ## System Controls and Services
 
 | Command | Description | Example |
@@ -112,16 +103,37 @@ on macOS systems.
 | `reboot` | Reboot system | `sudo reboot` |
 
 
-
 ## Security and Privacy
 
 | Command | Description | Example |
 |---------|-------------|---------|
 | `spctl` | Gatekeeper status | `spctl --status` |
 | `codesign` | Code signing operations | `codesign -dv --verbose=4 /Applications/Safari.app` |
-| `csrutil` | SIP configuration | `csrutil status` |
+| `csrutil` | SIP configuration | `csrutil status` (requires Recovery OS) |
+| `tccutil` | Reset Privacy preferences | `sudo tccutil reset SystemPolicyAllFiles` |
+| `security` | Keychain and certificate management | `security find-certificate -a -p` |
+| `scutil` | System configuration | `scutil --get ComputerName` |
+| `sysctl` | Kernel parameters | `sysctl kern.securelevel` |
 
 
+## MDM and Configuration Profile Management
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `profiles` | Manage configuration profiles | `profiles -P` (list installed) |
+| `profiles` | Show profile details | `profiles -P -o stdout-xml` |
+| `profiles` | Remove profile | `sudo profiles -R -p "com.example.profile"` |
+| `profiles` | Install profile | `sudo profiles -I -F /path/to/profile.mobileconfig` |
+
+## Hardware and System Information
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `system_profiler` | Detailed system information | `system_profiler SPHardwareDataType` |
+| `ioreg` | I/O Kit registry | `ioreg -l -w 0` |
+| `pkgutil` | Package manager info | `pkgutil --pkgs` |
+| `mdfind` | Spotlight search from CLI | `mdfind "kMDItemKind == 'Application'"` |
+| `mdls` | Get file metadata | `mdls /Applications/Safari.app` |
 
 ## Handy macOS-Specific Shortcuts
 
@@ -130,11 +142,27 @@ on macOS systems.
 | Show hidden files in Finder | `defaults write com.apple.finder AppleShowAllFiles TRUE; killall Finder` |
 | Flush DNS cache | `sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder` |
 | Take screenshot from terminal | `screencapture ~/Desktop/screen.jpg` |
+| List user accounts | `dscl . list /Users` |
+| Check FileVault status | `fdesetup status` |
+| Check SIP status | `csrutil status` (run from Recovery OS) |
 
 
+## Enterprise Administration Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `dscl` | Directory Service command-line utility | `dscl . -read /Users/$(whoami)` |
+| `dseditgroup` | Edit directory service groups | `sudo dseditgroup -o edit -a user -t user admin` |
+| `log stream` | Stream unified logs | `log stream --predicate 'subsystem == "com.apple.security"'` |
+| `log show` | Query unified logs | `log show --last 1d --predicate 'eventMessage contains "error"'` |
+| `diskutil` | Disk utility | `diskutil list`, `diskutil apfs listSnapshots /` |
+| `softwareupdate` | Software update management | `sudo softwareupdate -l` |
+| `installer` | Install packages | `sudo installer -pkg package.pkg -target /` |
 
 ## Final Tips
 
 Keep this reference nearby as you build your own scripts and automations.  
 Combine these commands with robust Bash syntax to streamline your macOS workflows  
 and keep your systems secure and efficient.
+
+For more detailed information on these tools and their enterprise applications, refer to the chapters in Part 3 of this book.

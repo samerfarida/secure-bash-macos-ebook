@@ -30,17 +30,17 @@ def get_chapter_number(filename):
 def generate_nav():
     """Generate navigation structure from ebook directory."""
     ebook_dir = Path('ebook')
-    
+
     nav = []
-    
+
     # Home page
     if (ebook_dir / 'index.md').exists():
         nav.append('  - Home: index.md')
-    
+
     # About page
     if (ebook_dir / 'about.md').exists():
         nav.append('  - About: about.md')
-    
+
     # Part I – Bash Fundamentals
     part1_dir = ebook_dir / 'part1_bash_fundamentals'
     if part1_dir.exists():
@@ -54,7 +54,7 @@ def generate_nav():
                 nav.append(f'    - "{title}": {rel_path}')
             else:
                 nav.append(f'    - {title}: {rel_path}')
-    
+
     # Part II – Advanced Security Scripting
     part2_dir = ebook_dir / 'part2_advanced_security'
     if part2_dir.exists():
@@ -67,7 +67,7 @@ def generate_nav():
                 nav.append(f'    - "{title}": {rel_path}')
             else:
                 nav.append(f'    - {title}: {rel_path}')
-    
+
     # Part III – Real-World Projects
     part3_dir = ebook_dir / 'part3_real_world_projects'
     if part3_dir.exists():
@@ -80,7 +80,7 @@ def generate_nav():
                 nav.append(f'    - "{title}": {rel_path}')
             else:
                 nav.append(f'    - {title}: {rel_path}')
-    
+
     # Appendices
     appendices_dir = ebook_dir / 'appendices'
     if appendices_dir.exists():
@@ -93,9 +93,8 @@ def generate_nav():
                 nav.append(f'    - "{title}": {rel_path}')
             else:
                 nav.append(f'    - {title}: {rel_path}')
-    
+
     return '\n'.join(nav)
 
 if __name__ == '__main__':
     print(generate_nav())
-

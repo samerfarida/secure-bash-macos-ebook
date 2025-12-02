@@ -265,7 +265,7 @@ done
 
 # Close the dialog
 "$DIALOG" --quit
-wait $DIALOG_PID
+wait "$DIALOG_PID"
 ```
 
 ### Input Forms with swiftDialog
@@ -535,7 +535,7 @@ EOF
     execute_operation "$operation"
     
     # Kill the dialog when done
-    kill $DIALOG_PID 2>/dev/null || true
+    kill "$DIALOG_PID" 2>/dev/null || true
 }
 
 execute_operation() {
@@ -701,4 +701,3 @@ esac
 - Keep dialog text clear and concise—avoid technical jargon when possible.
 - Implement progress indicators for operations longer than 5 seconds.
 - Never store sensitive data (passwords, tokens) in dialog responses permanently.
-

@@ -12,11 +12,9 @@ By the end of this chapter, you will be able to:
 - Understand sandboxing basics and how they affect script execution.
 
 
-
 ## Introduction: Scripting with macOS Internals in Mind
 
 macOS combines security features, system tools, and logging mechanisms you must know to write reliable Bash scripts. `launchd` controls background processes, SIP restricts certain operations, and PPPC governs access to user data. You’ll also learn how to use the unified log and how sandboxing can limit script actions.
-
 
 
 ## 10.1 Using launchctl and launchd
@@ -57,7 +55,7 @@ Schedule a `LaunchDaemon` to run a backup script daily using `rsync`.
 
 ```bash
 #!/bin/bash
-rsync -av --delete ~/Documents/ /Volumes/BackupDrive/Documents_Backup/
+rsync -av --delete "$HOME/Documents/" "/Volumes/BackupDrive/Documents_Backup/"
 ```
 
 Make sure the script is executable:
@@ -101,7 +99,6 @@ sudo launchctl load /Library/LaunchDaemons/com.example.backup.plist
 This will run your backup script daily at 2 AM and also run it immediately when loaded.
 
 
-
 ## 10.2 Understanding System Integrity Protection (SIP)
 
 SIP protects system files and processes from being modified—even by root.
@@ -124,7 +121,6 @@ csrutil status
 ```
 
 
-
 ## 10.3 Privacy Preferences Policy Control (PPPC)
 
 PPPC protects access to things like Mail, Messages, and Full Disk Access.
@@ -138,7 +134,6 @@ Scripts may fail to access protected folders without explicit permission.
 - Grant Full Disk Access in System Settings > Privacy & Security.
 - Use MDM to deploy PPPC profiles for multiple machines.
 - Reset permissions for testing: `tccutil reset All`
-
 
 
 ## 10.4 Using the Unified Logging System
@@ -158,7 +153,6 @@ log show --predicate 'eventMessage CONTAINS "Backup started"' --info
 ```
 
 
-
 ## 10.5 Understanding Sandboxing
 
 Some macOS apps run in a sandbox which limits what they can do.
@@ -166,7 +160,6 @@ Some macOS apps run in a sandbox which limits what they can do.
 - Scripts from sandboxed apps may inherit restrictions.
 - For packaged scripts, use hardened runtime and notarization.
 - Test scripts in Terminal and via `launchd` to verify behavior.
-
 
 
 ## Chapter 10 Exercise

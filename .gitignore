@@ -22,3 +22,7 @@ __pycache__/
 *.pyo
 *.pyd
 .Python
+
+# Node.js dependencies
+node_modules/
+# Note: package-lock.json should be committed for reproducible builds

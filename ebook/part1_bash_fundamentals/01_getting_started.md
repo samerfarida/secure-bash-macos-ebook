@@ -74,21 +74,21 @@ Let’s create a simple Bash script to print “Hello, Secure Bash!” to the Te
 nano hello.sh
 ```
 
-3. Add the following code:
+1. Add the following code:
 
 ```bash
 #!/bin/bash
 echo "Hello, Secure Bash!"
 ```
 
-4. Save and exit (`Ctrl+O` to write out, then `Ctrl+X` to exit).
-5. Make it executable:
+1. Save and exit (`Ctrl+O` to write out, then `Ctrl+X` to exit).
+2. Make it executable:
 
 ```bash
 chmod +x hello.sh
 ```
 
-6. Run the script:
+1. Run the script:
 
 ```bash
 ./hello.sh

@@ -9,11 +9,9 @@ By the end of this chapter, you will be able to:
 3. Use Launch Agents and Daemons to manage environment variables and scripts.
 
 
-
 ## Introduction: Why Environment Configuration Matters
 
 Environment variables influence how Bash scripts run and interact with macOS. They define system-wide paths, user preferences, and credentials. Misconfigurations can lead to unexpected behavior, security issues, or broken automation. This chapter shows you how to manage these settings correctly.
-
 
 
 ## 9.1 User vs System Environment
@@ -30,15 +28,14 @@ env
 Or print a single variable:
 
 ```bash
-echo $PATH
-echo $HOME
+echo "$PATH"
+echo "$HOME"
 ```
 
 ### Modifying System Variables Safely
 
 - On macOS, modify `/etc/paths` to add system-wide directories.
 - For sensitive scripts, prefer user-level variables unless you need system scope.
-
 
 
 ## 9.2 .bash\_profile, .bashrc, and macOS Quirks
@@ -66,7 +63,6 @@ fi
 ```
 
 **Tip:** Always test changes with a new Terminal window.
-
 
 
 ## 9.3 Managing Config with Launch Agents and Daemons
@@ -114,7 +110,6 @@ cat /tmp/my_var.txt
 **Tip:** For system-wide daemons, use `/Library/LaunchDaemons/` and ensure permissions are correct.
 
 
-
 ## Chapter 9 Exercise
 
 **Manage your environment:**
@@ -131,7 +126,6 @@ export BACKUP_DIR="$HOME/backups"
 mkdir -p "$BACKUP_DIR"
 echo "Backups will go to: $BACKUP_DIR"
 ```
-
 
 
 ## macOS Scripting Tips

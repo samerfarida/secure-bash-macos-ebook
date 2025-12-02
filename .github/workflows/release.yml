@@ -1,6 +1,13 @@
 name: Build and Auto-Release eBook
 
 on:
+  workflow_run:
+    workflows: ["Lint Markdown and YAML"]
+    types:
+      - completed
+    branches:
+      - main
+  # Keep push trigger for manual runs, but lint should pass first
   push:
     branches:
       - main
@@ -11,120 +18,132 @@ permissions:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+    # Only run if linting workflow completed successfully
+    if: |
+      github.event.workflow_run.conclusion == 'success' ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main')
 
     steps:
-    - name: 📥 Checkout repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+      - name: 🔍 Check if linting passed (for workflow_run trigger)
+        if: github.event_name == 'workflow_run'
+        run: |
+          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
+            echo "❌ Linting workflow did not pass. Skipping build."
+            exit 1
+          fi
 
-    - name: 🧰 Set up Pandoc
-      uses: r-lib/actions/setup-pandoc@v2
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    - name: 📦  Install Full TeX Live (includes SourceSansPro)
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y texlive-full 
-                                
-    - name: 🔢 Auto-version minor if new .md added, else patch
-      id: compute_tag
-      run: |
-        LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.1.0")
-        VERSION=${LATEST_TAG#v}
-        IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+      - name: 🧰 Set up Pandoc
+        uses: r-lib/actions/setup-pandoc@v2
 
-        CHANGED=$(git diff --name-status "$LATEST_TAG"..HEAD | grep '\.md$' || true)
-        ADDED=$(echo "$CHANGED" | grep '^A' || true)
+      - name: 📦  Install Full TeX Live (includes SourceSansPro)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-full
 
-        if [[ -n "$ADDED" ]]; then
-          NEW_MINOR=$((MINOR + 1))
-          NEW_PATCH=0
-          BUMP_TYPE="minor"
-        else
-          NEW_MINOR=$MINOR
-          NEW_PATCH=$((PATCH + 1))
-          BUMP_TYPE="patch"
-        fi
+      - name: 🔢 Auto-version minor if new .md added, else patch
+        id: compute_tag
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.1.0")
+          VERSION=${LATEST_TAG#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
 
-        NEW_TAG="v$MAJOR.$NEW_MINOR.$NEW_PATCH"
-        echo "📌 Bumping $BUMP_TYPE version → $NEW_TAG"
-        echo "tag=$NEW_TAG" >> $GITHUB_OUTPUT
-        echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
+          CHANGED=$(git diff --name-status "$LATEST_TAG"..HEAD | grep '\.md$' || true)
+          ADDED=$(echo "$CHANGED" | grep '^A' || true)
 
-    - name: 🏷 Set version and date environment variables
-      run: |
-        echo "VERSION=${{ steps.compute_tag.outputs.tag }}" >> $GITHUB_ENV
-        echo "DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
+          if [[ -n "$ADDED" ]]; then
+            NEW_MINOR=$((MINOR + 1))
+            NEW_PATCH=0
+            BUMP_TYPE="minor"
+          else
+            NEW_MINOR=$MINOR
+            NEW_PATCH=$((PATCH + 1))
+            BUMP_TYPE="patch"
+          fi
 
-    - name: 🛠 Inject version and date into metadata.yaml
-      run: |
-        sed -i.bak "s/__VERSION__/${{ env.VERSION }}/g" metadata.yaml
-        sed -i.bak "s/__DATE__/${{ env.DATE }}/g" metadata.yaml
+          NEW_TAG="v$MAJOR.$NEW_MINOR.$NEW_PATCH"
+          echo "📌 Bumping $BUMP_TYPE version → $NEW_TAG"
+          echo "tag=$NEW_TAG" >> $GITHUB_OUTPUT
+          echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
 
-    - name: 📚 Build eBook formats
-      run: |
-        mkdir -p output
+      - name: 🏷 Set version and date environment variables
+        run: |
+          echo "VERSION=${{ steps.compute_tag.outputs.tag }}" >> $GITHUB_ENV
+          echo "DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
 
-        FILEBASE="Secure-Bash-for-macOS-${{ env.VERSION }}"
+      - name: 🛠 Inject version and date into metadata.yaml
+        run: |
+          sed -i.bak "s/__VERSION__/${{ env.VERSION }}/g" metadata.yaml
+          sed -i.bak "s/__DATE__/${{ env.DATE }}/g" metadata.yaml
 
-        # Common chapter ordering
-        CHAPTERS="$(find ebook/about.md) \
-                   $(find ebook/part1_bash_fundamentals -name '*.md' | sort) \
-                   $(find ebook/part2_advanced_security -name '*.md' | sort) \
-                   $(find ebook/part3_real_world_projects -name '*.md' | sort) \
-                   $(find ebook/appendices -name '*.md' | sort)"
-        
-        # Ensure all chapters are in the correct order
-        echo "$CHAPTERS" | tr ' ' '\n'
+      - name: 📚 Build eBook formats
+        run: |
+          mkdir -p output
 
-        # PDF
-        # Copy cover image to root for LaTeX to find it more easily
-        cp ebook/assets/images/cover.png cover.png
-        # Set titlepage-background and suppress text overlay (cover image contains all info)
-        pandoc $CHAPTERS \
-          --metadata-file=metadata.yaml \
-          --highlight-style=templates/tango.theme \
-          --template=templates/eisvogel.latex \
-          -V geometry:margin=1in \
-          -V titlepage=true \
-          -V titlepage-background=cover.png \
-          -V title="" \
-          -V subtitle="" \
-          -V author="" \
-          -V date="" \
-          -o output/${FILEBASE}.pdf
-        rm -f cover.png
+          FILEBASE="Secure-Bash-for-macOS-${{ env.VERSION }}"
 
-        # EPUB
-        pandoc $CHAPTERS \
-          --metadata-file=metadata.yaml \
-          --css=templates/ebook-style.css \
-          --toc --toc-depth=2 \
-          --highlight-style=tango \
-          -o output/${FILEBASE}.epub
+          # Common chapter ordering
+          CHAPTERS="$(find ebook/about.md) \
+                     $(find ebook/part1_bash_fundamentals -name '*.md' | sort) \
+                     $(find ebook/part2_advanced_security -name '*.md' | sort) \
+                     $(find ebook/part3_real_world_projects -name '*.md' | sort) \
+                     $(find ebook/appendices -name '*.md' | sort)"
 
-        # HTML
-        pandoc $CHAPTERS \
-          --metadata-file=metadata.yaml \
-          --css=templates/ebook-style.css \
-          --toc --toc-depth=2 \
-          --standalone \
-          --highlight-style=tango \
-          -o output/${FILEBASE}.html
+          # Ensure all chapters are in the correct order
+          echo "$CHAPTERS" | tr ' ' '\n'
 
-    - name: 🧹 Clean up backup file
-      run: rm metadata.yaml.bak
+          # PDF
+          # Copy cover image to root for LaTeX to find it more easily
+          cp ebook/assets/images/cover.png cover.png
+          # Set titlepage-background and suppress text overlay (cover image contains all info)
+          pandoc $CHAPTERS \
+            --metadata-file=metadata.yaml \
+            --highlight-style=templates/tango.theme \
+            --template=templates/eisvogel.latex \
+            -V geometry:margin=1in \
+            -V titlepage=true \
+            -V titlepage-background=cover.png \
+            -V title="" \
+            -V subtitle="" \
+            -V author="" \
+            -V date="" \
+            -o output/${FILEBASE}.pdf
+          rm -f cover.png
 
-    - name: 📦 Create GitHub Release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: ${{ steps.compute_tag.outputs.tag }}
-        name: "Release ${{ steps.compute_tag.outputs.tag }} (${{ steps.compute_tag.outputs.bump_type }})"
-        prerelease: true
-        generate_release_notes: true
-        files: |
-          output/Secure-Bash-for-macOS-${{ env.VERSION }}.pdf
-          output/Secure-Bash-for-macOS-${{ env.VERSION }}.epub
-          output/Secure-Bash-for-macOS-${{ env.VERSION }}.html
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # EPUB
+          pandoc $CHAPTERS \
+            --metadata-file=metadata.yaml \
+            --css=templates/ebook-style.css \
+            --toc --toc-depth=2 \
+            --highlight-style=tango \
+            -o output/${FILEBASE}.epub
+
+          # HTML
+          pandoc $CHAPTERS \
+            --metadata-file=metadata.yaml \
+            --css=templates/ebook-style.css \
+            --toc --toc-depth=2 \
+            --standalone \
+            --highlight-style=tango \
+            -o output/${FILEBASE}.html
+
+      - name: 🧹 Clean up backup file
+        run: rm metadata.yaml.bak
+
+      - name: 📦 Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.compute_tag.outputs.tag }}
+          name: "Release ${{ steps.compute_tag.outputs.tag }} (${{ steps.compute_tag.outputs.bump_type }})"
+          prerelease: true
+          generate_release_notes: true
+          files: |
+            output/Secure-Bash-for-macOS-${{ env.VERSION }}.pdf
+            output/Secure-Bash-for-macOS-${{ env.VERSION }}.epub
+            output/Secure-Bash-for-macOS-${{ env.VERSION }}.html
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

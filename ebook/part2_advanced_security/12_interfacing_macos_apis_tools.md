@@ -17,7 +17,7 @@ In real-world enterprise environments, tasks like deploying FileVault keys, conf
 
 > **Note:** The techniques in this chapter show how macOS native tools work under the hood. Use these scripts for testing, compliance checks, or troubleshooting — not as a replacement for managed deployment.
 
-## 12.1 Using `osascript` for Secure User Prompts
+## 12.1 Using osascript for Secure User Prompts
 
 AppleScript remains helpful for simple GUI prompts when you need user interaction alongside scripts.
 
@@ -97,7 +97,7 @@ tccutil reset All com.yourcompany.yourapp
 
 This is useful when testing new Privacy Preferences Policy Control (PPPC) profiles before pushing them via MDM.
 
-## 12.4 Using `profiles` and `mdmclient`
+## 12.4 Using profiles and mdmclient
 
 The `profiles` and `mdmclient` commands help you verify your MDM status and what profiles are installed.
 
@@ -127,7 +127,7 @@ Keeping devices up to date is a core security control. Use your MDM’s built-in
 
 But you can supplement this with native CLI tools and open-source solutions for better user experience.
 
-### Example: Use `softwareupdate` CLI
+### Example: Use softwareupdate CLI
 
 ```bash
 #!/bin/bash
@@ -148,7 +148,7 @@ Instead of building your own `osascript` loops, consider using these community t
 
 These tools integrate well with your MDM but can also be invoked by scripts or `launchd` jobs for local checks and user experience improvements.
 
-## 12.6 Combining with `launchd` for Compliance Checks
+## 12.6 Combining with launchd for Compliance Checks
 
 Even with MDM, local scripts can verify compliance and notify IT of drifts.
 

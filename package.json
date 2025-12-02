@@ -1,0 +1,23 @@
+{
+  "name": "secure-bash-macos-ebook",
+  "version": "1.0.0",
+  "description": "Secure Bash for macOS - A Hands-On Scripting Guide",
+  "private": true,
+  "scripts": {
+    "lint": "npm run lint:markdown && npm run spell-check && npm run lint:yaml",
+    "lint:markdown": "markdownlint-cli2 '**/*.md' '#node_modules' '#venv' '#site' '#output'",
+    "lint:markdown:fix": "markdownlint-cli2 --fix '**/*.md' '#node_modules' '#venv' '#site' '#output'",
+    "spell-check": "cspell \"**/*.md\" --no-progress",
+    "link-check": "find ebook -name '*.md' -type f -exec npx markdown-link-check {} \\;",
+    "lint:yaml": "yamllint -c .yamllint.yml .github/workflows/*.yml metadata.yaml || (yamllint -c .yamllint.yml mkdocs.yml --no-warnings 2>&1 | grep -v 'warning' || true)"
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "^0.19.1",
+    "cspell": "^8.15.0",
+    "markdown-link-check": "^3.14.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

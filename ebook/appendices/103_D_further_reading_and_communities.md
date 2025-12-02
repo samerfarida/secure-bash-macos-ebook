@@ -17,6 +17,10 @@
 | **Apple Developer Documentation** | Official docs for macOS internals and command-line tools | [https://developer.apple.com/documentation/](https://developer.apple.com/documentation/) |
 | **SS64** | Clear and concise macOS command reference | [https://ss64.com/osx/](https://ss64.com/osx/) |
 | **NIST macOS Security Guides** | macOS Security Configuration Guidance | [https://csrc.nist.gov/publications](https://csrc.nist.gov/publications) |
+| **mSCP Documentation** | macOS Security Compliance Project documentation | [https://pages.nist.gov/macos_security/](https://pages.nist.gov/macos_security/) |
+| **North Pole Security** | Santa application control documentation and Workshop | [https://northpole.dev](https://northpole.dev) |
+| **Jamf Documentation** | Comprehensive MDM and macOS management docs | [https://docs.jamf.com/](https://docs.jamf.com/) |
+| **Munki Documentation** | macOS package management documentation | [https://github.com/munki/munki/wiki](https://github.com/munki/munki/wiki) |
 
 ## Active Communities
 
@@ -27,7 +31,22 @@
 | **r/macsysadmin (Reddit)** | macOS system administration subreddit | [https://www.reddit.com/r/macsysadmin/](https://www.reddit.com/r/macsysadmin/) |
 | **r/bash (Reddit)** | Community for sharing Bash scripts and tips | [https://www.reddit.com/r/bash/](https://www.reddit.com/r/bash/) |
 | **Objective-See Community** | macOS security research community | [https://objective-see.org/](https://objective-see.org/) |
+| **Installomator Community** | Discussion and support for Installomator | [https://github.com/Installomator/Installomator/discussions](https://github.com/Installomator/Installomator/discussions) |
+| **MacAdmin Tools** | Community-maintained macOS admin tools and scripts | [https://github.com/macadmin-tools](https://github.com/macadmin-tools) |
 
-## Author’s Favorites
+## GitHub Repositories and Projects
 
-I recommend subscribing to security mailing lists, following macOS security and scripting blogs, and joining relevant GitHub repositories to stay current. The macOS ecosystem evolves fast — staying connected helps you keep your Bash scripts secure, compatible, and powerful.
+| Repository | Description | Link |
+|------------|-------------|------|
+| **mSCP** | macOS Security Compliance Project | [https://github.com/usnistgov/macos_security](https://github.com/usnistgov/macos_security) |
+| **Santa** | Application control system (North Pole Security) | [https://github.com/northpolesec/santa](https://github.com/northpolesec/santa) |
+| **SAP Privileges** | Time-limited admin elevation | [https://github.com/SAP/macOS-enterprise-privileges](https://github.com/SAP/macOS-enterprise-privileges) |
+| **Installomator** | Application installer/updater | [https://github.com/Installomator/Installomator](https://github.com/Installomator/Installomator) |
+| **Nudge** | macOS update deferral framework | [https://github.com/macadmins/nudge](https://github.com/macadmins/nudge) |
+| **swiftDialog** | Dialog presentation tool | [https://github.com/bartreardon/swiftDialog](https://github.com/bartreardon/swiftDialog) |
+| **erase-install** | OS refresh automation | [https://github.com/grahampugh/erase-install](https://github.com/grahampugh/erase-install) |
+| **Osquery** | Endpoint visibility platform | [https://github.com/osquery/osquery](https://github.com/osquery/osquery) |
+
+## Author's Favorites
+
+I recommend subscribing to security mailing lists, following macOS security and scripting blogs, and joining relevant GitHub repositories to stay current. The macOS ecosystem evolves fast — staying connected helps you keep your Bash scripts secure, compatible, and powerful. Participate in open-source projects, contribute back improvements, and share knowledge with the MacAdmin community.

@@ -1,7 +1,6 @@
 # Appendix A: Bash Scripting Cheat Sheet
 
-A quick-reference guide for writing and debugging Bash scripts on macOS.
-
+A quick-reference guide for writing and debugging Bash scripts on macOS. This cheat sheet focuses on practical patterns used in enterprise macOS management and security automation.
 
 
 ## Variables
@@ -12,7 +11,6 @@ echo "Hello, $name"
 readonly PI=3.14       # constant
 unset name             # delete variable
 ```
-
 
 
 ## Conditionals
@@ -40,7 +38,6 @@ fi
 | `"$a" != "$b"` | Strings not equal     |
 
 
-
 ## Loops
 
 ```bash
@@ -59,7 +56,6 @@ done
 ```
 
 
-
 ## Functions
 
 ```bash
@@ -70,7 +66,6 @@ greet "macOS"
 ```
 
 
-
 ## Arrays
 
 ```bash
@@ -78,7 +73,6 @@ fruits=("apple" "banana" "cherry")
 echo "${fruits[1]}"     # banana
 echo "${#fruits[@]}"    # count
 ```
-
 
 
 ## String Manipulation
@@ -92,7 +86,6 @@ echo "${str/m/Mac}"     # replace
 ```
 
 
-
 ## File Descriptors and Redirection
 
 ```bash
@@ -103,14 +96,12 @@ command &> all.txt       # both stdout + stderr
 ```
 
 
-
 ## Command Substitution
 
 ```bash
 today=$(date)
 echo "Today is $today"
 ```
-
 
 
 ## Useful Shortcuts
@@ -126,14 +117,12 @@ echo "Today is $today"
 | `!n`         | Run command `n` from history     |
 
 
-
 ## Script Template
 
 ```bash
 #!/bin/bash
 
 set -euo pipefail
-IFS=$''
 
 echo "Script started"
 
@@ -143,7 +132,6 @@ echo "Done"
 ```
 
 
-
 ## File Permission Basics
 
 ```bash
@@ -151,7 +139,6 @@ chmod +x script.sh      # make executable
 chmod 644 file.txt      # rw-r--r--
 chown user:staff file   # change owner
 ```
-
 
 
 ## macOS Specific Tips
@@ -164,7 +151,6 @@ system_profiler SPHardwareDataType # hardware info
 ```
 
 
-
 ## Debugging
 
 ```bash
@@ -174,21 +160,147 @@ trap 'echo "Failed at $LINENO"' ERR
 ```
 
 
-
 ## Safe Scripting Practices
 
-* Use `set -euo pipefail`
-* Quote variables: `"$var"`
-* Validate inputs before use
-* Avoid parsing `ls`, use `find` or `stat`
+- Use `set -euo pipefail` for strict error handling
+- Quote variables: `"$var"` to prevent word splitting
+- Validate inputs before use
+- Avoid parsing `ls`, use `find` or `stat`
+- Check return codes: `if ! command; then echo "Failed"; fi`
+- Use absolute paths in scripts: `/usr/local/bin/tool` vs `tool`
 
+## Error Handling Patterns
 
+```bash
+# Exit on error with cleanup
+set -e
+trap 'cleanup_function' EXIT
+
+# Log errors
+log_error() {
+    echo "[ERROR] $(date): $*" >&2
+}
+
+# Check command success
+if ! command; then
+    log_error "Command failed"
+    exit 1
+fi
+
+# Retry with backoff
+retry() {
+    local max_attempts=3
+    local delay=2
+    for ((i=1; i<=max_attempts; i++)); do
+        if command; then
+            return 0
+        fi
+        sleep $delay
+        delay=$((delay * 2))
+    done
+    return 1
+}
+```
+
+## Logging and Output
+
+```bash
+# Log to file with timestamp
+log_file="/var/log/script.log"
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$log_file"
+}
+
+# Quiet mode support
+if [[ "${QUIET:-false}" != "true" ]]; then
+    echo "Verbose output enabled"
+fi
+
+# Redirect output conditionally
+if [[ -n "${LOG_DIR:-}" ]]; then
+    exec > >(tee -a "${LOG_DIR}/script.log")
+    exec 2>&1
+fi
+```
+
+## Enterprise Script Patterns
+
+### Check Root Privileges
+
+```bash
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root" >&2
+    exit 1
+fi
+```
+
+### Check macOS Version
+
+```bash
+os_version=$(sw_vers -productVersion | cut -d. -f1,2)
+if [[ $(echo "$os_version >= 14.0" | bc -l) -eq 0 ]]; then
+    echo "macOS 14.0+ required"
+    exit 1
+fi
+```
+
+### MDM Profile Check
+
+```bash
+check_mdm_profile() {
+    local profile_identifier="$1"
+    if profiles -P | grep -q "$profile_identifier"; then
+        return 0
+    else
+        return 1
+    fi
+}
+```
+
+### Process Check and Kill
+
+```bash
+# Check if process is running
+if pgrep -x "ApplicationName" > /dev/null; then
+    echo "Application is running"
+    pkill -x "ApplicationName"
+fi
+```
+
+### JSON Parsing (with jq)
+
+```bash
+# Parse JSON from API
+response=$(curl -s "https://api.example.com/data")
+value=$(echo "$response" | jq -r '.key.subkey')
+
+# Create JSON
+json_data=$(jq -n \
+    --arg key "value" \
+    '{key: $key}')
+```
+
+### Plist Operations
+
+```bash
+# Read plist value
+defaults read /path/to/file.plist Key
+
+# Write plist value
+defaults write /path/to/file.plist Key -string "value"
+
+# Delete plist key
+defaults delete /path/to/file.plist Key
+
+# Using PlistBuddy
+/usr/libexec/PlistBuddy -c "Print :Key" file.plist
+/usr/libexec/PlistBuddy -c "Set :Key value" file.plist
+```
 
 ## Resources
 
-* `man bash` — Bash manual
-* `help` — Bash built-ins help
-* `man -k something` — Search man pages
-* `brew install bash` — Install latest Bash (via Homebrew)
-
-
+- `man bash` — Bash manual
+- `help` — Bash built-ins help
+- `man -k something` — Search man pages
+- `brew install bash` — Install latest Bash (via Homebrew)
+- See Appendix C for additional tools and resources
