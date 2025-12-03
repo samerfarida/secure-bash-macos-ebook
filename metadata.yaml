@@ -23,4 +23,7 @@ toc: true
 toc-depth: 2
 
 pdf-engine: xelatex
-highlight-style: breezeDark
+# Note: Actual highlight styles used:
+# - PDF: templates/tango.theme (via command line)
+# - EPUB/HTML: tango (via command line)
+highlight-style: tango  # Default reference (not automatically used by pandoc)

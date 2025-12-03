@@ -21,16 +21,16 @@ pdf:
 	# Copy cover image to root for LaTeX to find it more easily
 	cp $(COVER) cover.png
 	# Set titlepage-background and suppress text overlay (cover image contains all info)
-	pandoc $(CHAPTERS) --metadata-file=$(METADATA) -V geometry:margin=1in -V titlepage=true -V titlepage-background=cover.png -V title="" -V subtitle="" -V author="" -V date="" -o $(OUTPUT_DIR)/Secure-Bash-for-macOS.pdf
+	pandoc $(CHAPTERS) --metadata-file=$(METADATA) --template=templates/eisvogel.latex --highlight-style=templates/tango.theme -V geometry:margin=1in -V titlepage=true -V titlepage-background=cover.png -V title="" -V subtitle="" -V author="" -V date="" -o $(OUTPUT_DIR)/Secure-Bash-for-macOS.pdf
 	rm -f cover.png
 
 epub:
 	mkdir -p $(OUTPUT_DIR)
-	pandoc $(CHAPTERS) --metadata-file=$(METADATA) --cover-image=$(COVER) -o $(OUTPUT_DIR)/Secure-Bash-for-macOS.epub
+	pandoc $(CHAPTERS) --metadata-file=$(METADATA) --css=templates/ebook-style.css --toc --toc-depth=2 --highlight-style=tango -o $(OUTPUT_DIR)/Secure-Bash-for-macOS.epub
 
 html:
 	mkdir -p $(OUTPUT_DIR)
-	pandoc $(CHAPTERS) --metadata-file=$(METADATA) -s -o $(OUTPUT_DIR)/Secure-Bash-for-macOS.html
+	pandoc $(CHAPTERS) --metadata-file=$(METADATA) --css=templates/ebook-style.css --toc --toc-depth=2 --standalone --highlight-style=tango -o $(OUTPUT_DIR)/Secure-Bash-for-macOS.html
 
 website:
 	mkdir -p $(OUTPUT_DIR)
