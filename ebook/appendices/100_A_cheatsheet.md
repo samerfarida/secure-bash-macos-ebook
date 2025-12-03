@@ -3,7 +3,7 @@
 A quick-reference guide for writing and debugging Bash scripts on macOS. This cheat sheet focuses on practical patterns used in enterprise macOS management and security automation.
 
 
-## Variables
+## A.1 Variables
 
 ```bash
 name="Sammy"
@@ -13,7 +13,7 @@ unset name             # delete variable
 ```
 
 
-## Conditionals
+## A.2 Conditionals
 
 ```bash
 if [ "$var" -eq 1 ]; then
@@ -25,7 +25,7 @@ else
 fi
 ```
 
-### Common Test Operators
+### A.2.1 Common Test Operators
 
 | Test         | Description           |
 |--------------|------------------------|
@@ -38,7 +38,7 @@ fi
 | `"$a" != "$b"` | Strings not equal     |
 
 
-## Loops
+## A.3 Loops
 
 ```bash
 for file in *.txt; do
@@ -56,7 +56,7 @@ done
 ```
 
 
-## Functions
+## A.4 Functions
 
 ```bash
 greet() {
@@ -66,7 +66,7 @@ greet "macOS"
 ```
 
 
-## Arrays
+## A.5 Arrays
 
 ```bash
 fruits=("apple" "banana" "cherry")
@@ -75,7 +75,7 @@ echo "${#fruits[@]}"    # count
 ```
 
 
-## String Manipulation
+## A.6 String Manipulation
 
 ```bash
 str="macOS"
@@ -86,7 +86,7 @@ echo "${str/m/Mac}"     # replace
 ```
 
 
-## File Descriptors and Redirection
+## A.7 File Descriptors and Redirection
 
 ```bash
 command > out.txt        # stdout
@@ -96,7 +96,7 @@ command &> all.txt       # both stdout + stderr
 ```
 
 
-## Command Substitution
+## A.8 Command Substitution
 
 ```bash
 today=$(date)
@@ -104,7 +104,7 @@ echo "Today is $today"
 ```
 
 
-## Useful Shortcuts
+## A.9 Useful Shortcuts
 
 | Shortcut     | Meaning                         |
 |--------------|----------------------------------|
@@ -117,7 +117,7 @@ echo "Today is $today"
 | `!n`         | Run command `n` from history     |
 
 
-## Script Template
+## A.10 Script Template
 
 ```bash
 #!/bin/bash
@@ -132,7 +132,7 @@ echo "Done"
 ```
 
 
-## File Permission Basics
+## A.11 File Permission Basics
 
 ```bash
 chmod +x script.sh      # make executable
@@ -141,7 +141,7 @@ chown user:staff file   # change owner
 ```
 
 
-## macOS Specific Tips
+## A.12 macOS Specific Tips
 
 ```bash
 open -a "TextEdit" file.txt        # open file with GUI app
@@ -151,7 +151,7 @@ system_profiler SPHardwareDataType # hardware info
 ```
 
 
-## Debugging
+## A.13 Debugging
 
 ```bash
 bash -x script.sh       # trace execution
@@ -160,7 +160,7 @@ trap 'echo "Failed at $LINENO"' ERR
 ```
 
 
-## Safe Scripting Practices
+## A.14 Safe Scripting Practices
 
 - Use `set -euo pipefail` for strict error handling
 - Quote variables: `"$var"` to prevent word splitting
@@ -169,7 +169,7 @@ trap 'echo "Failed at $LINENO"' ERR
 - Check return codes: `if ! command; then echo "Failed"; fi`
 - Use absolute paths in scripts: `/usr/local/bin/tool` vs `tool`
 
-## Error Handling Patterns
+## A.15 Error Handling Patterns
 
 ```bash
 # Exit on error with cleanup
@@ -202,7 +202,7 @@ retry() {
 }
 ```
 
-## Logging and Output
+## A.16 Logging and Output
 
 ```bash
 # Log to file with timestamp
@@ -223,9 +223,9 @@ if [[ -n "${LOG_DIR:-}" ]]; then
 fi
 ```
 
-## Enterprise Script Patterns
+## A.17 Enterprise Script Patterns
 
-### Check Root Privileges
+### A.17.1 Check Root Privileges
 
 ```bash
 if [[ $EUID -ne 0 ]]; then
@@ -234,7 +234,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 ```
 
-### Check macOS Version
+### A.17.2 Check macOS Version
 
 ```bash
 os_version=$(sw_vers -productVersion | cut -d. -f1,2)
@@ -244,7 +244,7 @@ if [[ $(echo "$os_version >= 14.0" | bc -l) -eq 0 ]]; then
 fi
 ```
 
-### MDM Profile Check
+### A.17.3 MDM Profile Check
 
 ```bash
 check_mdm_profile() {
@@ -257,7 +257,7 @@ check_mdm_profile() {
 }
 ```
 
-### Process Check and Kill
+### A.17.4 Process Check and Kill
 
 ```bash
 # Check if process is running
@@ -267,7 +267,7 @@ if pgrep -x "ApplicationName" > /dev/null; then
 fi
 ```
 
-### JSON Parsing (with jq)
+### A.17.5 JSON Parsing (with jq)
 
 ```bash
 # Parse JSON from API
@@ -280,7 +280,7 @@ json_data=$(jq -n \
     '{key: $key}')
 ```
 
-### Plist Operations
+### A.17.6 Plist Operations
 
 ```bash
 # Read plist value
@@ -297,7 +297,7 @@ defaults delete /path/to/file.plist Key
 /usr/libexec/PlistBuddy -c "Set :Key value" file.plist
 ```
 
-## Resources
+## A.18 Resources
 
 - `man bash` — Bash manual
 - `help` — Bash built-ins help

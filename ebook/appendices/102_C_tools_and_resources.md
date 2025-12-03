@@ -1,6 +1,6 @@
 # Appendix C: Tools and Resources
 
-## Learning and Development Tools
+## C.1 Learning and Development Tools
 
 | Tool | Description | Link |
 |------|-------------|------|
@@ -10,7 +10,7 @@
 | **cheat.sh** | Unified community cheatsheets | [https://cheat.sh/](https://cheat.sh/) |
 | **Bash Hackers Wiki** | Community wiki for Bash scripting | [https://wiki.bash-hackers.org/](https://wiki.bash-hackers.org/) |
 
-## macOS-Specific Tools
+## C.2 macOS-Specific Tools
 
 | Tool | Description | Link |
 |------|-------------|------|
@@ -20,7 +20,7 @@
 | **BBEdit** | Advanced text editor for macOS | [https://www.barebones.com/products/bbedit/](https://www.barebones.com/products/bbedit/) |
 | **iTerm2** | Powerful Terminal replacement | [https://iterm2.com/](https://iterm2.com/) |
 
-## Security and Hardening Tools
+## C.3 Security and Hardening Tools
 
 | Tool | Description | Link |
 |------|-------------|------|
@@ -41,7 +41,7 @@
 | **munkipkg** | Tool for building macOS installer packages | [https://github.com/munki/munki-pkg](https://github.com/munki/munki-pkg) |
 | **Platypus** | Create macOS applications from command-line scripts | [https://sveinbjorn.org/platypus](https://sveinbjorn.org/platypus) |
 
-## Recommended Shells and Extensions
+## C.4 Recommended Shells and Extensions
 
 | Tool | Description | Link |
 |------|-------------|------|
@@ -51,7 +51,7 @@
 | **Starship** | Fast, customizable shell prompt | [https://starship.rs/](https://starship.rs/) |
 | **Bash-it** | Framework for managing Bash configs | [https://github.com/Bash-it/bash-it](https://github.com/Bash-it/bash-it) |
 
-## Helpful Online Tools
+## C.5 Helpful Online Tools
 
 | Tool | Description | Link |
 |------|-------------|------|
@@ -60,6 +60,6 @@
 | **CyberChef** | Swiss Army knife for data format transformations | [https://gchq.github.io/CyberChef/](https://gchq.github.io/CyberChef/) |
 
 
-## Author's Note
+## C.6 Author's Note
 
 These tools can help you write, test, and secure your Bash scripts on macOS. I encourage you to explore, experiment, and contribute back to open-source projects that make your scripting journey smoother.

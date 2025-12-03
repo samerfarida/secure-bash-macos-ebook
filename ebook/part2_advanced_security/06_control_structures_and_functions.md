@@ -174,3 +174,12 @@ main
 1. Write a script that loops through all `.log` files in `/var/log` and prints the filename and number of lines.
 2. Create a function called `backup_home` that accepts a username and uses `rsync` to back up their home directory to `/Users/Backups/`.
 3. Modify the `Lock Screen Reminder` example to send a message only once every 10 minutes.
+
+
+## macOS Scripting Tips
+
+- Use `osascript` for GUI integration with Bash scripts, but remember it requires appropriate permissions under System Preferences > Privacy & Security > Automation.
+- Functions help organize code; use `local` variables within functions to avoid conflicts with global scope.
+- macOS-specific commands like `dscl` can help iterate over user accounts more reliably than parsing `/etc/passwd`.
+- Use `sw_vers` or `uname` to programmatically detect macOS version and platform for cross-compatibility checks.
+- Consider using `launchctl` to schedule functions and scripts to run automatically on macOS.

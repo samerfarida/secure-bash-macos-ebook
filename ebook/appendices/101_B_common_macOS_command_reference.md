@@ -12,7 +12,7 @@ on macOS systems.
 - Apply commands securely and efficiently in real-world scripts.
 
 
-## System Information
+## B.1 System Information
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -22,7 +22,7 @@ on macOS systems.
 | `sysctl` | Read kernel parameters | `sysctl -a \| grep machdep.cpu` |
 
 
-## File and Directory Operations
+## B.2 File and Directory Operations
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -38,7 +38,7 @@ on macOS systems.
 | `df` | Filesystem disk space usage | `df -h` |
 
 
-## Permissions and Ownership
+## B.3 Permissions and Ownership
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -47,7 +47,7 @@ on macOS systems.
 | `sudo` | Run as superuser | `sudo nano /etc/hosts` |
 
 
-## Process and Resource Management
+## B.4 Process and Resource Management
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -58,7 +58,7 @@ on macOS systems.
 | `pkill` | Kill processes by name | `pkill -f "processname"` |
 
 
-## Networking
+## B.5 Networking
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -71,7 +71,7 @@ on macOS systems.
 | `nc` | Netcat: open TCP/UDP connections | `nc -vz host 80` |
 
 
-## System Maintenance and Updates
+## B.6 System Maintenance and Updates
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -82,7 +82,7 @@ on macOS systems.
 | `csrutil` | SIP (System Integrity Protection) status/config | `csrutil status` (must run from Recovery OS) |
 
 
-## Logging and Monitoring
+## B.7 Logging and Monitoring
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -93,7 +93,7 @@ on macOS systems.
 | `sed` | Stream editor | `sed 's/old/new/g' file.txt` |
 
 
-## System Controls and Services
+## B.8 System Controls and Services
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -103,7 +103,7 @@ on macOS systems.
 | `reboot` | Reboot system | `sudo reboot` |
 
 
-## Security and Privacy
+## B.9 Security and Privacy
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -116,7 +116,7 @@ on macOS systems.
 | `sysctl` | Kernel parameters | `sysctl kern.securelevel` |
 
 
-## MDM and Configuration Profile Management
+## B.10 MDM and Configuration Profile Management
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -125,7 +125,7 @@ on macOS systems.
 | `profiles` | Remove profile | `sudo profiles -R -p "com.example.profile"` |
 | `profiles` | Install profile | `sudo profiles -I -F /path/to/profile.mobileconfig` |
 
-## Hardware and System Information
+## B.11 Hardware and System Information
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -135,7 +135,7 @@ on macOS systems.
 | `mdfind` | Spotlight search from CLI | `mdfind "kMDItemKind == 'Application'"` |
 | `mdls` | Get file metadata | `mdls /Applications/Safari.app` |
 
-## Handy macOS-Specific Shortcuts
+## B.12 Handy macOS-Specific Shortcuts
 
 | Task | Command |
 |------|---------|
@@ -147,7 +147,7 @@ on macOS systems.
 | Check SIP status | `csrutil status` (run from Recovery OS) |
 
 
-## Enterprise Administration Commands
+## B.13 Enterprise Administration Commands
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -159,7 +159,7 @@ on macOS systems.
 | `softwareupdate` | Software update management | `sudo softwareupdate -l` |
 | `installer` | Install packages | `sudo installer -pkg package.pkg -target /` |
 
-## Final Tips
+## B.14 Final Tips
 
 Keep this reference nearby as you build your own scripts and automations.  
 Combine these commands with robust Bash syntax to streamline your macOS workflows  

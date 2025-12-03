@@ -1,6 +1,6 @@
 # Appendix D: Further Reading and Communities
 
-## Recommended Books
+## D.1 Recommended Books
 
 | Title | Description | Link |
 |-------|-------------|------|
@@ -9,7 +9,7 @@
 | **macOS Internals** by Jonathan Levin | In-depth look at macOS internals, useful for advanced scripts | [Technologeeks](http://newosxbook.com/) |
 | **The Mac Administrator’s Guide to Bash** | Practical Bash applications for Mac admins | (Check your local or online tech bookstore) |
 
-## Online Documentation and Guides
+## D.2 Online Documentation and Guides
 
 | Resource | Description | Link |
 |----------|-------------|------|
@@ -22,7 +22,7 @@
 | **Jamf Documentation** | Comprehensive MDM and macOS management docs | [https://docs.jamf.com/](https://docs.jamf.com/) |
 | **Munki Documentation** | macOS package management documentation | [https://github.com/munki/munki/wiki](https://github.com/munki/munki/wiki) |
 
-## Active Communities
+## D.3 Active Communities
 
 | Community | Description | Link |
 |-----------|-------------|------|
@@ -34,7 +34,7 @@
 | **Installomator Community** | Discussion and support for Installomator | [https://github.com/Installomator/Installomator/discussions](https://github.com/Installomator/Installomator/discussions) |
 | **MacAdmin Tools** | Community-maintained macOS admin tools and scripts | [https://github.com/macadmin-tools](https://github.com/macadmin-tools) |
 
-## GitHub Repositories and Projects
+## D.4 GitHub Repositories and Projects
 
 | Repository | Description | Link |
 |------------|-------------|------|
@@ -47,6 +47,6 @@
 | **erase-install** | OS refresh automation | [https://github.com/grahampugh/erase-install](https://github.com/grahampugh/erase-install) |
 | **Osquery** | Endpoint visibility platform | [https://github.com/osquery/osquery](https://github.com/osquery/osquery) |
 
-## Author's Favorites
+## D.5 Author's Favorites
 
 I recommend subscribing to security mailing lists, following macOS security and scripting blogs, and joining relevant GitHub repositories to stay current. The macOS ecosystem evolves fast — staying connected helps you keep your Bash scripts secure, compatible, and powerful. Participate in open-source projects, contribute back improvements, and share knowledge with the MacAdmin community.

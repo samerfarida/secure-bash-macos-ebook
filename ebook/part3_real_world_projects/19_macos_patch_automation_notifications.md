@@ -1,5 +1,22 @@
 # Chapter 19: macOS Patch Automation & Notifications (DDM-first)
 
+## Learning Objectives
+
+By the end of this chapter, you will be able to:
+
+- Design a **Declarative Device Management (DDM)-first** strategy for macOS software updates.  
+- Combine **DDM enforcement** with **Nudge**-driven user experience to maximize compliance.  
+- Use **softwareupdate** primarily for diagnostics, verification, and edge cases.  
+- Implement ring-based rollouts, deadlines, and deferrals that respect UX and security posture.  
+- Observe and troubleshoot the Apple **Unified Logging** and **Software Update** subsystems.  
+- Integrate notifications and compliance signals with your MDM and SIEM compliance signals.
+
+## Introduction
+
+Apple's Declarative Device Management (DDM) fundamentally changes how fleets receive and report software update state: devices **proactively evaluate** their status and **report** back without constant polling. For macOS, this means **reliable, scalable enforcement** of OS updates, security updates, and Rapid Security Responses (RSRs), while keeping the end-user experience front and center.
+
+This chapter takes a **DDM-first** approach: use DDM to define the *what* (required version, deadline, enforcement), use **Nudge** to deliver the *why/when* to users (clear guidance, deferrals, deadlines), and reserve **softwareupdate** CLI for *diagnostics and exceptional cases*. The result is higher compliance, fewer help desk calls, and fewer surprises on patch night.
+
 ## 19.1 Prerequisites, Scope & Limitations
 
 ### System Requirements
@@ -68,23 +85,6 @@ profiles status -type enrollment
 - Test with multiple device models and macOS versions
 - Validate edge cases (low disk space, network constraints, user absences)
 - Document vendor-specific behaviors and workarounds
-
-## Learning Objectives
-
-By the end of this chapter, you will be able to:
-
-- Design a **Declarative Device Management (DDM)-first** strategy for macOS software updates.  
-- Combine **DDM enforcement** with **Nudge**-driven user experience to maximize compliance.  
-- Use **softwareupdate** primarily for diagnostics, verification, and edge cases.  
-- Implement ring-based rollouts, deadlines, and deferrals that respect UX and security posture.  
-- Observe and troubleshoot the Apple **Unified Logging** and **Software Update** subsystems.  
-- Integrate notifications and compliance signals with your MDM and SIEM compliance signals.
-
-## Introduction
-
-Apple’s Declarative Device Management (DDM) fundamentally changes how fleets receive and report software update state: devices **proactively evaluate** their status and **report** back without constant polling. For macOS, this means **reliable, scalable enforcement** of OS updates, security updates, and Rapid Security Responses (RSRs), while keeping the end-user experience front and center.
-
-This chapter takes a **DDM-first** approach: use DDM to define the *what* (required version, deadline, enforcement), use **Nudge** to deliver the *why/when* to users (clear guidance, deferrals, deadlines), and reserve **softwareupdate** CLI for *diagnostics and exceptional cases*. The result is higher compliance, fewer help desk calls, and fewer surprises on patch night.
 
 ## Setting Up Your Patch Management Program
 
