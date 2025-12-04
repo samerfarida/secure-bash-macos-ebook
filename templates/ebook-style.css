@@ -1,54 +1,281 @@
+/* ============================================
+   Base Typography
+   ============================================ */
 body {
-  font-family: "Latin Modern Roman", serif;
-  margin: 2rem auto;
+  font-family: "Latin Modern Roman", "Times New Roman", serif;
+  margin: 0;
+  padding: 1.5em 1em;
   max-width: 42em;
-  line-height: 1.6;
-  padding: 0 1rem;
+  line-height: 1.7;
   background: #ffffff;
   color: #111;
+  text-align: left;
+  font-size: 1em;
 }
 
-h1, h2, h3, h4 {
-  margin-top: 2rem;
+/* Paragraph spacing */
+p {
+  margin: 1em 0;
+  text-align: left;
+  orphans: 2;
+  widows: 2;
+}
+
+/* ============================================
+   Headings
+   ============================================ */
+h1 {
+  font-size: 1.8em;
+  margin-top: 2em;
+  margin-bottom: 1em;
   line-height: 1.2;
+  font-weight: bold;
+  page-break-after: avoid;
+  color: #222;
 }
 
-/* Fenced code blocks */
-pre > code {
-  background-color: #f5f5f5;
-  color: #111;
-  display: block;
-  padding: 0.75em;
-  border-radius: 5px;
-  font-family: "Fira Code", monospace;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-wrap: anywhere;
-  max-width: 100%;
-  box-sizing: border-box;
+h2 {
+  font-size: 1.5em;
+  margin-top: 1.8em;
+  margin-bottom: 0.8em;
+  line-height: 1.3;
+  font-weight: bold;
+  page-break-after: avoid;
+  color: #222;
 }
 
+h3 {
+  font-size: 1.25em;
+  margin-top: 1.5em;
+  margin-bottom: 0.6em;
+  line-height: 1.3;
+  font-weight: bold;
+  page-break-after: avoid;
+  color: #333;
+}
+
+h4 {
+  font-size: 1.1em;
+  margin-top: 1.3em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+  font-weight: bold;
+  page-break-after: avoid;
+  color: #333;
+}
+
+h5, h6 {
+  font-size: 1em;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+  font-weight: bold;
+  page-break-after: avoid;
+}
+
+/* ============================================
+   Table of Contents - Remove Numbering
+   ============================================ */
+/* EPUB3 uses nav#toc for the table of contents */
+nav#toc ol,
+nav#toc ul,
+nav.toc ol,
+nav.toc ul {
+  list-style: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+/* TOC hierarchy - add indentation for nested items */
+nav#toc ol ol,
+nav#toc ul ul,
+nav.toc ol ol,
+nav.toc ul ul {
+  padding-left: 1.5em;
+  margin-left: 0;
+}
+
+nav#toc ol ol ol,
+nav#toc ul ul ul,
+nav.toc ol ol ol,
+nav.toc ul ul ul {
+  padding-left: 1.5em;
+}
+
+nav#toc ol li,
+nav#toc ul li,
+nav.toc ol li,
+nav.toc ul li {
+  list-style: none;
+  counter-reset: none;
+  margin: 0.5em 0;
+}
+
+nav#toc ol li::before,
+nav#toc ul li::before,
+nav.toc ol li::before,
+nav.toc ul li::before {
+  content: none;
+}
+
+/* TOC link styling */
+nav#toc a,
+nav.toc a {
+  text-decoration: none;
+  color: #0066cc;
+}
+
+nav#toc a:hover,
+nav.toc a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================
+   Lists (preserve numbering for content lists)
+   ============================================ */
+ul, ol {
+  margin: 1em 0;
+  padding-left: 2em;
+}
+
+li {
+  margin: 0.5em 0;
+  line-height: 1.6;
+}
+
+/* Nested lists */
+ul ul, ol ol, ul ol, ol ul {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+/* ============================================
+   Code Blocks
+   ============================================ */
 pre {
   background-color: #f5f5f5;
+  border: 1px solid #e0e0e0;
   color: #111;
-  padding: 0.75em;
+  padding: 1em;
   border-radius: 5px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-wrap: anywhere;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: pre;
+  word-wrap: normal;
+  margin: 1.5em 0;
+  page-break-inside: avoid;
+  font-size: 0.9em;
+  line-height: 1.5;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+pre > code {
+  background-color: transparent;
+  color: inherit;
+  display: block;
+  padding: 0;
+  border-radius: 0;
+  font-family: "Fira Code", "Courier New", monospace;
+  white-space: pre;
+  word-wrap: normal;
+  overflow-wrap: normal;
+  box-sizing: border-box;
+  border: none;
+  width: fit-content;
+  min-width: 100%;
 }
 
 /* Inline code */
 code {
   background-color: #f5f5f5;
-  color: #111;
-  padding: 0.15em 0.3em;
+  border: 1px solid #e0e0e0;
+  color: #c7254e;
+  padding: 0.15em 0.4em;
   border-radius: 3px;
-  font-family: "Fira Code", monospace;
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 0.9em;
   white-space: nowrap;
 }
 
-/* Hyperlinks */
+/* Code inside headings - adjust size */
+h1 code, h2 code, h3 code, h4 code {
+  font-size: 0.85em;
+  padding: 0.1em 0.3em;
+}
+
+/* ============================================
+   Tables
+   ============================================ */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  margin: 1.5em 0;
+  page-break-inside: avoid;
+  font-size: 0.95em;
+}
+
+thead {
+  background-color: #f8f8f8;
+}
+
+th {
+  border: 1px solid #ddd;
+  padding: 0.75em;
+  text-align: left;
+  font-weight: bold;
+  background-color: #f8f8f8;
+}
+
+td {
+  border: 1px solid #ddd;
+  padding: 0.75em;
+  text-align: left;
+}
+
+tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/* ============================================
+   Blockquotes
+   ============================================ */
+blockquote {
+  margin: 1.5em 1em;
+  padding: 0.75em 1em;
+  border-left: 4px solid #4a9eff;
+  background-color: #f8f9fa;
+  color: #333;
+  font-style: italic;
+  page-break-inside: avoid;
+}
+
+/* Dark mode support for blockquotes */
+@media (prefers-color-scheme: dark) {
+  blockquote {
+    border-left-color: #6bb6ff;
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+  }
+}
+
+blockquote p {
+  margin: 0.5em 0;
+}
+
+blockquote p:first-child {
+  margin-top: 0;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ============================================
+   Links
+   ============================================ */
 a {
   color: #0066cc;
   text-decoration: none;
@@ -56,4 +283,82 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+a:visited {
+  color: #551a8b;
+}
+
+/* ============================================
+   Text Formatting
+   ============================================ */
+strong, b {
+  font-weight: bold;
+  color: #222;
+}
+
+em, i {
+  font-style: italic;
+}
+
+/* ============================================
+   Images
+   ============================================ */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5em auto;
+  page-break-inside: avoid;
+}
+
+/* ============================================
+   Horizontal Rules
+   ============================================ */
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 2em 0;
+  page-break-inside: avoid;
+}
+
+/* ============================================
+   EPUB-Specific Page Break Controls
+   ============================================ */
+/* Keep headings with following content */
+h1, h2, h3, h4, h5, h6 {
+  page-break-after: avoid;
+}
+
+/* Avoid breaking code blocks and tables */
+pre, code, table {
+  page-break-inside: avoid;
+}
+
+/* Keep table rows together when possible */
+tr {
+  page-break-inside: avoid;
+}
+
+/* Prevent orphans and widows */
+p, li, blockquote {
+  orphans: 2;
+  widows: 2;
+}
+
+/* ============================================
+   Definition Lists (if used)
+   ============================================ */
+dl {
+  margin: 1em 0;
+}
+
+dt {
+  font-weight: bold;
+  margin-top: 1em;
+}
+
+dd {
+  margin-left: 2em;
+  margin-bottom: 0.5em;
 }
