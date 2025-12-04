@@ -7,10 +7,6 @@ on:
       - completed
     branches:
       - main
-  # Keep push trigger for manual runs, but lint should pass first
-  push:
-    branches:
-      - main
 
 permissions:
   contents: write
@@ -19,18 +15,16 @@ jobs:
   build-and-release:
     runs-on: ubuntu-latest
     # Only run if linting workflow completed successfully
-    if: |
-      github.event.workflow_run.conclusion == 'success' ||
-      (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    if: github.event.workflow_run.conclusion == 'success'
 
     steps:
-      - name: 🔍 Check if linting passed (for workflow_run trigger)
-        if: github.event_name == 'workflow_run'
+      - name: 🔍 Verify linting passed
         run: |
           if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
             echo "❌ Linting workflow did not pass. Skipping build."
             exit 1
           fi
+          echo "✅ Linting workflow passed. Proceeding with build."
 
       - name: 📥 Checkout repository
         uses: actions/checkout@v3
