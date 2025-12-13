@@ -147,5 +147,6 @@ jobs:
             output/Secure-Bash-for-macOS-${{ env.VERSION }}.pdf
             output/Secure-Bash-for-macOS-${{ env.VERSION }}.epub
             output/Secure-Bash-for-macOS-${{ env.VERSION }}.html
+            CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
