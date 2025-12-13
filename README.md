@@ -112,6 +112,7 @@ make html
 5. Working with Processes and System Resources
 
 **Part II – Advanced Security Scripting**
+
 6. Control Structures and Functions
 7. File Management and Permissions
 8. Error Handling and Debugging
@@ -122,6 +123,7 @@ make html
 13. Writing Interactive and GUI-Driven Scripts
 
 **Part III – Real-World Projects**
+
 14. Automated Hardening & Compliance (mSCP)
 15. Inventory & Asset Management
 16. Signed & Notarized Installer Packages
