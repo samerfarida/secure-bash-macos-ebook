@@ -32,7 +32,7 @@
 | **r/bash (Reddit)** | Community for sharing Bash scripts and tips | [https://www.reddit.com/r/bash/](https://www.reddit.com/r/bash/) |
 | **Objective-See Community** | macOS security research community | [https://objective-see.org/](https://objective-see.org/) |
 | **Installomator Community** | Discussion and support for Installomator | [https://github.com/Installomator/Installomator/discussions](https://github.com/Installomator/Installomator/discussions) |
-| **MacAdmin Tools** | Community-maintained macOS admin tools and scripts | [https://github.com/macadmin-tools](https://github.com/macadmin-tools) |
+| **MacAdmin Tools** | Community-maintained macOS admin tools and scripts | [https://github.com/NYCIST/macadmin-tools](https://github.com/NYCIST/macadmin-tools) |
 
 ## D.4 GitHub Repositories and Projects
 
