@@ -188,7 +188,15 @@
     "splunk",
     "otel",
     "otlp",
-    "Kiro"
+    "Kiro",
+    "agentic",
+    "Agentic",
+    "exfil",
+    "unsandboxed",
+    "unreviewed",
+    "devx",
+    "creds",
+    "SSDF"
   ],
   "flagWords": [],
   "ignorePaths": [
