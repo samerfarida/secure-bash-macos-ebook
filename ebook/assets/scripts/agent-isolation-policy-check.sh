@@ -14,7 +14,7 @@ check_sbx() {
     return "$EXIT_FAIL"
   fi
   if ! sbx version >/dev/null 2>&1; then
-    echo "FAIL: sbx installed but not functional — sign in with Docker account"
+    echo "FAIL: sbx installed but not functional — run sbx login"
     return "$EXIT_FAIL"
   fi
   echo "OK: sbx $(sbx version 2>/dev/null | head -1)"
@@ -33,10 +33,14 @@ check_marker() {
 
 main() {
   local repo="${1:-.}"
-  local rc=0
+  local rc="$EXIT_OK" mc
 
   check_sbx || rc=$?
-  check_marker "$repo" || [[ $rc -eq 0 ]] && rc=$?
+
+  if ! check_marker "$repo"; then
+    mc=$?
+    (( mc > rc )) && rc=$mc
+  fi
 
   exit "$rc"
 }

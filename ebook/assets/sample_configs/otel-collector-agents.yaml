@@ -14,6 +14,8 @@ receivers:
       - type: json_parser
         timestamp:
           parse_from: attributes.time
+          layout_type: epoch
+          layout: s
 
 processors:
   batch:
@@ -24,7 +26,7 @@ processors:
 
 exporters:
   debug:
-    verbosity: basic
+    verbosity: detailed
   splunk_hec:
     token: ${env:SPLUNK_HEC_TOKEN}
     endpoint: https://splunk.corp.example:8088/services/collector

@@ -48,6 +48,7 @@
 | **OpenTelemetry Collector** | Vendor-neutral OTLP pipeline for logs, metrics, traces | [https://opentelemetry.io/docs/collector/](https://opentelemetry.io/docs/collector/) |
 | **o11y-dev/opentelemetry-hooks** | Multi-agent hook-based OTel exporter | [https://github.com/o11y-dev/opentelemetry-hooks](https://github.com/o11y-dev/opentelemetry-hooks) |
 | **cursorscope** | Cursor hook events to OTLP forwarder | [https://github.com/last9/cursorscope](https://github.com/last9/cursorscope) |
+| **Chapter 23 lab assets** | `test-validator.sh`, Cursor hook guards, osquery pack, MCP allowlist | `ebook/assets/scripts/` and `ebook/assets/sample_configs/` |
 | **MCP SSH Orchestrator** | Declarative MCP SSH access control example | [https://me.itsecurity.network/projects/mcp-ssh-orchestrator/](https://me.itsecurity.network/projects/mcp-ssh-orchestrator/) |
 
 ## C.4 Recommended Shells and Extensions

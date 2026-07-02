@@ -1,0 +1,5 @@
+{
+  "servers": {},
+  "default": "deny",
+  "notes": "Add MCP servers only after security review. Example entry: \"filesystem\": {\"allowed\": true, \"reason\": \"local read-only\"}"
+}
