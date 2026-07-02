@@ -40,6 +40,15 @@
 | **swiftDialog** | Professional dialog presentation tool for macOS | [https://github.com/bartreardon/swiftDialog](https://github.com/bartreardon/swiftDialog) |
 | **munkipkg** | Tool for building macOS installer packages | [https://github.com/munki/munki-pkg](https://github.com/munki/munki-pkg) |
 | **Platypus** | Create macOS applications from command-line scripts | [https://sveinbjorn.org/platypus](https://sveinbjorn.org/platypus) |
+| **sbx (Docker Sandboxes)** | MicroVM isolation for AI coding agents on Apple Silicon | [https://docs.docker.com/ai/sandboxes/](https://docs.docker.com/ai/sandboxes/) |
+| **Claude Code** | Anthropic agentic coding CLI with Seatbelt sandbox and hooks | [https://code.claude.com/](https://code.claude.com/) |
+| **Cursor** | AI IDE/CLI with `sandbox.json` and agent hooks | [https://cursor.com/](https://cursor.com/) |
+| **Codex CLI** | OpenAI agentic coding CLI with Seatbelt and `[otel]` telemetry | [https://developers.openai.com/codex/](https://developers.openai.com/codex/) |
+| **Agent Safehouse** | Seatbelt wrapper for agent CLIs | [https://agent-safehouse.dev/](https://agent-safehouse.dev/) |
+| **OpenTelemetry Collector** | Vendor-neutral OTLP pipeline for logs, metrics, traces | [https://opentelemetry.io/docs/collector/](https://opentelemetry.io/docs/collector/) |
+| **o11y-dev/opentelemetry-hooks** | Multi-agent hook-based OTel exporter | [https://github.com/o11y-dev/opentelemetry-hooks](https://github.com/o11y-dev/opentelemetry-hooks) |
+| **cursorscope** | Cursor hook events to OTLP forwarder | [https://github.com/last9/cursorscope](https://github.com/last9/cursorscope) |
+| **MCP SSH Orchestrator** | Declarative MCP SSH access control example | [https://me.itsecurity.network/projects/mcp-ssh-orchestrator/](https://me.itsecurity.network/projects/mcp-ssh-orchestrator/) |
 
 ## C.4 Recommended Shells and Extensions
 

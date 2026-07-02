@@ -46,6 +46,18 @@
 | **swiftDialog** | Dialog presentation tool | [https://github.com/bartreardon/swiftDialog](https://github.com/bartreardon/swiftDialog) |
 | **erase-install** | OS refresh automation | [https://github.com/grahampugh/erase-install](https://github.com/grahampugh/erase-install) |
 | **Osquery** | Endpoint visibility platform | [https://github.com/osquery/osquery](https://github.com/osquery/osquery) |
+| **o11y-dev/opentelemetry-hooks** | Hook-based OTel for Claude, Codex, Cursor, Copilot | [https://github.com/o11y-dev/opentelemetry-hooks](https://github.com/o11y-dev/opentelemetry-hooks) |
+| **OpenTelemetry Collector Contrib** | OTLP exporters for Datadog, Splunk, Elastic | [https://github.com/open-telemetry/opentelemetry-collector-contrib](https://github.com/open-telemetry/opentelemetry-collector-contrib) |
+| **agents.md** | Cross-agent instruction file standard | [https://agents.md/](https://agents.md/) |
+
+## D.6 Agentic AI Security References
+
+| Resource | Description | Link |
+|----------|-------------|------|
+| **Docker Sandboxes (`sbx`)** | MicroVM agent isolation docs | [https://docs.docker.com/ai/sandboxes/](https://docs.docker.com/ai/sandboxes/) |
+| **Claude Code hooks** | Deterministic PreToolUse enforcement | [https://code.claude.com/docs/en/hooks](https://code.claude.com/docs/en/hooks) |
+| **Cursor sandbox.json** | Workspace network and filesystem policy | [https://cursor.com/docs/reference/sandbox](https://cursor.com/docs/reference/sandbox) |
+| **OWASP LLM Top 10** | LLM application security risks | [https://owasp.org/www-project-top-10-for-large-language-model-applications/](https://owasp.org/www-project-top-10-for-large-language-model-applications/) |
 
 ## D.5 Author's Favorites
 

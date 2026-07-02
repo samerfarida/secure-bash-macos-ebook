@@ -135,6 +135,7 @@ Before deploying Privileges, design a privilege elevation policy that balances s
 
 - May need more frequent elevation
 - Consider transitive allowlisting in combination with Santa
+- Prefer **sandbox-by-default** for agentic AI coding tools (Chapter 23) instead of recurring Privileges grants for routine development
 - Balance development needs with security
 
 **Executives:**

@@ -319,7 +319,7 @@ When transitioning from Monitor to Lockdown mode, follow this workflow:
 2. Collect observed executions:  
    - If using file logs: `sudo tail -F /var/db/santa/santa.log` (or ship the file to your SIEM).  
    - If using protobuf logs: `sudo santactl printlog --json > /tmp/santa_events.json`.  
-3. Build allowlists from observed data (favor TeamID/SigningID rules). Optionally enable **transitive allowlisting** for compilers on developer Macs.  
+3. Build allowlists from observed data (favor TeamID/SigningID rules). Optionally enable **transitive allowlisting** for compilers on developer Macs. Prefer sandboxed agent workflows (Chapter 23) before widening Santa allowlists for development toolchains.  
 4. Pilot **Lockdown** (or **Standalone**) with a small group, then expand by department.  
 5. Maintain an emergency override (temporary allow rule) and a documented rollback to Monitor.
 
