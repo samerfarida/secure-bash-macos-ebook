@@ -78,6 +78,7 @@ For new or materially changed chapters, verify/update:
 
 ## 5. Security editorial
 
+- Chapter 23 must **not** reference **Devin** (removed from scope); use Cursor, Claude Code, Codex, Copilot, OpenCode, Aider, or `sbx` instead
 - Danger zone before destructive commands
 - No real secrets in examples
 - Warn on bypass flags (`--dangerously-skip-permissions`, etc.)

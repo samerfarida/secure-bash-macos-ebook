@@ -32,6 +32,15 @@ exporters:
     endpoints:
       - https://elastic.corp.example:9200
     logs_index: agent-otel-logs
+  # Uncomment and configure for Datadog OTLP intake (verify site: datadoghq.com vs EU)
+  # datadog:
+  #   api:
+  #     key: ${env:DATADOG_API_KEY}
+  #     site: datadoghq.com
+  # Microsoft Sentinel — use Logs Ingestion API + Data Collection Rule (DCR), not azuremonitor alone
+  # azuremonitor:
+  #   connection_string: "InstrumentationKey=...;IngestionEndpoint=https://....ingest.monitor.azure.com/"
+  #   # See Azure Monitor docs for otelcol contrib azure exporter and DCR mapping
 
 service:
   pipelines:

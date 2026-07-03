@@ -166,6 +166,25 @@ if [[ ${#plist_files[@]} -gt 0 ]]; then
   done
 fi
 
+# --- Chapter 23 publication checks (when applicable) ---
+if [[ "$CHAPTER" == *"23_secure_agentic_ai"* ]]; then
+  if rg -n '\bDevin\b' "$CHAPTER" 2>/dev/null; then
+    log_blocker "Devin reference found in $CHAPTER (removed per publication policy)"
+  else
+    log_ok "No Devin references in chapter"
+  fi
+  if rg -n "sbx ls.*awk.*NR==1" "$CHAPTER" 2>/dev/null; then
+    log_blocker "Unsafe sbx ls NR==1 parsing in $CHAPTER (use SBX_LAB_NAME or sbx_lab_name)"
+  else
+    log_ok "No unsafe sbx ls NR==1 parsing"
+  fi
+  if rg -n 'FROM process_events\b' "$CHAPTER" 2>/dev/null; then
+    log_blocker "Use es_process_events (not process_events) in osquery SQL"
+  else
+    log_ok "osquery uses es_process_events"
+  fi
+fi
+
 # --- Linux-ism scan on chapter ---
 LINUX_PATTERNS='apt-get|apt install|yum |dnf |systemctl |useradd |usermod |grep -P|readlink -f|stat -c|date -d|/home/|/etc/bash.bashrc'
 if rg -n -e "$LINUX_PATTERNS" "$CHAPTER" 2>/dev/null; then
