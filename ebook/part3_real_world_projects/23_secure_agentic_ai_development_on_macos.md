@@ -322,7 +322,7 @@ If you do not have the ebook repo locally, create the files manually in section 
 
 ## 23.4 `sbx` Sandboxes: Hands-On Lab
 
-> **Note:** Older blog posts reference `docker sandbox` — that interface is deprecated. This chapter standardizes on **`sbx`**.
+> **Note:** Older blog posts reference `docker sandbox` — that interface is deprecated. This chapter standardizes on **`sbx`**. Official docs: [Docker Sandboxes](https://docs.docker.com/ai/sandboxes/).
 
 ### Supported agents (verify against current Docker docs)
 
@@ -543,6 +543,8 @@ Claude does **not** natively read `AGENTS.md` — import it from `CLAUDE.md`:
 
 Sandbox modes include `read-only`, `workspace-write`, and `danger-full-access`. `--full-auto` presets combine sandbox with approval policy. The YOLO flag bypasses sandbox entirely — reserve for break-glass with alerting and credential rotation.
 
+Official docs: [agent approvals and security](https://developers.openai.com/codex/agent-approvals-security), [config reference](https://developers.openai.com/codex/config-reference), [CLI reference](https://developers.openai.com/codex/cli/reference).
+
 ### GitHub Copilot CLI
 
 Copilot CLI has **no OS-level sandbox**. Security controls are **advisory**: hooks, tool allowlists, and trusted directories — not kernel enforcement. Native hooks ship GA:
@@ -552,6 +554,130 @@ Copilot CLI has **no OS-level sandbox**. Security controls are **advisory**: hoo
 - `permissionDecision`: `allow` / `deny` / `ask` (ask becomes deny when unattended)
 
 For OS isolation, wrap with `sbx` or Agent Safehouse. OTel is available via the **Copilot SDK** (TelemetryConfig, W3C trace context) — not turnkey env-var export like Claude Code.
+
+Official docs: [Copilot CLI autopilot](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/autopilot), [CLI reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference), [configuration](https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/configure-copilot-cli).
+
+### Auto mode and unattended execution (per agent)
+
+Each product uses different terminology for autonomous runs. Reserve full bypass flags (`--dangerously-skip-permissions`, `--yolo`, `--force`) for **microVM or container boundaries** (`sbx`, dev containers) — not bare-metal host execution.
+
+#### Claude Code
+
+`defaultMode: "auto"` uses a background classifier before actions run. Set in **user** settings only (`~/.claude/settings.json`); project `.claude/settings.json` cannot grant `auto`.
+
+```json
+{
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true
+  }
+}
+```
+
+```bash
+claude --permission-mode auto
+claude -p --permission-mode auto "Fix failing tests in src/"
+```
+
+Docs: [permission modes](https://code.claude.com/docs/en/permission-modes), [settings](https://code.claude.com/docs/en/settings), [sandboxing](https://code.claude.com/docs/en/sandboxing).
+
+#### Codex CLI
+
+Recommended host preset — sandboxed writes with on-request approvals for network and out-of-workspace access:
+
+```toml
+# ~/.codex/config.toml
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+```
+
+```bash
+codex --sandbox workspace-write --ask-for-approval on-request
+codex exec --sandbox workspace-write "Fix build errors"
+```
+
+Fully scripted runs (still sandboxed — use only in controlled environments):
+
+```toml
+approval_policy = "never"
+sandbox_mode = "workspace-write"
+```
+
+```bash
+codex exec --sandbox workspace-write --ask-for-approval never "Migrate tests"
+```
+
+Avoid `--yolo` / `--dangerously-bypass-approvals-and-sandbox` on the host. Docs: [agent approvals](https://developers.openai.com/codex/agent-approvals-security), [config reference](https://developers.openai.com/codex/config-reference).
+
+#### Cursor CLI
+
+Allowlist mode with sandbox enabled is the safer unattended pattern on the host:
+
+```json
+{
+  "version": 1,
+  "approvalMode": "allowlist",
+  "sandbox": {
+    "mode": "enabled",
+    "networkAccess": "deny"
+  },
+  "permissions": {
+    "allow": ["Shell(git)", "Shell(npm)", "Read(src/**)", "Write(src/**)"],
+    "deny": ["Shell(rm)", "Read(.env*)", "Write(**/.env*)"]
+  }
+}
+```
+
+```bash
+agent -p --sandbox enabled --trust "Analyze this codebase"
+```
+
+For break-glass headless runs inside `sbx` only, `--force` / `--yolo` auto-approves unless explicitly denied — do not use on the host.
+
+Docs: [CLI configuration](https://cursor.com/docs/cli/reference/configuration), [CLI parameters](https://cursor.com/docs/cli/reference/parameters), [sandbox](https://cursor.com/docs/reference/sandbox).
+
+#### GitHub Copilot CLI
+
+Autopilot is a **runtime mode** — there is no `autopilot: true` config key. Set trusted directories in `~/.copilot/config.json`:
+
+```json
+{
+  "trustedFolders": ["/Users/you/agent-security-lab"]
+}
+```
+
+```bash
+copilot --autopilot --max-autopilot-continues 10 -p "Fix failing CI"
+copilot --autopilot --allow-tool='shell' --allow-tool='write' --max-autopilot-continues 20 -p "Refactor logging"
+```
+
+Avoid `--yolo` / `--allow-all` on the host. Inside `sbx`, Copilot defaults to `--yolo` — acceptable only because the microVM boundary applies.
+
+#### Docker `sbx` — per-agent defaults
+
+Official per-agent pages document default bypass flags **inside the VM**:
+
+| Agent | Doc | Default inside `sbx run` |
+|-------|-----|--------------------------|
+| Claude Code | [sbx/agents/claude-code](https://docs.docker.com/ai/sandboxes/agents/claude-code/) | `claude --dangerously-skip-permissions` |
+| Codex | [sbx/agents/codex](https://docs.docker.com/ai/sandboxes/agents/codex/) | `codex --dangerously-bypass-approvals-and-sandbox` |
+| Cursor | [sbx/agents/cursor](https://docs.docker.com/ai/sandboxes/agents/cursor/) | `cursor-agent --yolo` |
+| Copilot | [sbx/agents/copilot](https://docs.docker.com/ai/sandboxes/agents/copilot/) | `copilot --yolo` |
+
+Safer overrides when launching:
+
+```bash
+cd "$AGENT_LAB"
+sbx run claude -- --permission-mode auto "task"
+sbx run codex -- --sandbox workspace-write --ask-for-approval on-request "task"
+sbx run cursor -- -p --sandbox enabled --trust "task"
+sbx run copilot -- --autopilot --max-autopilot-continues 10 -p "Fix CI"
+```
+
+Overview: [docs.docker.com/ai/sandboxes](https://docs.docker.com/ai/sandboxes/).
 
 ### OpenCode, Aider, Devin Desktop
 
@@ -1133,11 +1259,9 @@ Run a collector on each Mac or a fleet gateway. Do not point laptops directly at
 |-------|-------------|--------|------------|
 | Claude Code | Yes | Managed `env` block | Best — documented SIEM events |
 | Codex CLI | Yes | `[otel]` in `config.toml` | Strong — set `metrics_exporter` |
-| Cursor | Hooks only | otel-hook, cursorscope | Community |
-| Copilot CLI | SDK-based | Copilot SDK / otel-hook | Emerging |
+| Cursor | Hooks only | Hook audit JSON → collector | First-party hooks + custom forwarder |
+| Copilot CLI | SDK-based | Copilot SDK TelemetryConfig | Emerging |
 | `sbx` | Via agent inside VM | `sbx policy log` separate | Merge in collector |
-
-Do not enable **native OTel and otel-hook** on the same agent without intent — duplicate telemetry.
 
 ### Claude Code — managed OTel
 
@@ -1201,9 +1325,24 @@ log_user_prompt = false
 
 > **Critical:** `metrics_exporter` defaults to **Statsig** if unset — metrics will not reach your OTLP collector.
 
-### Cursor — hook-based OTel
+### Cursor — hook audit and supplementary streams
 
-No first-party OTel in Cursor IDE/CLI today. Use [o11y-dev/opentelemetry-hooks](https://github.com/o11y-dev/opentelemetry-hooks) or [last9/cursorscope](https://github.com/last9/cursorscope). Separate **enforcement hooks** from **telemetry forwarder hooks**.
+Cursor IDE/CLI does not ship native OTLP export today. Use **first-party hook events** as your audit source:
+
+1. **Enforcement hooks** (`beforeReadFile`, `beforeShellExecution`, `beforeMCPExecution`) — fail-closed gates (Labs E, H)
+2. **Audit hooks** (`afterFileEdit`, `postToolUse`) — append JSON lines to a log file your collector ingests via `filelog`
+3. **`sbx policy log`** — network allow/deny events when the agent runs inside Docker Sandboxes
+
+Separate enforcement hooks from telemetry forwarders. A PostToolUse script that writes structured JSON to `/var/log/cursor-hook-audit.jsonl` is sufficient for SIEM correlation — no third-party hook exporters required.
+
+Per-agent `sbx` telemetry: run the agent inside a sandbox and merge policy events with hook audit files in `otelcol-contrib`. Forward JSON lines with a periodic job:
+
+```bash
+# Example launchd-friendly forwarder (append-only)
+sbx policy log --json >> "$HOME/Library/Logs/com.docker.sandboxes/sbx-policy-forward.jsonl"
+```
+
+Enterprise fleets may also ingest Docker Sandboxes governance audit logs — see [governance monitoring](https://docs.docker.com/ai/sandboxes/governance/monitoring/). Cursor-specific sandbox defaults: [docs.docker.com/ai/sandboxes/agents/cursor](https://docs.docker.com/ai/sandboxes/agents/cursor/).
 
 ### Collector backends
 
@@ -1222,21 +1361,19 @@ No first-party OTel in Cursor IDE/CLI today. Use [o11y-dev/opentelemetry-hooks](
 
 ### Supplementary streams
 
-Merge via `filelog` receiver:
+Forward `sbx policy log --json` to a file your collector ingests via `filelog`:
 
 ```yaml
 receivers:
   filelog/sbx:
-    include: [/var/log/sbx-policy.log]
+    include: ["${env:HOME}/Library/Logs/com.docker.sandboxes/sbx-policy-forward.jsonl"]
     operators:
       - type: json_parser
-        timestamp:
-          parse_from: attributes.time
 ```
 
 | Source | Content |
 |--------|---------|
-| `sbx policy log` | Allowed/blocked egress |
+| `sbx policy log --json` | Allowed/blocked egress (forwarded to JSONL) |
 | Hook audit JSON | Custom PostToolUse logs |
 | Santa logs | Binary execution (Ch 21) |
 
@@ -1330,7 +1467,7 @@ log_user_prompt = false
 - [ ] Claude or Codex session produces OTLP traffic
 - [ ] `tool_decision` / `codex.tool_decision` visible in exporter output
 - [ ] Prompts **not** present when `OTEL_LOG_USER_PROMPTS=0`
-- [ ] No duplicate telemetry from both native OTel **and** otel-hook on same agent
+- [ ] No duplicate telemetry from both native OTel **and** a custom hook forwarder on the same agent
 
 ### Lab N — Hook deny → SIEM correlation drill (tabletop)
 
@@ -1500,13 +1637,12 @@ Draft one-page YAML/Markdown policy for fictional `billing-service` repo:
 
 ## References and Further Reading
 
-- Docker `sbx` Sandboxes documentation (architecture, network policies, agents)
+- [Docker Sandboxes (`sbx`)](https://docs.docker.com/ai/sandboxes/) — architecture, network policies, per-agent pages ([Claude](https://docs.docker.com/ai/sandboxes/agents/claude-code/), [Codex](https://docs.docker.com/ai/sandboxes/agents/codex/), [Cursor](https://docs.docker.com/ai/sandboxes/agents/cursor/), [Copilot](https://docs.docker.com/ai/sandboxes/agents/copilot/))
 - [agents.md](https://agents.md/) open standard
-- Claude Code: memory (`CLAUDE.md`), [hooks reference](https://code.claude.com/docs/en/hooks), [monitoring / SIEM](https://code.claude.com/docs/en/monitoring-usage/)
-- Codex CLI hooks and `requirements.toml`; `[otel]` configuration
-- Cursor: [sandbox.json](https://cursor.com/docs/reference/sandbox), [agent hooks](https://cursor.com/docs/agent/hooks)
-- GitHub Copilot CLI hooks reference
-- [o11y-dev/opentelemetry-hooks](https://github.com/o11y-dev/opentelemetry-hooks); [last9/cursorscope](https://github.com/last9/cursorscope)
+- Claude Code: memory (`CLAUDE.md`), [hooks reference](https://code.claude.com/docs/en/hooks), [permission modes](https://code.claude.com/docs/en/permission-modes), [monitoring / SIEM](https://code.claude.com/docs/en/monitoring-usage/)
+- Codex CLI: [agent approvals](https://developers.openai.com/codex/agent-approvals-security), [config reference](https://developers.openai.com/codex/config-reference) (`[otel]`, `requirements.toml`), [CLI reference](https://developers.openai.com/codex/cli/reference)
+- Cursor: [sandbox.json](https://cursor.com/docs/reference/sandbox), [agent hooks](https://cursor.com/docs/agent/hooks), [CLI configuration](https://cursor.com/docs/cli/reference/configuration)
+- GitHub Copilot CLI: [autopilot](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/autopilot), [hooks configuration](https://docs.github.com/en/copilot/reference/hooks-configuration), [configuration](https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/configure-copilot-cli)
 - OpenTelemetry Collector contrib exporters (Datadog, Splunk HEC, Elasticsearch)
 - OpenTelemetry GenAI semantic conventions
 - OWASP LLM Top 10 (LLM01, LLM07, LLM08)

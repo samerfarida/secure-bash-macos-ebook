@@ -9,13 +9,9 @@ receivers:
         endpoint: 127.0.0.1:4318
   filelog/sbx:
     include:
-      - /var/log/sbx-policy.log
+      - ${env:HOME}/Library/Logs/com.docker.sandboxes/sbx-policy-forward.jsonl
     operators:
       - type: json_parser
-        timestamp:
-          parse_from: attributes.time
-          layout_type: epoch
-          layout: s
 
 processors:
   batch:
