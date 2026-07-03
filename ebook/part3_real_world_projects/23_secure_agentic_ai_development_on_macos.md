@@ -51,8 +51,6 @@ Threat (injection, supply chain, insider)
   +-- Observability: OpenTelemetry -> collector -> SIEM
 ```
 
-> **Note on diagrams:** Part III chapters use **ASCII diagrams inside fenced code blocks** (as above). This project's MkDocs build does **not** include a Mermaid extension — ` ```mermaid ` blocks will not render. Use ASCII art and tables for architecture, matching Chapters 18 and 21.
-
 **Guardrails vs. gates:** Per-command approval dialogs assume humans can judge context faster than the agent acts. In practice, approval fatigue leads to clicks without review. **Guardrails** change the default: sandboxed execution requires no ticket; host execution requires a documented, time-bound exception (the Chapter 22 Privileges model applied to agent workflows).
 
 ### Three-path decision tree
@@ -1444,8 +1442,8 @@ claude   # run a simple ls or hook-deny test from Lab H
 **Step 4 — Verify in collector debug output:**
 
 ```bash
-# If using Docker for otelcol:
-docker logs <container_id> 2>&1 | grep -E 'tool_decision|claude_code|codex\.tool'
+# If using Docker for otelcol (replace with your container ID or name):
+docker logs "$CONTAINER_ID" 2>&1 | grep -E 'tool_decision|claude_code|codex\.tool'
 ```
 
 Look for log records with `event.name` = `tool_decision` (Claude) or `codex.tool_decision` (Codex). Claude uses `decision=accept|reject` — not `deny`.
@@ -1599,7 +1597,7 @@ Pin `sbx` and agent CLI versions in MDM. Test upgrades in a pilot ring before fl
 | 5.3 | Codex `[otel]` with `metrics_exporter` | not Statsig-only |
 | 5.4 | Confirm `tool_decision` events | debug exporter output |
 | 5.5 | Confirm prompts redacted | no prompt body in logs |
-| 5.6 | Tabletop IR: hook deny → contain → rotate | runbook draft |
+| 5.6 | Tabletop IR: hook deny → contain → rotate | IR runbook documents hook deny → contain → rotate |
 
 ### Stretch — Policy document
 
@@ -1649,7 +1647,6 @@ Draft one-page YAML/Markdown policy for fictional `billing-service` repo:
 - NIST SSDF / AI RMF
 - Devin Desktop / Devin Local documentation
 - Chapter 23 sample assets: `test-validator.sh`, `cursor-before-read-guard.sh`, `cursor-before-shell-guard.sh`, `osquery-agentic-ai-pack.json`, `mcp-allowlist.json`
-- Author further reading (not primary sources):
-  - [Docker Sandboxes for AI Coding Agents](https://me.itsecurity.network/blog/docker-sandboxes-enterprise-security-for-ai-coding-agents/)
-  - [Agent Skills Supply Chain](https://me.itsecurity.network/blog/agent-skills-the-new-supply-chain-attack-vector/)
-  - [Building Workforce Security Guardrails](https://me.itsecurity.network/blog/building_workforce_security_guardrails/)
+- [Docker Sandboxes for AI Coding Agents](https://me.itsecurity.network/blog/docker-sandboxes-enterprise-security-for-ai-coding-agents/) — enterprise security perspective (Sammy Farida)
+- [Agent Skills Supply Chain](https://me.itsecurity.network/blog/agent-skills-the-new-supply-chain-attack-vector/)
+- [Building Workforce Security Guardrails](https://me.itsecurity.network/blog/building_workforce_security_guardrails/)

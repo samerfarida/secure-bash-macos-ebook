@@ -1,0 +1,115 @@
+---
+description: Authoring conventions for Secure Bash for macOS ebook chapters. For drafting agents and maintainers — never copy this content into reader-facing chapter text.
+globs:
+  - ebook/**/*.md
+alwaysApply: false
+---
+
+# Ebook Authoring Rules (Agents & Maintainers)
+
+These conventions guide **writers and coding agents** while drafting chapters. They must **not** appear as notes inside published chapter prose.
+
+## Forbidden reader-facing patterns
+
+Never commit these into chapter markdown:
+
+- Build/tooling notes: MkDocs, Mermaid, lint, branch status, "this project"
+- Author labels: `Note on diagrams`, `Author further reading (not primary sources)`
+- WIP placeholders: `TBD`, `TODO`, `FIXME`, `draft` (unless deliberate exercise instruction)
+- Cross-chapter style guidance: "matching Chapters 18 and 21", "as above" without antecedent
+- ` ```mermaid ` blocks — MkDocs build has no Mermaid extension
+
+Put internal notes here or in PR descriptions, not in `ebook/`.
+
+## Allowed reader callouts
+
+Use these blockquote prefixes for **readers**:
+
+- `> **Production note:**`
+- `> **Important:**`
+- `> **Danger zone:**`
+- `> **Tip:**`
+- `> **Note:**` (operational context only, not authoring)
+- `> **Honest limit:**` (security candor — encouraged)
+
+## Diagrams and formatting
+
+- **Part III architecture:** ASCII diagrams inside fenced plain code blocks (no language tag required). Reference models: Chapters 18 and 21.
+- **No Mermaid** in chapter files.
+- **Tables** for comparisons, checklists, and lab verify columns.
+- **Code blocks:** `$` prompt prefix for terminal commands per `ebook/about.md`.
+- **Placeholders:** UPPERCASE for replaceable values (`$FILENAME`).
+
+## macOS scripting requirements
+
+- **Default shell:** `/bin/bash` is Bash 3.2 on macOS. No Bash 4+ features (`mapfile`, `readarray`, `declare -A`, `|&`, `wait -n`) without `brew install bash` prerequisite.
+- **In-place sed:** `sed -i '' 's/old/new/' file` — the `''` is required on BSD sed.
+- **No Linux package managers:** no `apt`, `yum`, `dnf`. Use `brew install` / `brew install --cask`.
+- **launchctl:** Prefer `bootstrap`/`bootout` for system daemons. Document correct domain for LaunchAgents.
+- **Paths:** `$HOME`, not `/Users/sammy` in scripts (example paths may use callout to replace). `/var` = `/private/var`.
+- **Homebrew paths:** `{/opt/homebrew,/usr/local}/bin` for Apple Silicon + Intel.
+- **Tools before use:** Declare `jq`, `shellcheck`, `yq`, etc. in Prerequisites before first fenced block using them.
+- **SIP / FDA / PPPC:** State prerequisite before commands needing TCC or Full Disk Access.
+- **Keychain:** Non-interactive patterns in copy-paste examples; model: Chapter 16.
+
+## Linux anti-patterns (never in examples)
+
+```
+apt-get, apt install, yum, dnf, systemctl, useradd, usermod
+grep -P, sed -i (without ''), readlink -f, stat -c, date -d
+/home/, /etc/bash.bashrc
+```
+
+## Chapter skeleton
+
+### All chapters
+
+1. `# Chapter N: Title`
+2. `## Learning Objectives` — "By the end of this chapter, you will be able to:"
+3. `## Introduction`
+4. Numbered sections (`## N.1`, `## N.2`, ...)
+5. `## Chapter N Exercise`
+6. `## macOS Scripting Tips`
+
+### Part III additionally
+
+- Enterprise context subsection early
+- Strategy/planning section before tooling
+- Prerequisites before hands-on labs
+- Optional `## References and Further Reading`
+- Fleet deployment checklists where appropriate
+
+## Exercise and lab tables
+
+- **Verify column** = learner-observable outcome (not author workflow: avoid `runbook draft`, `TBD`)
+- Exercise steps use actionable verbs
+- Note offline alternatives when labs need Apple Silicon, API keys, or MDM
+
+## Book integration checklist (new or materially changed chapter)
+
+When adding or substantially editing chapter N:
+
+- [ ] `ebook/partN_*/NN_snake_case_title.md` — chapter file
+- [ ] Part intro `ebook/partN_*/00_part*.md` — one-line summary bullet
+- [ ] `mkdocs.yml` nav entry (or run `scripts/generate_nav.py`)
+- [ ] `ebook/index.md` if part summary should mention the chapter
+- [ ] `ebook/about.md` § System Requirements if prerequisites changed
+- [ ] Appendices 101/102/103 if new tools or references
+- [ ] `ebook/assets/scripts/` and `ebook/assets/sample_configs/` for cited samples
+- [ ] `CHANGELOG.md` for new chapters
+
+## Assets
+
+- Sample configs: `ebook/assets/sample_configs/`
+- Scripts: `ebook/assets/scripts/`
+- Reference by repo path in prose; do not embed build instructions in chapter body
+
+## Source quality
+
+- Prefer official documentation over blog posts
+- Flag archived repos (model: Santa / North Pole Security in Ch 21)
+- Run `npm run lint` before PR
+
+## Publication review
+
+Before merge, run `/chapter-publication-editor` (includes Phase 2.5 executable QA via `/chapter-executable-qa-macos`).
