@@ -23,6 +23,10 @@ if [[ -f "$REPO_ROOT/assets/scripts/cursor-before-shell-guard.sh" ]]; then
   cp "$REPO_ROOT/assets/scripts/cursor-before-shell-guard.sh" .cursor/cursor-before-shell-guard.sh
   chmod +x .cursor/cursor-before-shell-guard.sh
 fi
+if [[ -f "$REPO_ROOT/assets/scripts/cursor-before-mcp-guard.sh" ]]; then
+  cp "$REPO_ROOT/assets/scripts/cursor-before-mcp-guard.sh" .cursor/cursor-before-mcp-guard.sh
+  chmod +x .cursor/cursor-before-mcp-guard.sh
+fi
 
 cat > AGENTS.md <<'EOF'
 # Agent instructions
@@ -80,6 +84,10 @@ cat > .cursor/hooks.json <<'EOF'
     }],
     "beforeReadFile": [{
       "command": ".cursor/cursor-before-read-guard.sh",
+      "failClosed": true
+    }],
+    "beforeMCPExecution": [{
+      "command": ".cursor/cursor-before-mcp-guard.sh",
       "failClosed": true
     }]
   }

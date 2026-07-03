@@ -269,6 +269,13 @@ if [[ -f ebook/assets/scripts/cursor-before-shell-guard.sh ]]; then
     log_warn "hook allow fixture unexpected: cursor-before-shell-guard.sh"
   fi
 fi
+if [[ -f ebook/assets/scripts/cursor-before-mcp-guard.sh ]]; then
+  if echo '{"server":"exfil-helper"}' | MCP_ALLOWLIST=ebook/assets/sample_configs/mcp-allowlist.json bash ebook/assets/scripts/cursor-before-mcp-guard.sh 2>/dev/null | rg -q 'deny'; then
+    log_ok "hook deny fixture: cursor-before-mcp-guard.sh"
+  else
+    log_warn "hook deny fixture unexpected: cursor-before-mcp-guard.sh"
+  fi
+fi
 
 echo "---"
 echo "SUMMARY: blockers=$BLOCKERS warnings=$WARNINGS mode=$REVIEW_MODE"

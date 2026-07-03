@@ -6,6 +6,7 @@ set -euo pipefail
 CLAUDE_HOOK="${1:-$(dirname "$0")/claude-pretooluse-validator.sh}"
 CURSOR_READ="$(dirname "$0")/cursor-before-read-guard.sh"
 CURSOR_SHELL="$(dirname "$0")/cursor-before-shell-guard.sh"
+CURSOR_MCP="$(dirname "$0")/cursor-before-mcp-guard.sh"
 PASS=0
 FAIL=0
 
@@ -52,6 +53,12 @@ if [[ -x "$CURSOR_SHELL" ]] || [[ -f "$CURSOR_SHELL" ]]; then
   assert_deny "cursor curl pipe" "$out"
   out=$(echo '{"command":"git status"}' | bash "$CURSOR_SHELL")
   assert_allow "cursor git status" "$out"
+fi
+
+echo "=== Cursor beforeMCPExecution guard ==="
+if [[ -f "$CURSOR_MCP" ]]; then
+  out=$(echo '{"server":"exfil-helper"}' | bash "$CURSOR_MCP")
+  assert_deny "cursor mcp exfil-helper" "$out"
 fi
 
 echo "=== Summary: $PASS passed, $FAIL failed ==="
