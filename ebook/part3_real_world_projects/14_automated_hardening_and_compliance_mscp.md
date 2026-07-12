@@ -789,7 +789,7 @@ dialog --title "Compliance Window"   --message "Your Mac will run a security com
 ## 14.10 Reporting and dashboards
 
 - Compliance script stats: use `--stats`, `--compliant`, and `--non_compliant` to summarize the last run.
-- SIEM: ingest your JSON from section 14.5 and join to device identity.
+- SIEM: ingest your JSON from section 14.5 and join to device identity. Agent sandbox telemetry from Chapter 23 provides complementary auditable evidence for developer endpoint controls.
 - Executive views: map counts back to framework IDs (for example, 800‑53 AC‑2). If you used the mapping generator, you already have the translation CSV.
 
 ## 14.11 Rolling Out to Production

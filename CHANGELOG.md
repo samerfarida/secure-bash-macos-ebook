@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Chapter 23: Secure Agentic AI Development on macOS** — `sbx` microVM sandboxes, native Seatbelt agents (Cursor, Claude Code, Codex CLI), policy guardrails (`AGENTS.md`, hooks), OpenTelemetry/SIEM integration, skills/MCP/plugins supply chain, and fleet integration with Santa, osquery, mSCP, and SAP Privileges
+- Sample scripts: `agent-sandbox-wrapper.sh`, `agent-isolation-policy-check.sh`, `claude-pretooluse-validator.sh`, `cursor-before-read-guard.sh`, `cursor-before-shell-guard.sh`, `cursor-before-mcp-guard.sh`, `test-validator.sh`
+- Sample configs: `otel-collector-agents.yaml`, `agent-lab-scaffold.sh`, `mcp-allowlist.json`, `osquery-agentic-ai-pack.json`
+- Forward-reference backlinks in Chapters 14, 18, 21, and 22
+
 ## [1.0.0] - 2024-12-19
 
 ### Changed

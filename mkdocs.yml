@@ -133,6 +133,7 @@ nav:
     - "Chapter 20: Application Deployment & Update Automation (Installomator + Patchomator)": part3_real_world_projects/20_application_deployment_update_automation.md
     - "Chapter 21: Application Control with Santa": part3_real_world_projects/21_application_control_with_santa.md
     - "Chapter 22: Privilege Elevation with SAP Privileges": part3_real_world_projects/22_privilege_elevation_with_sap_privileges.md
+    - "Chapter 23: Secure Agentic AI Development on macOS": part3_real_world_projects/23_secure_agentic_ai_development_on_macos.md
   - Appendices:
     - "Appendix A: Bash Scripting Cheat Sheet": appendices/100_A_cheatsheet.md
     - "Appendix B: Common macOS Command Reference": appendices/101_B_common_macOS_command_reference.md

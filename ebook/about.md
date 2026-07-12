@@ -54,7 +54,7 @@ To follow along and run the examples in this book, you will need:
 - An MDM system like Jamf Pro, Intune, Mosyle, or Addigy (optional, for Part III enterprise automation chapters)
 - Internet connection for downloading tools, packages, and updates
 
-Before starting, make sure your macOS is up to date and you have a safe test environment for experimenting with scripts. For enterprise automation chapters (14-22), an MDM test environment is recommended to follow along with examples.
+Before starting, make sure your macOS is up to date and you have a safe test environment for experimenting with scripts. For enterprise automation chapters (14-23), an MDM test environment is recommended to follow along with examples. Chapter 23 hands-on labs require an Apple Silicon Mac and the `sbx` CLI (`brew install docker/tap/sbx`) with a Docker account sign-in.
 
 ## License
 

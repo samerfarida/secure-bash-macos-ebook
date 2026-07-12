@@ -1,6 +1,6 @@
 # Part III – Real-World Projects and Automation
 
-In this final section, you'll put your Bash skills into practice with hands-on projects designed for enterprise-grade macOS management and security.
+In this section, you'll put your Bash skills into practice with hands-on projects designed for enterprise-grade macOS management and security.
 
 **What you'll build:**
 
@@ -13,5 +13,6 @@ In this final section, you'll put your Bash skills into practice with hands-on p
 - **Chapter 20**: Application Deployment & Update Automation - Use Installomator and Patchomator for at-scale app installs and updates with label-driven recipes
 - **Chapter 21**: Application Control with Santa - Configure binary authorization system with allow/deny rules using TeamID, SigningID, and hash-based policies
 - **Chapter 22**: Privilege Elevation with SAP Privileges - Implement time-bound admin elevation with LaunchAgents for least-privilege workflows
+- **Chapter 23**: Secure Agentic AI Development on macOS - Deploy `sbx` microVM sandboxes, native Seatbelt agents, policy hooks, OpenTelemetry/SIEM observability, and fleet integration with Santa and osquery
 
 These projects reflect real-world needs of macOS administrators and security engineers, giving you reusable templates to streamline your work while maintaining security best practices.

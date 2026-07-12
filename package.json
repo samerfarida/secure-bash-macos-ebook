@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "lint": "npm run lint:markdown && npm run spell-check && npm run lint:yaml",
-    "lint:markdown": "markdownlint-cli2 '**/*.md' '#node_modules' '#venv' '#site' '#output'",
-    "lint:markdown:fix": "markdownlint-cli2 --fix '**/*.md' '#node_modules' '#venv' '#site' '#output'",
+    "lint:markdown": "markdownlint-cli2 '**/*.md' '#node_modules' '#venv' '#site' '#output' '#.cursor/plans'",
+    "lint:markdown:fix": "markdownlint-cli2 --fix '**/*.md' '#node_modules' '#venv' '#site' '#output' '#.cursor/plans'",
     "spell-check": "cspell \"**/*.md\" --no-progress",
     "link-check": "find ebook -name '*.md' -type f -exec npx markdown-link-check {} \\;",
     "lint:yaml": "yamllint -c .yamllint.yml .github/workflows/*.yml metadata.yaml || (yamllint -c .yamllint.yml mkdocs.yml --no-warnings 2>&1 | grep -v 'warning' || true)"

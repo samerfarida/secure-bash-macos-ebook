@@ -1,0 +1,14 @@
+{
+  "queries": {
+    "agent_cli_spawn": {
+      "query": "SELECT datetime(e.time,'unixepoch') AS ts, e.pid, e.parent, p.path AS parent_path, e.path, s.team_identifier FROM es_process_events e LEFT JOIN processes p ON p.pid = e.parent LEFT JOIN signature s ON s.path = e.path WHERE e.path LIKE '%/claude%' OR e.path LIKE '%/agent%' OR e.path LIKE '%/codex%' OR e.path LIKE '%/sbx%' ORDER BY e.time DESC LIMIT 50;",
+      "interval": 300,
+      "description": "Agentic AI CLI and sbx process spawns (Chapter 23)"
+    },
+    "agent_lotl_chain": {
+      "query": "SELECT datetime(e.time,'unixepoch') AS ts, e.parent, pp.path AS parent_name, e.path AS child FROM es_process_events e JOIN processes pp ON pp.pid = e.parent WHERE (pp.path LIKE '%claude%' OR pp.path LIKE '%agent%' OR pp.path LIKE '%Cursor%') AND e.path IN ('/bin/bash','/bin/zsh','/usr/bin/curl','/usr/bin/python3') ORDER BY e.time DESC LIMIT 30;",
+      "interval": 300,
+      "description": "LOTL children spawned under agent parents"
+    }
+  }
+}

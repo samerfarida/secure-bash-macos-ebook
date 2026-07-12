@@ -1,0 +1,58 @@
+# otel-collector-agents.yaml — illustrative OpenTelemetry Collector for agent fleets
+# Secure Bash for macOS — Chapter 23 sample config (validate processor names for your otelcol version)
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 127.0.0.1:4317
+      http:
+        endpoint: 127.0.0.1:4318
+  filelog/sbx:
+    include:
+      - ${env:HOME}/Library/Logs/com.docker.sandboxes/sbx-policy-forward.jsonl
+    operators:
+      - type: json_parser
+
+processors:
+  batch:
+  attributes/redact:
+    actions:
+      - key: user.email
+        action: hash
+
+exporters:
+  debug:
+    verbosity: detailed
+  splunk_hec:
+    token: ${env:SPLUNK_HEC_TOKEN}
+    endpoint: https://splunk.corp.example:8088/services/collector
+    sourcetype: otel:agent-coding
+    index: devtools_security
+  elasticsearch:
+    endpoints:
+      - https://elastic.corp.example:9200
+    logs_index: agent-otel-logs
+  # Uncomment and configure for Datadog OTLP intake (verify site: datadoghq.com vs EU)
+  # datadog:
+  #   api:
+  #     key: ${env:DATADOG_API_KEY}
+  #     site: datadoghq.com
+  # Microsoft Sentinel — use Logs Ingestion API + Data Collection Rule (DCR), not azuremonitor alone
+  # azuremonitor:
+  #   connection_string: "InstrumentationKey=...;IngestionEndpoint=https://....ingest.monitor.azure.com/"
+  #   # See Azure Monitor docs for otelcol contrib azure exporter and DCR mapping
+
+service:
+  pipelines:
+    logs:
+      receivers: [otlp, filelog/sbx]
+      processors: [attributes/redact, batch]
+      exporters: [debug, splunk_hec, elasticsearch]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug]
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug]

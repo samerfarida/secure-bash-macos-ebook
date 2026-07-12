@@ -37,13 +37,14 @@ This comprehensive ebook teaches you how to write secure, efficient Bash scripts
 
 ### Part III – Real-World Projects
 
-- **Chapters 14-22:** Enterprise-grade automation you can deploy today
+- **Chapters 14-23:** Enterprise-grade automation you can deploy today
 - Automated hardening & compliance with mSCP
 - Application deployment with Installomator & Patchomator
 - Endpoint monitoring with osquery
 - Patch automation and notifications
 - Application control with Santa
 - Privilege elevation with SAP Privileges
+- Secure agentic AI development on macOS
 - And much more!
 
 ## Why This Book?
@@ -113,26 +114,27 @@ make html
 
 **Part II – Advanced Security Scripting**
 
-6. Control Structures and Functions
-7. File Management and Permissions
-8. Error Handling and Debugging
-9. Environment Variables and Configuration
-10. macOS Internals for Scripting
-11. Security Practices in Bash
-12. Interfacing with macOS APIs and Tools
-13. Writing Interactive and GUI-Driven Scripts
+- **6.** Control Structures and Functions
+- **7.** File Management and Permissions
+- **8.** Error Handling and Debugging
+- **9.** Environment Variables and Configuration
+- **10.** macOS Internals for Scripting
+- **11.** Security Practices in Bash
+- **12.** Interfacing with macOS APIs and Tools
+- **13.** Writing Interactive and GUI-Driven Scripts
 
 **Part III – Real-World Projects**
 
-14. Automated Hardening & Compliance (mSCP)
-15. Inventory & Asset Management
-16. Signed & Notarized Installer Packages
-17. Reprovisioning & OS Refresh
-18. Endpoint Monitoring & Threat Detection
-19. macOS Patch Automation & Notifications
-20. Application Deployment & Update Automation
-21. Application Control with Santa
-22. Privilege Elevation with SAP Privileges
+- **14.** Automated Hardening & Compliance (mSCP)
+- **15.** Inventory & Asset Management
+- **16.** Signed & Notarized Installer Packages
+- **17.** Reprovisioning & OS Refresh
+- **18.** Endpoint Monitoring & Threat Detection
+- **19.** macOS Patch Automation & Notifications
+- **20.** Application Deployment & Update Automation
+- **21.** Application Control with Santa
+- **22.** Privilege Elevation with SAP Privileges
+- **23.** Secure Agentic AI Development on macOS
 
 ## Who Is This Book For?
 

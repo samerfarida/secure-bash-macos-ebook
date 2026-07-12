@@ -637,7 +637,7 @@ Save this file to `/var/osquery/packs/detections.conf` and enable it from your m
       "query": "SELECT datetime(e.time,'unixepoch') AS ts, e.pid, e.parent, e.path, s.signed, s.team_identifier AS team_id FROM es_process_events AS e LEFT JOIN signature AS s ON s.path = e.path WHERE e.path LIKE '/Users/%/Downloads/%' OR e.path LIKE '/Users/%/Library/%' OR e.path LIKE '/private/tmp/%' OR e.path LIKE '/Volumes/%' ORDER BY e.time DESC LIMIT 200;",
       "interval": 300,
       "removed": false,
-      "description": "Process executions from user-writable locations, joined with signing metadata"
+      "description": "Process executions from user-writable locations, joined with signing metadata. Agentic AI CLI sessions amplify LOTL-style chains — see containment patterns in Chapter 23."
     },
     "first_seen_binaries": {
       "query": "WITH execs AS (SELECT path, MIN(time) AS first_seen FROM es_process_events GROUP BY path) SELECT datetime(first_seen,'unixepoch') AS first_seen_utc, path FROM execs ORDER BY first_seen ASC LIMIT 200;",

@@ -28,13 +28,14 @@ This comprehensive ebook teaches you how to write secure, efficient Bash scripts
 
 ### [Part III – Real-World Projects →](part3_real_world_projects/00_part3_real_world_projects.md)
 
-- **Chapters 14-22:** Enterprise-grade automation you can deploy today
+- **Chapters 14-23:** Enterprise-grade automation you can deploy today
 - Automated hardening & compliance with mSCP
 - Application deployment with Installomator & Patchomator
 - Endpoint monitoring with osquery
 - Patch automation and notifications
 - Application control with Santa
 - Privilege elevation with SAP Privileges
+- Secure agentic AI development on macOS
 - And much more!
 
 ## Why This Book?

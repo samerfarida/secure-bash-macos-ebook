@@ -46,7 +46,27 @@
 | **swiftDialog** | Dialog presentation tool | [https://github.com/bartreardon/swiftDialog](https://github.com/bartreardon/swiftDialog) |
 | **erase-install** | OS refresh automation | [https://github.com/grahampugh/erase-install](https://github.com/grahampugh/erase-install) |
 | **Osquery** | Endpoint visibility platform | [https://github.com/osquery/osquery](https://github.com/osquery/osquery) |
+| **OpenTelemetry Collector Contrib** | OTLP exporters for Datadog, Splunk, Elastic | [https://github.com/open-telemetry/opentelemetry-collector-contrib](https://github.com/open-telemetry/opentelemetry-collector-contrib) |
+| **agents.md** | Cross-agent instruction file standard | [https://agents.md/](https://agents.md/) |
 
 ## D.5 Author's Favorites
 
 I recommend subscribing to security mailing lists, following macOS security and scripting blogs, and joining relevant GitHub repositories to stay current. The macOS ecosystem evolves fast — staying connected helps you keep your Bash scripts secure, compatible, and powerful. Participate in open-source projects, contribute back improvements, and share knowledge with the MacAdmin community.
+
+## D.6 Agentic AI Security References
+
+| Resource | Description | Link |
+|----------|-------------|------|
+| **Docker Sandboxes (`sbx`)** | MicroVM agent isolation docs | [https://docs.docker.com/ai/sandboxes/](https://docs.docker.com/ai/sandboxes/) |
+| **sbx — Claude Code** | Per-agent sandbox defaults and `sbx run` patterns | [https://docs.docker.com/ai/sandboxes/agents/claude-code/](https://docs.docker.com/ai/sandboxes/agents/claude-code/) |
+| **sbx — Codex** | Codex inside Docker Sandboxes | [https://docs.docker.com/ai/sandboxes/agents/codex/](https://docs.docker.com/ai/sandboxes/agents/codex/) |
+| **sbx — Cursor** | Cursor CLI inside Docker Sandboxes | [https://docs.docker.com/ai/sandboxes/agents/cursor/](https://docs.docker.com/ai/sandboxes/agents/cursor/) |
+| **sbx — Copilot** | Copilot CLI inside Docker Sandboxes | [https://docs.docker.com/ai/sandboxes/agents/copilot/](https://docs.docker.com/ai/sandboxes/agents/copilot/) |
+| **Claude Code hooks** | Deterministic PreToolUse enforcement | [https://code.claude.com/docs/en/hooks](https://code.claude.com/docs/en/hooks) |
+| **Claude Code permission modes** | Auto mode, bypass, and managed settings | [https://code.claude.com/docs/en/permission-modes](https://code.claude.com/docs/en/permission-modes) |
+| **Codex agent approvals** | Sandbox modes and approval policies | [https://developers.openai.com/codex/agent-approvals-security](https://developers.openai.com/codex/agent-approvals-security) |
+| **Codex config reference** | `~/.codex/config.toml` including `[otel]` | [https://developers.openai.com/codex/config-reference](https://developers.openai.com/codex/config-reference) |
+| **Cursor sandbox.json** | Workspace network and filesystem policy | [https://cursor.com/docs/reference/sandbox](https://cursor.com/docs/reference/sandbox) |
+| **Cursor CLI configuration** | `cli-config.json`, approval modes, sandbox | [https://cursor.com/docs/cli/reference/configuration](https://cursor.com/docs/cli/reference/configuration) |
+| **Copilot CLI autopilot** | Multi-step unattended execution | [https://docs.github.com/en/copilot/concepts/agents/copilot-cli/autopilot](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/autopilot) |
+| **OWASP LLM Top 10** | LLM application security risks | [https://owasp.org/www-project-top-10-for-large-language-model-applications/](https://owasp.org/www-project-top-10-for-large-language-model-applications/) |

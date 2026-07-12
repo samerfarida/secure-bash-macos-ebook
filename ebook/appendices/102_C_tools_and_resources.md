@@ -40,6 +40,19 @@
 | **swiftDialog** | Professional dialog presentation tool for macOS | [https://github.com/bartreardon/swiftDialog](https://github.com/bartreardon/swiftDialog) |
 | **munkipkg** | Tool for building macOS installer packages | [https://github.com/munki/munki-pkg](https://github.com/munki/munki-pkg) |
 | **Platypus** | Create macOS applications from command-line scripts | [https://sveinbjorn.org/platypus](https://sveinbjorn.org/platypus) |
+| **sbx (Docker Sandboxes)** | MicroVM isolation for AI coding agents on Apple Silicon | [https://docs.docker.com/ai/sandboxes/](https://docs.docker.com/ai/sandboxes/) |
+| **sbx — Claude Code** | Per-agent `sbx run` defaults | [https://docs.docker.com/ai/sandboxes/agents/claude-code/](https://docs.docker.com/ai/sandboxes/agents/claude-code/) |
+| **sbx — Codex** | Codex inside Docker Sandboxes | [https://docs.docker.com/ai/sandboxes/agents/codex/](https://docs.docker.com/ai/sandboxes/agents/codex/) |
+| **sbx — Cursor** | Cursor CLI inside Docker Sandboxes | [https://docs.docker.com/ai/sandboxes/agents/cursor/](https://docs.docker.com/ai/sandboxes/agents/cursor/) |
+| **sbx — Copilot** | Copilot CLI inside Docker Sandboxes | [https://docs.docker.com/ai/sandboxes/agents/copilot/](https://docs.docker.com/ai/sandboxes/agents/copilot/) |
+| **Claude Code** | Anthropic agentic coding CLI with Seatbelt sandbox and hooks | [https://code.claude.com/](https://code.claude.com/) |
+| **Cursor** | AI IDE/CLI with `sandbox.json` and agent hooks | [https://cursor.com/](https://cursor.com/) |
+| **Codex CLI** | OpenAI agentic coding CLI with Seatbelt and `[otel]` telemetry | [https://developers.openai.com/codex/](https://developers.openai.com/codex/) |
+| **Agent Safehouse** | Seatbelt wrapper for agent CLIs | [https://agent-safehouse.dev/](https://agent-safehouse.dev/) |
+| **GitHub Copilot CLI** | Agentic coding CLI with hooks and autopilot mode | [https://docs.github.com/en/copilot/concepts/agents/copilot-cli](https://docs.github.com/en/copilot/concepts/agents/copilot-cli) |
+| **OpenTelemetry Collector** | Vendor-neutral OTLP pipeline for logs, metrics, traces | [https://opentelemetry.io/docs/collector/](https://opentelemetry.io/docs/collector/) |
+| **Chapter 23 lab assets** | `test-validator.sh`, Cursor hook guards, osquery pack, MCP allowlist | `ebook/assets/scripts/` and `ebook/assets/sample_configs/` |
+| **MCP SSH Orchestrator** | Declarative MCP SSH access control example | [https://me.itsecurity.network/projects/mcp-ssh-orchestrator/](https://me.itsecurity.network/projects/mcp-ssh-orchestrator/) |
 
 ## C.4 Recommended Shells and Extensions
 
