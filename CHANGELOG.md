@@ -7,12 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-07-12
+
 ### Added
 
 - **Chapter 23: Secure Agentic AI Development on macOS** — `sbx` microVM sandboxes, native Seatbelt agents (Cursor, Claude Code, Codex CLI), policy guardrails (`AGENTS.md`, hooks), OpenTelemetry/SIEM integration, skills/MCP/plugins supply chain, and fleet integration with Santa, osquery, mSCP, and SAP Privileges
 - Sample scripts: `agent-sandbox-wrapper.sh`, `agent-isolation-policy-check.sh`, `claude-pretooluse-validator.sh`, `cursor-before-read-guard.sh`, `cursor-before-shell-guard.sh`, `cursor-before-mcp-guard.sh`, `test-validator.sh`
 - Sample configs: `otel-collector-agents.yaml`, `agent-lab-scaffold.sh`, `mcp-allowlist.json`, `osquery-agentic-ai-pack.json`
 - Forward-reference backlinks in Chapters 14, 18, 21, and 22
+
+### Fixed
+
+- PDF build: declare `\newcounter{none}` in Eisvogel template for Pandoc 3.8+ / modern `longtable`
+- PDF fonts: use DejaVu Serif / DejaVu Sans Mono so code blocks with Unicode and box-drawing glyphs build under XeLaTeX (CI installs `fonts-dejavu-*`)
+- Release versioning: use highest semver tag and skip existing tags (avoids colliding with `v1.1.0`)
+- Release assets: also publish stable `Secure-Bash-for-macOS.{pdf,epub,html}` for `releases/latest` download links
 
 ## [1.0.0] - 2024-12-19
 
@@ -33,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Previous releases were marked as pre-releases. Starting with v1.0.0, all releases are full production releases.
 
-[Unreleased]: https://github.com/samerfarida/secure-bash-macos-ebook/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/samerfarida/secure-bash-macos-ebook/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/samerfarida/secure-bash-macos-ebook/releases/tag/v1.2.0
 [1.0.0]: https://github.com/samerfarida/secure-bash-macos-ebook/releases/tag/v1.0.0
 [0.16.1]: https://github.com/samerfarida/secure-bash-macos-ebook/releases/tag/v0.16.1

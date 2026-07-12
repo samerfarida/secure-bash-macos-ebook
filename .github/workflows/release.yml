@@ -45,12 +45,17 @@ jobs:
             texlive-fonts-recommended \
             texlive-fonts-extra \
             lmodern \
-            fonts-linuxlibertine
+            fonts-linuxlibertine \
+            fonts-dejavu-core \
+            fonts-dejavu-extra
 
       - name: 🔢 Auto-version minor if new .md added, else patch
         id: compute_tag
         run: |
-          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
+          # Highest semver tag (not git-describe nearest), so we never reuse
+          # an older minor like v1.1.0 when v1.0.2 is the describe tip.
+          LATEST_TAG=$(git tag -l 'v[0-9]*' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1)
+          LATEST_TAG=${LATEST_TAG:-v1.0.0}
           VERSION=${LATEST_TAG#v}
           IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
 
@@ -68,7 +73,19 @@ jobs:
           fi
 
           NEW_TAG="v$MAJOR.$NEW_MINOR.$NEW_PATCH"
-          echo "📌 Bumping $BUMP_TYPE version → $NEW_TAG"
+          # Skip tags that already exist (e.g. out-of-order historical releases)
+          while git rev-parse -q --verify "refs/tags/$NEW_TAG" >/dev/null 2>&1; do
+            echo "⚠️  Tag $NEW_TAG already exists — bumping again"
+            if [[ "$BUMP_TYPE" == "minor" ]]; then
+              NEW_MINOR=$((NEW_MINOR + 1))
+              NEW_PATCH=0
+            else
+              NEW_PATCH=$((NEW_PATCH + 1))
+            fi
+            NEW_TAG="v$MAJOR.$NEW_MINOR.$NEW_PATCH"
+          done
+
+          echo "📌 Bumping $BUMP_TYPE from $LATEST_TAG → $NEW_TAG"
           echo "tag=$NEW_TAG" >> $GITHUB_OUTPUT
           echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
 
@@ -133,6 +150,11 @@ jobs:
             --highlight-style=tango \
             -o output/${FILEBASE}.html
 
+          # Stable names for releases/latest/download (README badges)
+          cp "output/${FILEBASE}.pdf" output/Secure-Bash-for-macOS.pdf
+          cp "output/${FILEBASE}.epub" output/Secure-Bash-for-macOS.epub
+          cp "output/${FILEBASE}.html" output/Secure-Bash-for-macOS.html
+
       - name: 🧹 Clean up backup file
         run: rm metadata.yaml.bak
 
@@ -147,6 +169,9 @@ jobs:
             output/Secure-Bash-for-macOS-${{ env.VERSION }}.pdf
             output/Secure-Bash-for-macOS-${{ env.VERSION }}.epub
             output/Secure-Bash-for-macOS-${{ env.VERSION }}.html
+            output/Secure-Bash-for-macOS.pdf
+            output/Secure-Bash-for-macOS.epub
+            output/Secure-Bash-for-macOS.html
             CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

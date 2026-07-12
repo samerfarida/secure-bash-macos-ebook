@@ -321,6 +321,10 @@ $-- tables
 $--
 $if(tables)$
 \usepackage{longtable,booktabs,array}
+% Pandoc 3.8+ sets \LTcaptype{none} for caption-less tables; modern longtable
+% steps that counter at \begin{longtable}. Declare a dummy counter (same as
+% pandoc's default template / eisvogel upstream).
+\newcounter{none}
 $if(multirow)$
 \usepackage{multirow}
 $endif$

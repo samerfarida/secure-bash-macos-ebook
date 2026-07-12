@@ -7,9 +7,9 @@
 > **A practical, hands-on scripting guide for administrators and security engineers who want to master Bash on macOS**
 
 [![Read Online](https://img.shields.io/badge/Read-Online-blue.svg)](https://bash.itsecurity.network/)
-[![PDF Download](https://img.shields.io/badge/Download-PDF-red.svg)](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.pdf)
-[![EPUB Download](https://img.shields.io/badge/Download-EPUB-orange.svg)](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.epub)
-[![HTML Download](https://img.shields.io/badge/Download-HTML-green.svg)](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.html)
+[![PDF Download](https://img.shields.io/badge/Download-PDF-red.svg)](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS.pdf)
+[![EPUB Download](https://img.shields.io/badge/Download-EPUB-orange.svg)](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS.epub)
+[![HTML Download](https://img.shields.io/badge/Download-HTML-green.svg)](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS.html)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -71,15 +71,15 @@ The complete book is available online at **[https://bash.itsecurity.network/](ht
 
 ```bash
 # Download PDF
-curl -L https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.pdf \
+curl -L https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS.pdf \
   -o Secure-Bash-for-macOS.pdf
 
 # Download EPUB
-curl -L https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.epub \
+curl -L https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS.epub \
   -o Secure-Bash-for-macOS.epub
 
 # Download HTML
-curl -L https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.html \
+curl -L https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS.html \
   -o Secure-Bash-for-macOS.html
 ```
 
@@ -211,9 +211,9 @@ If you find this book helpful:
 **Ready to master Bash on macOS?**
 
 - [Read Online](https://bash.itsecurity.network/) - Full book with search and navigation
-- [Download PDF](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.pdf)
-- [Download EPUB](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.epub)
-- [Download HTML](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS-v0.14.0.html)
+- [Download PDF](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS.pdf)
+- [Download EPUB](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS.epub)
+- [Download HTML](https://github.com/samerfarida/secure-bash-macos-ebook/releases/latest/download/Secure-Bash-for-macOS.html)
 - [View All Releases](https://github.com/samerfarida/secure-bash-macos-ebook/releases)
 
 Made with care for the macOS security and admin community

@@ -1084,17 +1084,17 @@ EOF
 
 ```
 agent-security-lab/
-├── AGENTS.md
-├── CLAUDE.md                 # @AGENTS.md import
-├── .agent-isolation-required
-├── .claude/
-│   ├── settings.json
-│   └── hooks/validate-bash.sh
-├── .cursor/
-│   ├── sandbox.json
-│   └── hooks.json
-├── .mcp/allowlist.json
-└── docs/security-agent-policy.md
+|-- AGENTS.md
+|-- CLAUDE.md                 # @AGENTS.md import
+|-- .agent-isolation-required
+|-- .claude/
+|   |-- settings.json
+|   +-- hooks/validate-bash.sh
+|-- .cursor/
+|   |-- sandbox.json
+|   +-- hooks.json
+|-- .mcp/allowlist.json
++-- docs/security-agent-policy.md
 ```
 
 ## 23.7 Agent Skills, MCP Servers, Plugins, and the Supply Chain

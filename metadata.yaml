@@ -15,8 +15,8 @@ titlepage-background: "ebook/assets/images/cover.png"
 fontsize: 11pt
 geometry: margin=1in
 
-mainfont: "Latin Modern Roman"
-monofont: "Fira Code"
+mainfont: "DejaVu Serif"
+monofont: "DejaVu Sans Mono"
 linkcolor: blue
 
 toc: true
